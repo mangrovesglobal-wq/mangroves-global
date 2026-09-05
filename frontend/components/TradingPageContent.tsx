@@ -214,7 +214,7 @@ export default function TradingPageContent() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-mangrove-900/95 backdrop-blur-xl z-[60] flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-white">
+        <div className="fixed inset-0 bg-mangrove-900/95 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-white">
           <button
             onClick={() => setMobileMenuOpen(false)}
             className="absolute top-6 right-6 text-white"
@@ -293,7 +293,7 @@ export default function TradingPageContent() {
                 className="group flex flex-col items-center gap-2 text-center"
               >
                 <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border border-slate-800 group-hover:border-mangrove-accent/60 transition-colors relative">
-                  <Image src={p.image} alt={p.name} fill className="object-cover" />
+   <Image src={p.image} alt={p.name} fill sizes="80px" className="object-cover" />
                 </div>
                 <span className="text-[10px] sm:text-xs text-slate-400 group-hover:text-mangrove-accent transition-colors">
                   {p.name}
@@ -441,12 +441,13 @@ export default function TradingPageContent() {
                   className="group rounded-2xl bg-mangrove-800/30 border border-slate-800/80 overflow-hidden hover:border-mangrove-accent/50 transition-all duration-500"
                 >
                   <div className="h-56 bg-slate-800 relative overflow-hidden">
-                    <Image
-                      src={p.image}
-                      alt={p.alt}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
+                   <Image
+  src={p.image}
+  alt={p.alt}
+  fill
+  sizes="(max-width: 768px) 100vw, 33vw"
+  className="object-cover group-hover:scale-105 transition-transform duration-700"
+/>
                     <span className="absolute top-4 right-4 bg-mangrove-900/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase text-mangrove-accent border border-mangrove-accent/30">
                       {p.categoryLabel}
                     </span>
