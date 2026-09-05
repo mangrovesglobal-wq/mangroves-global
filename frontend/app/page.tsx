@@ -1,69 +1,117 @@
 import Image from "next/image";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="bg-white text-[#141f1c] min-h-screen">
+      {/* Header */}
+      <header className="w-full">
+        <div className="relative flex items-center h-20 sm:h-24">
+          <div
+            className="relative h-full flex items-center shrink-0 bg-[#22332e] pl-4 sm:pl-6 pr-10 sm:pr-16"
+            style={{ clipPath: "polygon(0 0, 100% 0, 62% 100%, 0 100%)" }}
           >
             <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+              src="/images/logo/mangroves-global-logo-badge.png"
+              width={120}
+              height={64}
+              className="h-14 sm:h-16 w-auto block"
+              alt="Mangroves Global — UAE B2B Commodity Sourcing, Freight Logistics, and Digital Marketing Group"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+        </div>
+      </header>
+
+      {/* Main */}
+      <main className="px-6 lg:px-16 py-16 sm:py-24">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="inline-flex items-center px-4 py-2 rounded-full border border-[#d5ad75]/40 bg-[#d5ad75]/10 text-[#22332e] text-xs uppercase tracking-widest mb-8">
+            UAE Headquartered · Global Operational Reach
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-tight mb-6">
+            Everything Your Business Needs to{" "}
+            <br className="hidden sm:inline" />
+            <span className="font-normal text-[#d5ad75]">
+              Source, Ship, and Scale.
+            </span>
+          </h1>
+
+          <p className="max-w-2xl mx-auto text-[#22332e]/70 text-base sm:text-lg font-light leading-relaxed mb-16">
+            Streamline your global supply chain, optimize cargo transport, and accelerate corporate growth through specialized enterprise divisions.
+          </p>
+
+          {/* Division cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
+            <a
+              href="/trading"
+              className="group block rounded-2xl border border-[#dde7e4] bg-[#f2f6f5]/60 p-8 hover:border-[#d5ad75] hover:bg-white hover:shadow-xl transition-all duration-300"
+            >
+              <div className="text-[#d5ad75] text-xs uppercase tracking-widest font-semibold mb-4">
+                Division 01
+              </div>
+              <h2 className="text-2xl font-semibold mb-3">
+                Commodity Sourcing &amp; Trading
+              </h2>
+              <p className="text-[#22332e]/60 text-sm leading-relaxed mb-6">
+                Direct origin sourcing for premium Indian spices, agricultural commodities, and cross-border B2B trading.
+              </p>
+              <span className="inline-flex items-center text-xs uppercase tracking-widest font-semibold group-hover:text-[#d5ad75] transition-colors">
+                Discover Trading Solutions →
+              </span>
+            </a>
+
+            <a
+              href="/logistics"
+              className="group block rounded-2xl border border-[#dde7e4] bg-[#f2f6f5]/60 p-8 hover:border-[#d5ad75] hover:bg-white hover:shadow-xl transition-all duration-300"
+            >
+              <div className="text-[#d5ad75] text-xs uppercase tracking-widest font-semibold mb-4">
+                Division 02
+              </div>
+              <h2 className="text-2xl font-semibold mb-3">
+                Freight &amp; Supply Chain
+              </h2>
+              <p className="text-[#22332e]/60 text-sm leading-relaxed mb-6">
+                End-to-end cargo logistics, international air and sea freight forwarding, and customs clearance routing.
+              </p>
+              <span className="inline-flex items-center text-xs uppercase tracking-widest font-semibold group-hover:text-[#d5ad75] transition-colors">
+                Explore Freight Logistics →
+              </span>
+            </a>
+
+            <a
+              href="/creative"
+              className="group block rounded-2xl border border-[#dde7e4] bg-[#f2f6f5]/60 p-8 hover:border-[#d5ad75] hover:bg-white hover:shadow-xl transition-all duration-300"
+            >
+              <div className="text-[#d5ad75] text-xs uppercase tracking-widest font-semibold mb-4">
+                Division 03
+              </div>
+              <h2 className="text-2xl font-semibold mb-3">
+                Advertising &amp; Brand Growth
+              </h2>
+              <p className="text-[#22332e]/60 text-sm leading-relaxed mb-6">
+                Strategic B2B digital marketing, corporate branding solutions, and high-impact media production.
+              </p>
+              <span className="inline-flex items-center text-xs uppercase tracking-widest font-semibold group-hover:text-[#d5ad75] transition-colors">
+                Access Creative Services →
+              </span>
+            </a>
+          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-[#22332e] text-white/70 text-xs">
+        <div className="max-w-7xl mx-auto px-6 lg:px-16 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <Image
+            src="/images/logo/mangroves-global-logo-wordmark.png"
+            width={180}
+            height={24}
+            className="h-6 w-auto block"
+            alt="Mangroves Global Trading FZ LLC"
+          />
+          <p>&copy; 2026 Mangroves Global Trading FZ LLC. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }
