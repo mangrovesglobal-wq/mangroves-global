@@ -293,7 +293,7 @@ export default function TradingPageContent() {
                 className="group flex flex-col items-center gap-2 text-center"
               >
                 <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border border-slate-800 group-hover:border-mangrove-accent/60 transition-colors relative">
-   <Image src={p.image} alt={p.name} fill sizes="80px" className="object-cover" />
+                  <Image src={p.image} alt={p.name} fill className="object-cover" />
                 </div>
                 <span className="text-[10px] sm:text-xs text-slate-400 group-hover:text-mangrove-accent transition-colors">
                   {p.name}
@@ -441,13 +441,12 @@ export default function TradingPageContent() {
                   className="group rounded-2xl bg-mangrove-800/30 border border-slate-800/80 overflow-hidden hover:border-mangrove-accent/50 transition-all duration-500"
                 >
                   <div className="h-56 bg-slate-800 relative overflow-hidden">
-                   <Image
-  src={p.image}
-  alt={p.alt}
-  fill
-  sizes="(max-width: 768px) 100vw, 33vw"
-  className="object-cover group-hover:scale-105 transition-transform duration-700"
-/>
+                    <Image
+                      src={p.image}
+                      alt={p.alt}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
                     <span className="absolute top-4 right-4 bg-mangrove-900/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase text-mangrove-accent border border-mangrove-accent/30">
                       {p.categoryLabel}
                     </span>
@@ -599,12 +598,11 @@ export default function TradingPageContent() {
             <div className="lg:col-span-7 bg-mangrove-800/20 border border-slate-800 p-8 sm:p-12 rounded-3xl">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/*
-                  Web3Forms integration:
-                  1. Create a free account at https://web3forms.com and verify info@mangrovesglobal.com
-                  2. Replace YOUR_WEB3FORMS_ACCESS_KEY below with the real access key.
-                  Until that key is set, submitting this form will show the error message below.
+                  Web3Forms integration — live.
+                  Submissions are delivered to the email verified on the Web3Forms account.
+                  Access keys are meant to be public/embedded client-side — this is normal for Web3Forms.
                 */}
-                <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
+                <input type="hidden" name="access_key" value="164f7e39-a60b-4f37-8cc8-4f26185e671e" />
                 <input type="hidden" name="subject" value="New Trade Inquiry — Mangroves Global website" />
                 <input type="hidden" name="from_name" value="Mangroves Global Website" />
                 <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
