@@ -43,7 +43,7 @@ export default function SupplyChainConsultingContent() {
       </header>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-[60] flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
+        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
           <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-6 text-mangrove-900" aria-label="Close menu">
             <X className="w-8 h-8" />
           </button>
@@ -104,7 +104,7 @@ export default function SupplyChainConsultingContent() {
           <div className="mt-16 p-8 sm:p-10 rounded-3xl bg-mangrove-50 border border-mangrove-100 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="font-serif text-2xl text-mangrove-900 mb-2">Request a Consultation</h3>
-              <p className="text-mangrove-800/60 text-sm">Tell us about your current logistics setup and where you'd like to improve.</p>
+              <p className="text-mangrove-800/60 text-sm">Tell us about your current logistics setup and where you&apos;d like to improve.</p>
             </div>
             <Link href="/logistics#contact" className="shrink-0 px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-colors duration-300 rounded-full font-semibold text-xs tracking-widest uppercase">
               Request a Consultation

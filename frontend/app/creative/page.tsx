@@ -1,18 +1,12 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import CreativePageContent from "@/components/CreativePageContent";
+
+export const metadata: Metadata = {
+  title: "Digital Marketing & Creative Agency UAE | Mangroves Global",
+  description:
+    "Advertising, digital marketing, branding and creative production for UAE businesses. Strategic communication built around measurable business objectives.",
+};
 
 export default function CreativePage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="text-center px-6">
-        <div className="text-mangrove-accent text-xs uppercase tracking-widest font-semibold mb-4">
-          Division 03
-        </div>
-        <h1 className="text-4xl font-bold text-mangrove-900 mb-4">Advertising &amp; Creative</h1>
-        <p className="text-mangrove-800/60 mb-8">This page is under construction.</p>
-        <Link href="/" className="text-sm underline text-mangrove-800">
-          Back to Mangroves Global
-        </Link>
-      </div>
-    </div>
-  );
+  return <CreativePageContent />;
 }
