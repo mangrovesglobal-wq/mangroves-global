@@ -12,7 +12,18 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Plus Jakarta Sans', ...defaultTheme.fontFamily.sans],
+                serif: ['Poppins', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                mangrove: {
+                    50: '#f2f6f5',
+                    100: '#dde7e4',
+                    500: '#3a5951',
+                    800: '#22332e',
+                    900: '#141f1c',
+                    accent: '#d5ad75',
+                },
             },
         },
     },

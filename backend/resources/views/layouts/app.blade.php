@@ -1,36 +1,57 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ config('app.name', 'Mangroves Global') }} — Admin</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="font-sans text-mangrove-900 antialiased bg-mangrove-50">
+    <div class="flex min-h-screen">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        {{-- Sidebar --}}
+        <aside class="w-64 bg-mangrove-900 min-h-screen text-white/80 hidden md:block shrink-0">
+            <div class="p-6 border-b border-white/10">
+                <a href="{{ route('dashboard') }}">
+                    <img src="{{ asset('images/logo/mangroves-global-logo-badge.png') }}" class="h-10 w-auto" alt="Mangroves Global">
+                </a>
+            </div>
+            <nav class="p-4 space-y-1 text-sm">
+                <a href="{{ route('dashboard') }}"
+                   class="block px-4 py-2.5 rounded-lg {{ request()->routeIs('dashboard') ? 'bg-mangrove-accent text-mangrove-900 font-semibold' : 'hover:bg-white/5' }}">
+                    Dashboard
+                </a>
+                <span class="block px-4 py-2.5 rounded-lg text-white/40 cursor-not-allowed">Quote Requests</span>
+                <span class="block px-4 py-2.5 rounded-lg text-white/40 cursor-not-allowed">Blog Posts</span>
+                <span class="block px-4 py-2.5 rounded-lg text-white/40 cursor-not-allowed">Services</span>
+                <span class="block px-4 py-2.5 rounded-lg text-white/40 cursor-not-allowed">Settings</span>
+            </nav>
+            <div class="p-4 mt-auto border-t border-white/10 absolute bottom-0 w-64">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-white/5">
+                        Log Out
+                    </button>
+                </form>
+            </div>
+        </aside>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+        {{-- Main content --}}
+        <div class="flex-1">
+            @if (isset($header))
+                <header class="px-8 pt-8 flex items-center justify-between">
+                    {{ $header }}
+                    <div class="w-9 h-9 rounded-full bg-mangrove-accent flex items-center justify-center text-mangrove-900 text-sm font-semibold">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                     </div>
                 </header>
-            @endisset
+            @endif
 
-            <!-- Page Content -->
-            <main>
+            <main class="p-8">
                 {{ $slot }}
             </main>
         </div>
-    </body>
+    </div>
+</body>
 </html>
