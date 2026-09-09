@@ -139,13 +139,27 @@ export default function TradingPageContent() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    // Replace this with your real API URL once deployed
+    // (e.g. https://api.mangrovesglobal.com/api/quote-requests)
+    const API_BASE_URL = "http://127.0.0.1:8000";
+
+    const payload = {
+      division: "trading",
+      name: formData.get("name"),
+      company: formData.get("company"),
+      email: formData.get("email"),
+      subject: formData.get("commodity"),
+      message: formData.get("message"),
+    };
+
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch(`${API_BASE_URL}/api/quote-requests`, {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
       const result = await response.json();
-      if (result.success) {
+      if (response.ok && result.success) {
         setFormStatus("success");
         form.reset();
       } else {
@@ -214,7 +228,7 @@ export default function TradingPageContent() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-mangrove-900/95 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-white">
+        <div className="fixed inset-0 bg-mangrove-900/95 backdrop-blur-xl z-[60] flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-white">
           <button
             onClick={() => setMobileMenuOpen(false)}
             className="absolute top-6 right-6 text-white"
@@ -597,16 +611,6 @@ export default function TradingPageContent() {
 
             <div className="lg:col-span-7 bg-mangrove-800/20 border border-slate-800 p-8 sm:p-12 rounded-3xl">
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/*
-                  Web3Forms integration — live.
-                  Submissions are delivered to the email verified on the Web3Forms account.
-                  Access keys are meant to be public/embedded client-side — this is normal for Web3Forms.
-                */}
-                <input type="hidden" name="access_key" value="164f7e39-a60b-4f37-8cc8-4f26185e671e" />
-                <input type="hidden" name="subject" value="New Trade Inquiry — Mangroves Global website" />
-                <input type="hidden" name="from_name" value="Mangroves Global Website" />
-                <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="tf-name" className="block text-xs uppercase tracking-wider text-slate-400 mb-2">
