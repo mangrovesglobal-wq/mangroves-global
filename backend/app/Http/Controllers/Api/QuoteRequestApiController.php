@@ -11,7 +11,7 @@ class QuoteRequestApiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'division' => 'required|in:trading,logistics,creative',
+            'division' => 'required|in:trading,logistics,creative,general',
             'name' => 'required|string|max:255',
             'company' => 'nullable|string|max:255',
             'email' => 'required|email|max:255',

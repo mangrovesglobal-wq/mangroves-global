@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, CheckCircle2, AlertTriangle } from "lucide-react";
 
 const services = [
   { num: "01", name: "Freight Coordination", desc: "Sea and air freight coordination through established logistics providers." },
@@ -22,6 +22,49 @@ const industries = ["Food & Spices", "Agriculture & Commodities", "Textiles & Ga
 
 export default function LogisticsPageContent() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormStatus("sending");
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    // Replace this with your real API URL once deployed
+    const API_BASE_URL = "http://127.0.0.1:8000";
+
+    const origin = formData.get("origin");
+    const destination = formData.get("destination");
+    const shipmentDetails = formData.get("message");
+    const combinedMessage = `Origin: ${origin || "—"}\nDestination: ${destination || "—"}\n\n${shipmentDetails}`;
+
+    const payload = {
+      division: "logistics",
+      name: formData.get("name"),
+      company: formData.get("company"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      subject: `${origin || "?"} → ${destination || "?"}`,
+      message: combinedMessage,
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/quote-requests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (response.ok && result.success) {
+        setFormStatus("success");
+        form.reset();
+      } else {
+        setFormStatus("error");
+      }
+    } catch {
+      setFormStatus("error");
+    }
+  }
 
   return (
     <div className="bg-white text-mangrove-900 antialiased overflow-x-hidden">
@@ -93,8 +136,7 @@ export default function LogisticsPageContent() {
       <main className="pt-20 sm:pt-24">
         {/* HERO */}
         <section className="relative px-6 lg:px-16 py-24 lg:py-32 overflow-hidden bg-white">
-          <div className="absolute top-0 right-0 w-[36rem] h-[36rem] rounded-full bg-mangrove-accent/10 blur-3xl -translate-y-1/3 translate-x-1/4"></div>
-          <div className="absolute bottom-0 left-0 w-[30rem] h-[30rem] rounded-full bg-mangrove-500/10 blur-3xl translate-y-1/3 -translate-x-1/4"></div>
+          
           <div className="relative z-10 max-w-5xl mx-auto text-center">
             <div className="inline-flex items-center px-4 py-2 rounded-full border border-mangrove-accent/40 bg-mangrove-accent/10 text-mangrove-800 text-xs uppercase tracking-widest mb-8">
               Logistics &amp; Supply Chain Division
@@ -217,14 +259,76 @@ export default function LogisticsPageContent() {
           </div>
         </section>
 
-        {/* FINAL CTA */}
+        {/* FINAL CTA — quote form */}
         <section id="contact" className="py-20 px-6 lg:px-16 bg-mangrove-accent">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-mangrove-900 mb-4">Start a logistics conversation</h2>
-            <p className="text-mangrove-900/70 mb-8">Tell us about your shipment and we&apos;ll come back with a coordinated logistics plan.</p>
-            <a href="mailto:info@mangrovesglobal.com" className="inline-flex px-8 py-4 bg-mangrove-900 text-mangrove-accent hover:bg-white hover:text-mangrove-900 transition-colors rounded-full font-semibold text-xs tracking-widest uppercase">
-              Request a Logistics Quote
-            </a>
+          <div className="max-w-2xl mx-auto">
+            <div className="text-center mb-10">
+              <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-mangrove-900 mb-4">Start a logistics conversation</h2>
+              <p className="text-mangrove-900/70">Tell us about your shipment and we&apos;ll come back with a coordinated logistics plan.</p>
+            </div>
+
+            {formStatus === "success" ? (
+              <div className="bg-white rounded-3xl p-10 text-center">
+                <CheckCircle2 className="w-10 h-10 text-mangrove-accent mx-auto mb-4" />
+                <p className="font-serif text-xl text-mangrove-900 mb-2">Quote request received.</p>
+                <p className="text-mangrove-800/60 text-sm">Our logistics team will follow up shortly.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 sm:p-10 space-y-5">
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="lg-name" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Full Name</label>
+                    <input id="lg-name" name="name" type="text" required className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                  </div>
+                  <div>
+                    <label htmlFor="lg-company" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Company Name</label>
+                    <input id="lg-company" name="company" type="text" required className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="lg-email" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Business Email</label>
+                    <input id="lg-email" name="email" type="email" required className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                  </div>
+                  <div>
+                    <label htmlFor="lg-phone" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Phone / WhatsApp</label>
+                    <input id="lg-phone" name="phone" type="text" required className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="lg-origin" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Origin</label>
+                    <input id="lg-origin" name="origin" type="text" placeholder="City, Country" className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                  </div>
+                  <div>
+                    <label htmlFor="lg-destination" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Destination</label>
+                    <input id="lg-destination" name="destination" type="text" placeholder="City, Country" className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="lg-message" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Shipment Details</label>
+                  <textarea id="lg-message" name="message" rows={4} required placeholder="Cargo type, quantity, timeline..." className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={formStatus === "sending"}
+                  className="w-full py-4 bg-mangrove-accent text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-colors rounded-full font-semibold text-xs tracking-widest uppercase disabled:opacity-60"
+                >
+                  {formStatus === "sending" ? "Sending..." : "Request a Logistics Quote"}
+                </button>
+
+                {formStatus === "error" && (
+                  <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-800">
+                    <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+                    <span>Something went wrong sending your request. Please try again or email us directly.</span>
+                  </div>
+                )}
+              </form>
+            )}
           </div>
         </section>
       </main>

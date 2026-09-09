@@ -13,13 +13,34 @@ export default function ContactPageContent() {
     setFormStatus("sending");
     const form = e.currentTarget;
     const formData = new FormData(form);
+
+    // Replace this with your real API URL once deployed
+    const API_BASE_URL = "http://127.0.0.1:8000";
+
+    const divisionMap: Record<string, string> = {
+      "Trading": "trading",
+      "Logistics": "logistics",
+      "Creative": "creative",
+      "Not sure / General inquiry": "general",
+    };
+    const rawDivision = String(formData.get("division") || "");
+
+    const payload = {
+      division: divisionMap[rawDivision] || "general",
+      name: formData.get("name"),
+      company: formData.get("company"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+    };
+
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch(`${API_BASE_URL}/api/quote-requests`, {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
       const result = await response.json();
-      if (result.success) {
+      if (response.ok && result.success) {
         setFormStatus("success");
         form.reset();
       } else {
@@ -113,11 +134,6 @@ export default function ContactPageContent() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="bg-mangrove-50 border border-mangrove-100 rounded-3xl p-8 sm:p-10 space-y-5">
-                <input type="hidden" name="access_key" value="164f7e39-a60b-4f37-8cc8-4f26185e671e" />
-                <input type="hidden" name="subject" value="New General Inquiry — Mangroves Global website" />
-                <input type="hidden" name="from_name" value="Mangroves Global" />
-                <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
-
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="ct-name" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Full Name</label>

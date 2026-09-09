@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, CheckCircle2, AlertTriangle } from "lucide-react";
 
 const serviceGroups = [
   {
@@ -48,6 +48,43 @@ const industries = ["Food & FMCG", "Trading & Distribution", "Logistics", "Real 
 
 export default function CreativePageContent() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormStatus("sending");
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    // Replace this with your real API URL once deployed
+    const API_BASE_URL = "http://127.0.0.1:8000";
+
+    const payload = {
+      division: "creative",
+      name: formData.get("name"),
+      company: formData.get("company"),
+      email: formData.get("email"),
+      subject: formData.get("service"),
+      message: formData.get("message"),
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/quote-requests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (response.ok && result.success) {
+        setFormStatus("success");
+        form.reset();
+      } else {
+        setFormStatus("error");
+      }
+    } catch {
+      setFormStatus("error");
+    }
+  }
 
   return (
     <div className="bg-white text-mangrove-900 antialiased overflow-x-hidden">
@@ -98,8 +135,7 @@ export default function CreativePageContent() {
       <main className="pt-20 sm:pt-24">
         {/* HERO */}
         <section className="relative px-6 lg:px-16 py-24 lg:py-32 overflow-hidden bg-white">
-          <div className="absolute top-0 right-0 w-[36rem] h-[36rem] rounded-full bg-mangrove-accent/10 blur-3xl -translate-y-1/3 translate-x-1/4"></div>
-          <div className="absolute bottom-0 left-0 w-[30rem] h-[30rem] rounded-full bg-mangrove-500/10 blur-3xl translate-y-1/3 -translate-x-1/4"></div>
+          
           <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
             <div>
               <div className="inline-flex items-center px-4 py-2 rounded-full border border-mangrove-accent/40 bg-mangrove-accent/10 text-mangrove-800 text-xs uppercase tracking-widest mb-8">
@@ -252,14 +288,72 @@ export default function CreativePageContent() {
           </div>
         </section>
 
-        {/* FINAL CTA */}
+        {/* FINAL CTA — project inquiry form */}
         <section id="contact" className="py-20 px-6 lg:px-16 bg-mangrove-accent">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-mangrove-900 mb-4">Start a project</h2>
-            <p className="text-mangrove-900/70 mb-8">Tell us what you&apos;re building and we&apos;ll put together the right team and approach.</p>
-            <a href="mailto:info@mangrovesglobal.com" className="inline-flex px-8 py-4 bg-mangrove-900 text-mangrove-accent hover:bg-white hover:text-mangrove-900 transition-colors rounded-full font-semibold text-xs tracking-widest uppercase">
-              Start a Project
-            </a>
+          <div className="max-w-2xl mx-auto">
+            <div className="text-center mb-10">
+              <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-mangrove-900 mb-4">Start a project</h2>
+              <p className="text-mangrove-900/70">Tell us what you&apos;re building and we&apos;ll put together the right team and approach.</p>
+            </div>
+
+            {formStatus === "success" ? (
+              <div className="bg-white rounded-3xl p-10 text-center">
+                <CheckCircle2 className="w-10 h-10 text-mangrove-accent mx-auto mb-4" />
+                <p className="font-serif text-xl text-mangrove-900 mb-2">Thanks — your project inquiry has been sent.</p>
+                <p className="text-mangrove-800/60 text-sm">Our creative team will follow up shortly.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 sm:p-10 space-y-5">
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="cr-name" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Full Name</label>
+                    <input id="cr-name" name="name" type="text" required className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                  </div>
+                  <div>
+                    <label htmlFor="cr-company" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Company Name</label>
+                    <input id="cr-company" name="company" type="text" required className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="cr-email" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Email</label>
+                    <input id="cr-email" name="email" type="email" required className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                  </div>
+                  <div>
+                    <label htmlFor="cr-service" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Service Required</label>
+                    <select id="cr-service" name="service" className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm text-mangrove-800 focus:outline-none focus:border-mangrove-accent">
+                      <option>Advertising &amp; Communication</option>
+                      <option>Digital Marketing</option>
+                      <option>Branding &amp; Creative</option>
+                      <option>Content &amp; Production</option>
+                      <option>Web &amp; Digital Experiences</option>
+                      <option>Not sure yet</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="cr-message" className="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Tell Us About the Project</label>
+                  <textarea id="cr-message" name="message" rows={4} required placeholder="What are you looking to achieve?" className="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-mangrove-accent" />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={formStatus === "sending"}
+                  className="w-full py-4 bg-mangrove-accent text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-colors rounded-full font-semibold text-xs tracking-widest uppercase disabled:opacity-60"
+                >
+                  {formStatus === "sending" ? "Sending..." : "Start a Project"}
+                </button>
+
+                {formStatus === "error" && (
+                  <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-800">
+                    <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+                    <span>Something went wrong sending your request. Please try again or email us directly.</span>
+                  </div>
+                )}
+              </form>
+            )}
           </div>
         </section>
       </main>
