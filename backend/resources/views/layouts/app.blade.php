@@ -26,7 +26,10 @@
                    class="block px-4 py-2.5 rounded-lg {{ request()->routeIs('quote-requests.*') ? 'bg-mangrove-accent text-mangrove-900 font-semibold' : 'hover:bg-white/5' }}">
                     Quote Requests
                 </a>
-                <span class="block px-4 py-2.5 rounded-lg text-white/40 cursor-not-allowed">Blog Posts</span>
+                <a href="{{ route('blog-posts.index') }}"
+                   class="block px-4 py-2.5 rounded-lg {{ request()->routeIs('blog-posts.*') ? 'bg-mangrove-accent text-mangrove-900 font-semibold' : 'hover:bg-white/5' }}">
+                    Blog Posts
+                </a>
                 <span class="block px-4 py-2.5 rounded-lg text-white/40 cursor-not-allowed">Services</span>
                 <span class="block px-4 py-2.5 rounded-lg text-white/40 cursor-not-allowed">Settings</span>
             </nav>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuoteRequestController;
+use App\Http\Controllers\BlogPostController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/quote-requests', [QuoteRequestController::class, 'index'])->name('quote-requests.index');
     Route::get('/quote-requests/{quoteRequest}', [QuoteRequestController::class, 'show'])->name('quote-requests.show');
     Route::patch('/quote-requests/{quoteRequest}', [QuoteRequestController::class, 'updateStatus'])->name('quote-requests.update-status');
+
+    Route::resource('blog-posts', BlogPostController::class)->except(['show']);
 });
 
 require __DIR__.'/auth.php';

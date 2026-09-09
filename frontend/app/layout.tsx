@@ -15,12 +15,21 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mangrovesglobal.com"),
   title: {
     default: "Mangroves Global",
     template: "%s | Mangroves Global",
   },
   description:
     "Mangroves Global Trading FZ LLC — UAE-based business group operating across trading, logistics and creative business services.",
+  openGraph: {
+    siteName: "Mangroves Global",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({
