@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function SeaFreightContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type SeaFreightContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function SeaFreightContent({ introText, blocks }: SeaFreightContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -67,26 +77,16 @@ export default function SeaFreightContent() {
             Sea Freight Coordination — FCL &amp; LCL for UAE &amp; GCC Importers
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            We coordinate FCL and LCL sea freight movements between India and the UAE, and onward across the GCC, through established ocean freight providers — covering port-to-port, door-to-port, port-to-door and full door-to-door shipments.
+            {introText}
           </p>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Coordinate</h2>
-            <ul>
-              <li><strong>FCL (Full Container Load)</strong> — 20ft, 40ft and 40HC container coordination for larger volume shipments.</li>
-              <li><strong>LCL (Less than Container Load)</strong> — consolidated shipments for smaller volumes, sharing container space with other cargo.</li>
-              <li><strong>Port-to-port, door-to-port, port-to-door and door-to-door</strong> — coordination matched to your operational setup at both ends.</li>
-              <li><strong>Import, export and re-export</strong> — coordination for all three movement types between India, the UAE and the GCC.</li>
-            </ul>
-
-            <h2>Cargo We Regularly Coordinate</h2>
-            <p>Sea freight coordination covers general cargo, food products and spices, agricultural commodities, machinery, furniture, garments and commercial goods. Dangerous goods (DG) capability is not assumed — this is confirmed on a per-shipment basis with the relevant licensed partner.</p>
-
-            <h2>How It Works</h2>
-            <p>Tell us your origin, destination, cargo type, volume and required shipping date. We identify suitable carriers and routing, coordinate quotations, and present a clear plan before anything moves — execution is then coordinated through to delivery with status updates along the way.</p>
-
-            <h2>Important Note on Execution</h2>
-            <p>Mangroves Global coordinates sea freight movements through established logistics providers. Where a regulated service requires a specific licence or authorization, execution is arranged through appropriately licensed service providers.</p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">
