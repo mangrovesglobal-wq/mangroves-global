@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function CustomsCoordinationContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type CustomsCoordinationContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function CustomsCoordinationContent({ introText, blocks }: CustomsCoordinationContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -67,7 +77,7 @@ export default function CustomsCoordinationContent() {
             Customs Coordination Without the Complexity
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            We help coordinate the documentation and communication side of customs clearance for shipments moving through UAE and GCC ports, working alongside appropriately licensed customs brokers.
+            {introText}
           </p>
 
           <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
@@ -82,24 +92,12 @@ export default function CustomsCoordinationContent() {
           </div>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Coordinate</h2>
-            <ul>
-              <li><strong>Documentation coordination</strong> — organising shipment paperwork ahead of clearance.</li>
-              <li><strong>Customs broker communication</strong> — acting as your point of contact with the licensed broker handling clearance.</li>
-              <li><strong>Import/export documentation</strong> — coordinating the paperwork required for both directions of trade.</li>
-              <li><strong>Duty/VAT information coordination</strong> — helping you understand applicable charges ahead of shipment.</li>
-              <li><strong>Inspection coordination &amp; clearance status updates</strong> — keeping you informed as your shipment moves through the process.</li>
-            </ul>
-
-            <h2>Important Note on Execution</h2>
-            <p>
-              Customs clearance is performed by appropriately licensed customs brokers where required. Mangroves Global coordinates customs clearance through licensed customs partners — we do not directly clear customs ourselves.
-            </p>
-
-            <h2>How It Works</h2>
-            <p>
-              As part of your broader shipment coordination, we manage documentation and communication with the customs broker on your behalf, so you have one point of contact rather than needing to manage the broker relationship directly.
-            </p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">

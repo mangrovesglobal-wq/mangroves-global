@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function AirFreightContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type AirFreightContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function AirFreightContent({ introText, blocks }: AirFreightContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -67,7 +77,7 @@ export default function AirFreightContent() {
             Air Freight Solutions UAE — Time-Sensitive India–UAE Cargo
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            We coordinate air freight movements for urgent cargo, samples, small commercial shipments and high-value or time-sensitive goods, between India, the UAE and the wider GCC.
+            {introText}
           </p>
 
           <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
@@ -82,21 +92,12 @@ export default function AirFreightContent() {
           </div>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Coordinate</h2>
-            <ul>
-              <li><strong>Urgent &amp; time-sensitive cargo</strong> — coordination prioritising speed for deadline-driven shipments.</li>
-              <li><strong>Samples &amp; small commercial shipments</strong> — suited to buyers and traders moving smaller volumes quickly.</li>
-              <li><strong>High-value cargo</strong> — coordination with appropriate handling and documentation for higher-value goods.</li>
-              <li><strong>Export/import coordination</strong> — origin airport to UAE customs coordination through to delivery.</li>
-            </ul>
-
-            <h2>How It Works</h2>
-            <p>
-              Origin → Airport → Air Freight → UAE Customs Coordination → Delivery. Tell us your cargo, origin, destination and required timeline, and we identify the fastest suitable routing through our air freight partner network, coordinating quotations and keeping you updated through to delivery.
-            </p>
-
-            <h2>Important Note on Execution</h2>
-            <p>Mangroves Global coordinates air freight movements through established logistics providers. Where a regulated service requires a specific licence or authorization, execution is arranged through appropriately licensed service providers.</p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">

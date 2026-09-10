@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function SupplyChainConsultingContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type SupplyChainConsultingContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function SupplyChainConsultingContent({ introText, blocks }: SupplyChainConsultingContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -67,7 +77,7 @@ export default function SupplyChainConsultingContent() {
             Turn Logistics Costs Into Strategic Advantage
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            Beyond individual shipment coordination, we work with UAE and GCC businesses on the bigger picture — evaluating routes, suppliers, warehousing and workflows to identify real operational improvements.
+            {introText}
           </p>
 
           <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
@@ -82,25 +92,12 @@ export default function SupplyChainConsultingContent() {
           </div>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Offer</h2>
-            <ul>
-              <li><strong>Logistics cost audit</strong> — identifying unnecessary logistics costs in your current setup.</li>
-              <li><strong>Route optimization</strong> — evaluating alternative transportation routes for cost or time efficiency.</li>
-              <li><strong>Supplier network review</strong> — evaluating your existing logistics suppliers against alternatives.</li>
-              <li><strong>Distribution &amp; warehouse planning</strong> — designing practical distribution structures and storage requirements.</li>
-              <li><strong>Shipment consolidation</strong> — identifying opportunities to consolidate shipments for cost savings.</li>
-              <li><strong>Import/export workflow review</strong> — reviewing documentation and operational bottlenecks in your process.</li>
-            </ul>
-
-            <h2>Who This Is For</h2>
-            <p>
-              This service is designed for businesses that may not have an internal logistics department, but are managing enough shipment volume that a structured review could reveal meaningful cost or efficiency improvements — without needing to build out an in-house logistics function.
-            </p>
-
-            <h2>How It Works</h2>
-            <p>
-              We start by understanding your current logistics setup — routes, suppliers, volumes and pain points — then identify specific, practical recommendations rather than generic advice. Engagements can be project-based or ongoing, depending on what you need.
-            </p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">

@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function RoadTransportContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type RoadTransportContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function RoadTransportContent({ introText, blocks }: RoadTransportContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -67,7 +77,7 @@ export default function RoadTransportContent() {
             Road Transportation — UAE &amp; GCC Coordination
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            We coordinate road transportation across the UAE and into the wider GCC through qualified transport providers, matched to cargo, vehicle and route requirements.
+            {introText}
           </p>
 
           <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
@@ -82,23 +92,12 @@ export default function RoadTransportContent() {
           </div>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Coordinate</h2>
-            <ul>
-              <li><strong>Container transportation</strong> — port pickup and delivery coordination for FCL containers.</li>
-              <li><strong>FTL (Full Truck Load)</strong> — dedicated vehicle coordination for larger shipments.</li>
-              <li><strong>Local UAE transportation</strong> — inter-emirate movement between Dubai, Sharjah, Ajman, Ras Al Khaimah and Abu Dhabi.</li>
-              <li><strong>GCC road transportation</strong> — coordination for UAE-to-GCC movement, subject to route and regulatory requirements.</li>
-            </ul>
-
-            <h2>Important Note on Execution</h2>
-            <p>
-              Transportation is arranged through qualified transport providers according to cargo, vehicle and route requirements. Mangroves Global does not claim ownership of a transport fleet — road transportation execution is coordinated through our qualified transport network.
-            </p>
-
-            <h2>How It Works</h2>
-            <p>
-              Tell us your cargo, origin, destination and required delivery date. We match your shipment to a suitable transport provider and vehicle type, coordinate the plan, and keep you updated through to delivery.
-            </p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">

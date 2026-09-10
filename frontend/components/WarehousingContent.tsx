@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function WarehousingContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type WarehousingContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function WarehousingContent({ introText, blocks }: WarehousingContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -67,7 +77,7 @@ export default function WarehousingContent() {
             Warehousing &amp; 3PL Coordination — UAE
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            We connect customers with suitable warehouse and 3PL capacity through our logistics network — short- and long-term storage, inventory handling, fulfilment and distribution.
+            {introText}
           </p>
 
           <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
@@ -82,24 +92,12 @@ export default function WarehousingContent() {
           </div>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Coordinate</h2>
-            <ul>
-              <li><strong>Short- and long-term storage</strong> — flexible warehousing matched to your holding period.</li>
-              <li><strong>Pallet &amp; bulk storage</strong> — coordination for palletized and bulk cargo storage needs.</li>
-              <li><strong>Inventory handling</strong> — stock management coordination through our warehouse partners.</li>
-              <li><strong>Pick &amp; pack, labelling and repacking</strong> — fulfilment-related handling coordination.</li>
-              <li><strong>Distribution &amp; cross-docking</strong> — coordination where cross-docking capacity is available.</li>
-            </ul>
-
-            <h2>Important Note on Execution</h2>
-            <p>
-              Mangroves Global does not claim ownership of warehouse facilities. We connect customers with suitable warehouse and 3PL capacity through our logistics network — access is coordinated according to your cargo, volume and location requirements.
-            </p>
-
-            <h2>How It Works</h2>
-            <p>
-              Tell us your cargo type, expected volume, holding duration and any fulfilment requirements (pick &amp; pack, labelling, etc.). We identify suitable warehouse and 3PL capacity from our network and coordinate access and terms on your behalf.
-            </p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">
