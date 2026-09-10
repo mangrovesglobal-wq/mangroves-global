@@ -370,6 +370,16 @@ export default function TradingPageContent() {
                   </div>
                 </div>
               </div>
+
+              <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-slate-800">
+                <Image
+                  src="/trading/images/premium-indian-spices-uae.jpg"
+                  alt="Flat lay of premium Indian spices — cloves, dried chillies, turmeric, cardamom, cinnamon and cumin — sourced by Mangroves Global for UAE and GCC buyers"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 480px"
+                  className="object-cover"
+                />
+              </div>
             </div>
 
             <div className="lg:col-span-7 space-y-8">
