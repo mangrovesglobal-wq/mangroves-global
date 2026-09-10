@@ -139,9 +139,7 @@ export default function TradingPageContent() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // Replace this with your real API URL once deployed
-    // (e.g. https://api.mangrovesglobal.com/api/quote-requests)
-    const API_BASE_URL = "http://127.0.0.1:8000";
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
     const payload = {
       division: "trading",
@@ -228,7 +226,7 @@ export default function TradingPageContent() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-mangrove-900/95 backdrop-blur-xl z-[60] flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-white">
+        <div className="fixed inset-0 bg-mangrove-900/95 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-white">
           <button
             onClick={() => setMobileMenuOpen(false)}
             className="absolute top-6 right-6 text-white"

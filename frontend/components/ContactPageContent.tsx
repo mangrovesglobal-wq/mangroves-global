@@ -14,8 +14,7 @@ export default function ContactPageContent() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // Replace this with your real API URL once deployed
-    const API_BASE_URL = "http://127.0.0.1:8000";
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
     const divisionMap: Record<string, string> = {
       "Trading": "trading",
