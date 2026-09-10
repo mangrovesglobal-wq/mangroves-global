@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import CustomsCoordinationContent from "@/components/CustomsCoordinationContent";
 
 export const metadata: Metadata = {
-  title: "Customs Clearance Coordination UAE | Mangroves Global",
+  title: "Customs Clearance Coordination UAE",
   description:
     "Customs documentation and clearance coordination for UAE and GCC shipments, working alongside appropriately licensed customs brokers.",
 };

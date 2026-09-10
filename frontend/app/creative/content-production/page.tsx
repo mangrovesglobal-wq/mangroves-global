@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ContentProductionContent from "@/components/ContentProductionContent";
 
 export const metadata: Metadata = {
-  title: "Content & Production Services UAE | Mangroves Global",
+  title: "Content & Production Services UAE",
   description:
     "Copywriting, photography, video and motion graphics for UAE businesses — content for campaigns, websites and social channels.",
 };

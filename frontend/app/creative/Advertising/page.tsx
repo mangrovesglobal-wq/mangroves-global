@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import AdvertisingContent from "@/components/AdvertisingContent";
 
 export const metadata: Metadata = {
-  title: "Advertising Agency UAE | Campaign Strategy | Mangroves Global",
+  title: "Advertising Agency UAE | Campaign Strategy",
   description:
     "Advertising campaigns, communication strategy and campaign execution for UAE businesses. Objective-first, not content for its own sake.",
 };

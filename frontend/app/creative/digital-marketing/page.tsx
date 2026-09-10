@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import DigitalMarketingContent from "@/components/DigitalMarketingContent";
 
 export const metadata: Metadata = {
-  title: "Digital Marketing Agency UAE | SEO & Paid Media | Mangroves Global",
+  title: "Digital Marketing Agency UAE | SEO & Paid Media",
   description:
     "SEO, social media marketing, paid digital advertising and analytics for UAE businesses. Digital marketing built around measurable objectives.",
 };

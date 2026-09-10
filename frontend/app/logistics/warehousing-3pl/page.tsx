@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import WarehousingContent from "@/components/WarehousingContent";
 
 export const metadata: Metadata = {
-  title: "Warehousing & 3PL Solutions UAE | Mangroves Global",
+  title: "Warehousing & 3PL Solutions UAE",
   description:
     "Warehouse and 3PL capacity coordination in the UAE — storage, inventory handling, pick & pack and distribution through our logistics network.",
 };

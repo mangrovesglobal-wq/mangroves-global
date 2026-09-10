@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import RoadTransportContent from "@/components/RoadTransportContent";
 
 export const metadata: Metadata = {
-  title: "Road Transport UAE | GCC Road Logistics | Mangroves Global",
+  title: "Road Transport UAE | GCC Road Logistics",
   description:
     "Road transportation coordination across the UAE and into the GCC through qualified transport partners — container, FTL and inter-emirate delivery. Request a quote.",
 };

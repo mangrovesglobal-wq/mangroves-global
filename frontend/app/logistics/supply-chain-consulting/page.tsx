@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SupplyChainConsultingContent from "@/components/SupplyChainConsultingContent";
 
 export const metadata: Metadata = {
-  title: "Supply Chain Consultancy UAE | Logistics Consulting | Mangroves Global",
+  title: "Supply Chain Consultancy UAE | Logistics Consulting",
   description:
     "Logistics cost audits, route optimization and distribution planning for UAE and GCC businesses. Request a supply chain consultation.",
 };

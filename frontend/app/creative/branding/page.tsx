@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import BrandingContent from "@/components/BrandingContent";
 
 export const metadata: Metadata = {
-  title: "Brand Identity Agency UAE | Branding & Creative | Mangroves Global",
+  title: "Brand Identity Agency UAE | Branding & Creative",
   description:
     "Brand strategy, naming, visual identity and packaging design for UAE businesses. Building brands that hold together across every touchpoint.",
 };

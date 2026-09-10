@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import AirFreightContent from "@/components/AirFreightContent";
 
 export const metadata: Metadata = {
-  title: "Air Freight UAE | India–UAE Cargo Coordination | Mangroves Global",
+  title: "Air Freight UAE | India–UAE Cargo Coordination",
   description:
     "Time-sensitive air freight coordination between India, the UAE and the GCC — urgent cargo, samples and high-value shipments. Request an air freight quote.",
 };

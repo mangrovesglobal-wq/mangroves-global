@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import WebDigitalContent from "@/components/WebDigitalContent";
 
 export const metadata: Metadata = {
-  title: "Web Development UAE | Corporate Websites | Mangroves Global",
+  title: "Web Development UAE | Corporate Websites",
   description:
     "Corporate websites, landing pages, UI/UX and CMS development for UAE businesses. Conversion-focused, SEO-structured, mobile-first builds.",
 };
