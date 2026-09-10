@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function WebDigitalContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type WebDigitalContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function WebDigitalContent({ introText, blocks }: WebDigitalContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -64,24 +74,16 @@ export default function WebDigitalContent() {
             Web Development UAE — Corporate Websites &amp; Digital Experiences
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            Corporate websites, landing pages and conversion-focused digital experiences — built to look professional and actually generate enquiries, not just exist.
+            {introText}
           </p>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Offer</h2>
-            <ul>
-              <li><strong>Corporate websites</strong> — full business websites built around clear information architecture and SEO.</li>
-              <li><strong>Landing pages</strong> — focused pages built for a specific campaign or offer.</li>
-              <li><strong>UI/UX</strong> — interface and experience design that keeps visitors moving toward a conversion.</li>
-              <li><strong>Frontend development</strong> — modern, fast, mobile-responsive builds.</li>
-              <li><strong>CMS development</strong> — content management systems so you can update your own site without a developer.</li>
-              <li><strong>Conversion-focused websites</strong> — built with a clear goal (leads, enquiries, bookings) in mind from the start.</li>
-            </ul>
-
-            <h2>Who This Is For</h2>
-            <p>
-              Businesses that need a website that actually performs — fast, mobile-friendly, SEO-structured, and built around getting visitors to take action, not just look good.
-            </p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">

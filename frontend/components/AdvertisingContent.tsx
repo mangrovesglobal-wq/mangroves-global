@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function AdvertisingContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type AdvertisingContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function AdvertisingContent({ introText, blocks }: AdvertisingContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -67,28 +77,16 @@ export default function AdvertisingContent() {
             Advertising &amp; Communication Agency UAE
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            Campaign strategy, advertising campaigns and communication planning built around a clear business objective — not content for its own sake.
+            {introText}
           </p>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Offer</h2>
-            <ul>
-              <li><strong>Campaign strategy</strong> — defining objective, audience and positioning before any creative work begins.</li>
-              <li><strong>Advertising campaigns</strong> — concept development and execution across selected channels.</li>
-              <li><strong>Communication strategy</strong> — messaging frameworks that stay consistent across every touchpoint.</li>
-              <li><strong>Creative campaign development</strong> — turning strategy into concrete campaign assets.</li>
-              <li><strong>Campaign execution</strong> — managing launch and delivery across chosen channels.</li>
-            </ul>
-
-            <h2>Who This Is For</h2>
-            <p>
-              Businesses that need advertising and communication support but don&apos;t have (or don&apos;t want to build) an internal agency function — from product launches to ongoing brand communication.
-            </p>
-
-            <h2>Regulatory Note</h2>
-            <p>
-              Mangroves Global provides advertising and communication services within the scope of the company&apos;s licensed business activity, subject to applicable UAE regulatory approvals.
-            </p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">

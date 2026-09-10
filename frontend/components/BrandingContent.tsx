@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function BrandingContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type BrandingContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function BrandingContent({ introText, blocks }: BrandingContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -64,23 +74,16 @@ export default function BrandingContent() {
             Brand Identity Agency UAE
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            Brand strategy, naming, visual identity and packaging design — building a brand that holds together across every touchpoint, not just a logo.
+            {introText}
           </p>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Offer</h2>
-            <ul>
-              <li><strong>Brand strategy</strong> — positioning, tone of voice and brand foundations before any design work starts.</li>
-              <li><strong>Naming</strong> — naming projects for new businesses, products or sub-brands.</li>
-              <li><strong>Brand identity &amp; visual identity</strong> — logo, colour system, typography and visual language.</li>
-              <li><strong>Packaging design</strong> — packaging that reflects brand identity and works commercially on shelf or online.</li>
-              <li><strong>Creative direction</strong> — ongoing creative oversight to keep a brand consistent as it grows.</li>
-            </ul>
-
-            <h2>Who This Is For</h2>
-            <p>
-              New businesses building a brand from scratch, and established businesses whose visual identity no longer matches where the business actually is.
-            </p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">

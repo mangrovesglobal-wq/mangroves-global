@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function ContentProductionContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type ContentProductionContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function ContentProductionContent({ introText, blocks }: ContentProductionContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -64,23 +74,16 @@ export default function ContentProductionContent() {
             Content &amp; Production Services UAE
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            Copywriting, photography, video and motion graphics — the content that actually fills your campaigns, website and social channels.
+            {introText}
           </p>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Offer</h2>
-            <ul>
-              <li><strong>Copywriting</strong> — website copy, campaign copy and brand messaging.</li>
-              <li><strong>Creative content</strong> — content concepts built for specific channels and audiences.</li>
-              <li><strong>Product &amp; corporate photography</strong> — photography for e-commerce, marketing and corporate use.</li>
-              <li><strong>Video content</strong> — video production for campaigns, social and corporate communication.</li>
-              <li><strong>Motion graphics</strong> — animated content for digital and social channels.</li>
-            </ul>
-
-            <h2>Who This Is For</h2>
-            <p>
-              Businesses that need a steady supply of on-brand content — whether for an ongoing campaign, a website relaunch, or a social media presence that needs to look consistently professional.
-            </p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">

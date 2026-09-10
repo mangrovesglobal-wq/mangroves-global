@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 
-export default function DigitalMarketingContent() {
+type ContentBlock = {
+  heading: string;
+  content: string;
+};
+
+type DigitalMarketingContentProps = {
+  introText: string;
+  blocks: ContentBlock[];
+};
+
+export default function DigitalMarketingContent({ introText, blocks }: DigitalMarketingContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -67,26 +77,16 @@ export default function DigitalMarketingContent() {
             Digital Marketing Agency UAE
           </h1>
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            SEO, social media, paid digital advertising and analytics — digital marketing built around measurable business objectives, not vanity metrics.
+            {introText}
           </p>
 
           <article className="prose-mgt-light text-mangrove-800/80">
-            <h2>What We Offer</h2>
-            <ul>
-              <li><strong>Digital strategy</strong> — channel selection and planning matched to your audience and objective.</li>
-              <li><strong>SEO</strong> — technical and content optimization to improve organic visibility.</li>
-              <li><strong>Social media marketing</strong> — platform strategy, content and community management.</li>
-              <li><strong>Paid digital advertising</strong> — campaign setup and management across paid channels.</li>
-              <li><strong>Content marketing</strong> — content built to support search visibility and audience engagement.</li>
-              <li><strong>Online reputation</strong> — monitoring and management of your digital presence.</li>
-              <li><strong>Lead generation</strong> — digital campaigns designed around actual conversion, not just traffic.</li>
-              <li><strong>Analytics &amp; reporting</strong> — clear reporting tied back to your original objective.</li>
-            </ul>
-
-            <h2>Who This Is For</h2>
-            <p>
-              UAE businesses that need a digital marketing function without building one internally — from SMEs running their first paid campaign to established businesses looking to improve digital performance.
-            </p>
+            {blocks.map((block) => (
+              <div key={block.heading}>
+                <h2>{block.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              </div>
+            ))}
           </article>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-4">
