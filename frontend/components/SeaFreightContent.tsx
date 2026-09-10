@@ -10,12 +10,18 @@ type ContentBlock = {
   content: string;
 };
 
+type HeroImage = {
+  src: string;
+  alt: string;
+};
+
 type SeaFreightContentProps = {
   introText: string;
   blocks: ContentBlock[];
+  heroImage: HeroImage;
 };
 
-export default function SeaFreightContent({ introText, blocks }: SeaFreightContentProps) {
+export default function SeaFreightContent({ introText, blocks, heroImage }: SeaFreightContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -79,6 +85,17 @@ export default function SeaFreightContent({ introText, blocks }: SeaFreightConte
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
             {introText}
           </p>
+
+          <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+            <Image
+              src={heroImage.src}
+              alt={heroImage.alt}
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+            />
+          </div>
 
           <article className="prose-mgt-light text-mangrove-800/80">
             {blocks.map((block) => (

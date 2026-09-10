@@ -53,11 +53,34 @@ async function getService(): Promise<ServiceDetail> {
   }
 }
 
+const HERO_IMAGE_PATH = "/images/sea-freight-container-port-network.jpg";
+const HERO_IMAGE_URL = `https://mangrovesglobal.com${HERO_IMAGE_PATH}`;
+const HERO_IMAGE_ALT =
+  "Container ship being loaded by gantry cranes at a port terminal at night, representing Mangroves Global's coordinated sea freight network between India and the UAE.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const service = await getService();
+  const title = service.meta_title || FALLBACK.meta_title!;
+  const description = service.meta_description || FALLBACK.meta_description!;
+
   return {
-    title: service.meta_title || FALLBACK.meta_title!,
-    description: service.meta_description || FALLBACK.meta_description!,
+    title,
+    description,
+    alternates: {
+      canonical: "/logistics/sea-freight",
+    },
+    openGraph: {
+      title,
+      description,
+      url: "/logistics/sea-freight",
+      images: [{ url: HERO_IMAGE_URL, width: 2400, height: 1371, alt: HERO_IMAGE_ALT }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [HERO_IMAGE_URL],
+    },
   };
 }
 
@@ -77,6 +100,7 @@ const jsonLd = {
       serviceType: "Sea Freight Coordination",
       provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
       areaServed: ["United Arab Emirates", "GCC", "India"],
+      image: HERO_IMAGE_URL,
       description:
         "FCL and LCL sea freight coordination between India, the UAE and the GCC, coordinated through established ocean freight providers.",
     },
@@ -96,7 +120,11 @@ export default async function SeaFreightPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <SeaFreightContent introText={service.short_description || FALLBACK.short_description!} blocks={blocks} />
+      <SeaFreightContent
+        introText={service.short_description || FALLBACK.short_description!}
+        blocks={blocks}
+        heroImage={{ src: HERO_IMAGE_PATH, alt: HERO_IMAGE_ALT }}
+      />
     </>
   );
 }
