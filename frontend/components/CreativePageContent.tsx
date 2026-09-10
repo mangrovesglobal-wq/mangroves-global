@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, CheckCircle2, AlertTriangle } from "lucide-react";
+import CreativeHeroVisual from "./CreativeHeroVisual";
 
 const serviceGroups = [
   {
@@ -160,12 +161,7 @@ export default function CreativePageContent() {
                 </a>
               </div>
             </div>
-            <div
-              className="rounded-2xl aspect-[4/3] flex items-center justify-center border border-dashed border-mangrove-500 text-mangrove-500 text-[11px] uppercase tracking-widest"
-              style={{ backgroundImage: "repeating-linear-gradient(45deg, #f2f6f5, #f2f6f5 10px, #dde7e4 10px, #dde7e4 20px)" }}
-            >
-              Image Placeholder — Hero Creative Visual
-            </div>
+            <CreativeHeroVisual />
           </div>
         </section>
 
