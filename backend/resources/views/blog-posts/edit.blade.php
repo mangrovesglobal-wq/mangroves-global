@@ -70,9 +70,38 @@
 
         <div>
             <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Content</label>
-            <textarea name="content" rows="12" required class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm font-mono">{{ old('content', $blogPost->content) }}</textarea>
-            <p class="text-xs text-mangrove-800/40 mt-2">Plain text for now — a rich text editor can be added later.</p>
+            <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+            <div id="editor-container" style="min-height: 320px;" class="bg-white border border-mangrove-100 rounded-xl">{!! old('content', $blogPost->content) !!}</div>
+            <textarea name="content" id="content-input" style="display:none;" required>{{ old('content', $blogPost->content) }}</textarea>
+            <p class="text-xs text-mangrove-800/40 mt-2">Use the toolbar for headings, font size, images and more.</p>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                window.quill = new Quill('#editor-container', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ header: [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ size: ['small', false, 'large', 'huge'] }],
+                            [{ font: [] }],
+                            [{ align: [] }],
+                            [{ list: 'ordered' }, { list: 'bullet' }],
+                            ['blockquote', 'link', 'image'],
+                            ['clean'],
+                        ],
+                    },
+                });
+
+                var contentInput = document.getElementById('content-input');
+                var form = contentInput.closest('form');
+                form.addEventListener('submit', function () {
+                    contentInput.value = window.quill.root.innerHTML;
+                });
+            });
+        </script>
 
         <div class="grid sm:grid-cols-2 gap-5">
             <div>
@@ -96,8 +125,74 @@
             </div>
         </div>
 
-        <button type="submit" class="px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-colors rounded-full font-semibold text-xs tracking-widest uppercase">
-            Update Blog Post
-        </button>
+        <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+                <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Focus Keyword</label>
+                <input type="text" name="focus_keyword" value="{{ old('focus_keyword', $blogPost->focus_keyword) }}" placeholder="e.g. green cardamom exporter UAE" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm">
+                <p class="text-xs text-mangrove-800/40 mt-1">The single main phrase this post is optimized to rank for.</p>
+            </div>
+            <div>
+                <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Tags</label>
+                <input type="text" name="tags" value="{{ old('tags', $blogPost->tags) }}" placeholder="e.g. cardamom, spices, export, UAE" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm">
+                <p class="text-xs text-mangrove-800/40 mt-1">Comma-separated. Used for categorisation and related-post linking.</p>
+            </div>
+        </div>
+
+        <div class="flex gap-4">
+            <button type="button" id="preview-toggle" class="px-8 py-4 border border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-white transition-colors rounded-full font-semibold text-xs tracking-widest uppercase">
+                Preview
+            </button>
+            <button type="submit" class="px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-colors rounded-full font-semibold text-xs tracking-widest uppercase">
+                Update Blog Post
+            </button>
+        </div>
     </form>
+
+    <div id="preview-panel" class="hidden mt-8 bg-white border-2 border-dashed border-mangrove-accent rounded-2xl p-8 sm:p-12">
+        <div class="text-xs uppercase tracking-widest text-mangrove-accent font-semibold mb-4">Preview (unsaved changes)</div>
+        <h1 id="preview-title" class="font-serif text-3xl font-bold text-mangrove-900 mb-4"></h1>
+        <div id="preview-meta" class="text-xs text-mangrove-800/40 mb-8"></div>
+        <img id="preview-image" class="w-full h-72 object-cover rounded-xl mb-8 hidden" alt="">
+        <div id="preview-content" class="prose-mgt-light text-mangrove-800/80 leading-relaxed"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toggleBtn = document.getElementById('preview-toggle');
+            var panel = document.getElementById('preview-panel');
+            var titleInput = document.querySelector('input[name="title"]');
+            var authorInput = document.querySelector('input[name="author"]');
+            var imageInput = document.querySelector('input[name="featured_image"]');
+            var existingImage = @json($blogPost->featured_image ? Storage::url($blogPost->featured_image) : null);
+
+            toggleBtn.addEventListener('click', function () {
+                var isHidden = panel.classList.contains('hidden');
+
+                if (isHidden) {
+                    document.getElementById('preview-title').textContent = titleInput.value || '(Untitled post)';
+                    var authorText = authorInput.value ? authorInput.value + ' · ' : '';
+                    document.getElementById('preview-meta').textContent = authorText + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+                    document.getElementById('preview-content').innerHTML = window.quill.root.innerHTML;
+
+                    var previewImage = document.getElementById('preview-image');
+                    if (imageInput.files && imageInput.files[0]) {
+                        previewImage.src = URL.createObjectURL(imageInput.files[0]);
+                        previewImage.classList.remove('hidden');
+                    } else if (existingImage) {
+                        previewImage.src = existingImage;
+                        previewImage.classList.remove('hidden');
+                    } else {
+                        previewImage.classList.add('hidden');
+                    }
+
+                    panel.classList.remove('hidden');
+                    toggleBtn.textContent = 'Hide Preview';
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    panel.classList.add('hidden');
+                    toggleBtn.textContent = 'Preview';
+                }
+            });
+        });
+    </script>
 </x-app-layout>

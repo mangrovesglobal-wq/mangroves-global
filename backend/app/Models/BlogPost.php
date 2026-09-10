@@ -19,6 +19,8 @@ class BlogPost extends Model
         'content',
         'meta_title',
         'meta_description',
+        'focus_keyword',
+        'tags',
         'author',
         'status',
         'published_at',
