@@ -9,22 +9,27 @@ const serviceGroups = [
   {
     title: "Advertising & Communication",
     items: ["Campaign Strategy", "Advertising Campaigns", "Communication Strategy", "Campaign Execution"],
+    slug: "advertising",
   },
   {
     title: "Digital Marketing",
     items: ["Digital Strategy", "SEO", "Social Media Marketing", "Paid Digital Advertising", "Analytics & Reporting"],
+    slug: "digital-marketing",
   },
   {
     title: "Branding & Creative",
     items: ["Brand Strategy", "Naming", "Visual Identity", "Packaging Design"],
+    slug: "branding",
   },
   {
     title: "Content & Production",
     items: ["Copywriting", "Product & Corporate Photography", "Video Content", "Motion Graphics"],
+    slug: "content-production",
   },
   {
     title: "Web & Digital Experiences",
     items: ["Corporate Websites", "Landing Pages", "UI/UX", "CMS Development"],
+    slug: "web-development",
   },
 ];
 
@@ -195,14 +200,18 @@ export default function CreativePageContent() {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {serviceGroups.map((group) => (
-                <div key={group.title} className="p-6 rounded-2xl border border-mangrove-100 bg-white hover:border-mangrove-accent/50 transition-colors">
+                <Link
+                  key={group.title}
+                  href={`/creative/${group.slug}`}
+                  className="block p-6 rounded-2xl border border-mangrove-100 bg-white hover:border-mangrove-accent/50 transition-colors"
+                >
                   <h3 className="font-serif text-base font-semibold text-mangrove-900 mb-3">{group.title}</h3>
                   <ul className="text-xs text-mangrove-800/60 space-y-1.5">
                     {group.items.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

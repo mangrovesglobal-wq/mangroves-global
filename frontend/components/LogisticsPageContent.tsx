@@ -5,15 +5,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, CheckCircle2, AlertTriangle } from "lucide-react";
 
-const services = [
-  { num: "01", name: "Freight Coordination", desc: "Sea and air freight coordination through established logistics providers." },
-  { num: "02", name: "Ocean Freight", desc: "FCL and LCL shipment coordination, port-to-port through door-to-door." },
-  { num: "03", name: "Air Freight", desc: "Time-sensitive and high-value cargo coordination." },
-  { num: "04", name: "Road Transportation", desc: "Container transportation and domestic/GCC road logistics through qualified transport partners." },
-  { num: "05", name: "Customs Coordination", desc: "Coordination with appropriately licensed customs-clearing partners." },
-  { num: "06", name: "Warehousing & 3PL", desc: "Storage, inventory handling, fulfilment and distribution through selected providers." },
-  { num: "07", name: "Supply Chain Consultancy", desc: "Route planning, cost analysis, distribution planning and operational improvement." },
-  { num: "08", name: "Last-Mile & Distribution", desc: "UAE delivery and distribution coordination." },
+const services: { num: string; name: string; desc: string; slug: string | null }[] = [
+  { num: "01", name: "Freight Coordination", desc: "Sea and air freight coordination through established logistics providers.", slug: null },
+  { num: "02", name: "Ocean Freight", desc: "FCL and LCL shipment coordination, port-to-port through door-to-door.", slug: "sea-freight" },
+  { num: "03", name: "Air Freight", desc: "Time-sensitive and high-value cargo coordination.", slug: "air-freight" },
+  { num: "04", name: "Road Transportation", desc: "Container transportation and domestic/GCC road logistics through qualified transport partners.", slug: "road-transport" },
+  { num: "05", name: "Customs Coordination", desc: "Coordination with appropriately licensed customs-clearing partners.", slug: "customs-clearance" },
+  { num: "06", name: "Warehousing & 3PL", desc: "Storage, inventory handling, fulfilment and distribution through selected providers.", slug: "warehousing-3pl" },
+  { num: "07", name: "Supply Chain Consultancy", desc: "Route planning, cost analysis, distribution planning and operational improvement.", slug: "supply-chain-consulting" },
+  { num: "08", name: "Last-Mile & Distribution", desc: "UAE delivery and distribution coordination.", slug: null },
 ];
 
 const flowSteps = ["Shipment Request", "Route Planning", "Freight", "Customs", "Transport", "Warehouse", "Delivery", "Shipment Update"];
@@ -188,12 +188,21 @@ export default function LogisticsPageContent() {
               <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-mangrove-900 mt-3">Eight core logistics services</h2>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {services.map((s) => (
-                <div key={s.num} className="p-6 rounded-2xl border border-mangrove-100 bg-mangrove-50/60 hover:border-mangrove-accent/50 transition-colors">
-                  <h3 className="font-serif text-lg font-semibold text-mangrove-900 mb-2">{s.name}</h3>
-                  <p className="text-sm text-mangrove-800/60 leading-relaxed">{s.desc}</p>
-                </div>
-              ))}
+              {services.map((s) => {
+                const card = (
+                  <div className="p-6 rounded-2xl border border-mangrove-100 bg-mangrove-50/60 hover:border-mangrove-accent/50 transition-colors h-full">
+                    <h3 className="font-serif text-lg font-semibold text-mangrove-900 mb-2">{s.name}</h3>
+                    <p className="text-sm text-mangrove-800/60 leading-relaxed">{s.desc}</p>
+                  </div>
+                );
+                return s.slug ? (
+                  <Link key={s.num} href={`/logistics/${s.slug}`} className="block">
+                    {card}
+                  </Link>
+                ) : (
+                  <div key={s.num}>{card}</div>
+                );
+              })}
             </div>
           </div>
         </section>
