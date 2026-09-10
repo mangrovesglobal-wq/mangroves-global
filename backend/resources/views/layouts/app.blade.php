@@ -30,7 +30,10 @@
                    class="block px-4 py-2.5 rounded-lg {{ request()->routeIs('blog-posts.*') ? 'bg-mangrove-accent text-mangrove-900 font-semibold' : 'hover:bg-white/5' }}">
                     Blog Posts
                 </a>
-                <span class="block px-4 py-2.5 rounded-lg text-white/40 cursor-not-allowed">Services</span>
+                <a href="{{ route('services.index') }}"
+                   class="block px-4 py-2.5 rounded-lg {{ request()->routeIs('services.*') ? 'bg-mangrove-accent text-mangrove-900 font-semibold' : 'hover:bg-white/5' }}">
+                    Services
+                </a>
                 <span class="block px-4 py-2.5 rounded-lg text-white/40 cursor-not-allowed">Settings</span>
             </nav>
             <div class="p-4 mt-auto border-t border-white/10 absolute bottom-0 w-64">
