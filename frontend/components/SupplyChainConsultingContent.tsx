@@ -70,6 +70,17 @@ export default function SupplyChainConsultingContent() {
             Beyond individual shipment coordination, we work with UAE and GCC businesses on the bigger picture — evaluating routes, suppliers, warehousing and workflows to identify real operational improvements.
           </p>
 
+          <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+            <Image
+              src="/images/supply-chain-network-coordination.jpg"
+              alt="Digital network visualization over a container ship and truck, representing Mangroves Global's coordinated supply chain consultancy."
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+            />
+          </div>
+
           <article className="prose-mgt-light text-mangrove-800/80">
             <h2>What We Offer</h2>
             <ul>

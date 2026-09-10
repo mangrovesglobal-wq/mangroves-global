@@ -1,10 +1,27 @@
 import type { Metadata } from "next";
 import RoadTransportContent from "@/components/RoadTransportContent";
 
+const TITLE = "Road Transport UAE | GCC Road Logistics";
+const DESCRIPTION =
+  "Road transportation coordination across the UAE and into the GCC through qualified transport partners — container, FTL and inter-emirate delivery. Request a quote.";
+const HERO_IMAGE_URL = "https://mangrovesglobal.com/images/road-transport-trucks-uae-gcc.jpg";
+
 export const metadata: Metadata = {
-  title: "Road Transport UAE | GCC Road Logistics",
-  description:
-    "Road transportation coordination across the UAE and into the GCC through qualified transport partners — container, FTL and inter-emirate delivery. Request a quote.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/logistics/road-transport" },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/logistics/road-transport",
+    images: [{ url: HERO_IMAGE_URL, width: 2400, height: 1350, alt: TITLE }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [HERO_IMAGE_URL],
+  },
 };
 
 const jsonLd = {
@@ -23,6 +40,7 @@ const jsonLd = {
       serviceType: "Road Transportation Coordination",
       provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
       areaServed: ["United Arab Emirates", "GCC"],
+      image: HERO_IMAGE_URL,
       description:
         "Road transportation coordination across the UAE and into the GCC through qualified transport providers.",
     },

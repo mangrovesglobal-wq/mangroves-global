@@ -70,6 +70,17 @@ export default function RoadTransportContent() {
             We coordinate road transportation across the UAE and into the wider GCC through qualified transport providers, matched to cargo, vehicle and route requirements.
           </p>
 
+          <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+            <Image
+              src="/images/road-transport-trucks-uae-gcc.jpg"
+              alt="Commercial trucks lined up at a logistics hub at sunset, representing Mangroves Global's road transport coordination across the UAE and GCC."
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+            />
+          </div>
+
           <article className="prose-mgt-light text-mangrove-800/80">
             <h2>What We Coordinate</h2>
             <ul>

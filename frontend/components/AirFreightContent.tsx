@@ -70,6 +70,17 @@ export default function AirFreightContent() {
             We coordinate air freight movements for urgent cargo, samples, small commercial shipments and high-value or time-sensitive goods, between India, the UAE and the wider GCC.
           </p>
 
+          <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+            <Image
+              src="/images/air-freight-cargo-plane-port.jpg"
+              alt="Cargo aircraft climbing out over a container port, representing Mangroves Global's time-sensitive air freight coordination between India and the UAE."
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+            />
+          </div>
+
           <article className="prose-mgt-light text-mangrove-800/80">
             <h2>What We Coordinate</h2>
             <ul>

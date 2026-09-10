@@ -70,6 +70,17 @@ export default function CustomsCoordinationContent() {
             We help coordinate the documentation and communication side of customs clearance for shipments moving through UAE and GCC ports, working alongside appropriately licensed customs brokers.
           </p>
 
+          <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+            <Image
+              src="/images/customs-clearance-cargo-ship-uae.jpg"
+              alt="Aerial view of a container ship at sea, representing cargo moving through customs clearance coordination for UAE and GCC ports."
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+            />
+          </div>
+
           <article className="prose-mgt-light text-mangrove-800/80">
             <h2>What We Coordinate</h2>
             <ul>

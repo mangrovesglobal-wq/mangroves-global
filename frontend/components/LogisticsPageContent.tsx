@@ -156,6 +156,17 @@ export default function LogisticsPageContent() {
               </a>
             </div>
           </div>
+
+          <div className="relative aspect-video rounded-2xl overflow-hidden mt-16 max-w-6xl mx-auto border border-mangrove-100">
+            <Image
+              src="/images/logistics-global-network-hero.jpg"
+              alt="Container ship being loaded by a gantry crane beside a delivery truck at dusk, representing Mangroves Global's connected logistics network across India, the UAE and the GCC."
+              fill
+              priority
+              sizes="(max-width: 1200px) 100vw, 1152px"
+              className="object-cover"
+            />
+          </div>
         </section>
 
         {/* TRUST STRIP */}

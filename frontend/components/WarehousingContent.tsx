@@ -70,6 +70,17 @@ export default function WarehousingContent() {
             We connect customers with suitable warehouse and 3PL capacity through our logistics network — short- and long-term storage, inventory handling, fulfilment and distribution.
           </p>
 
+          <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+            <Image
+              src="/images/warehousing-3pl-storage-uae.jpg"
+              alt="Interior of a modern high-bay warehouse with racking and forklifts, representing Mangroves Global's warehousing and 3PL coordination in the UAE."
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+            />
+          </div>
+
           <article className="prose-mgt-light text-mangrove-800/80">
             <h2>What We Coordinate</h2>
             <ul>
