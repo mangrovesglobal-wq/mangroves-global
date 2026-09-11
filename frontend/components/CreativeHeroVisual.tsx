@@ -140,7 +140,7 @@ export default function CreativeHeroVisual() {
 
   return (
     <div
-      className="relative w-full flex items-center justify-center h-[460px] lg:h-[580px]"
+      className="relative w-full flex items-center justify-center h-115 lg:h-145"
       style={{ perspective: 1000 }}
     >
       <div
@@ -153,7 +153,7 @@ export default function CreativeHeroVisual() {
           transform: "scale(0.92)",
         }}
       >
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-[1]" viewBox="0 0 500 500" preserveAspectRatio="none">
+        <svg className="absolute inset-0 w-full h-full pointer-events-none z-1" viewBox="0 0 500 500" preserveAspectRatio="none">
           <path
             d="M 40 250 C 150 100, 350 400, 460 250"
             fill="none"
@@ -180,7 +180,7 @@ export default function CreativeHeroVisual() {
           SEQUENCE // IDEA &rarr; STRATEGY &rarr; GROWTH
         </span>
 
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[210px] h-[210px] z-[3] flex items-center justify-center">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-52.5 h-52.5 z-3 flex items-center justify-center">
           <div
             className="absolute -inset-3 rounded-full opacity-35"
             style={{
@@ -233,7 +233,7 @@ export default function CreativeHeroVisual() {
               }`}
             >
               <span
-                className={`w-[18px] h-[18px] [&_svg]:w-full [&_svg]:h-full [&_svg]:fill-none [&_svg]:stroke-2 [&_svg]:stroke-linecap-round [&_svg]:stroke-linejoin-round ${
+                  className={`w-4.5 h-4.5 [&_svg]:w-full [&_svg]:h-full [&_svg]:fill-none [&_svg]:stroke-2 [&_svg]:stroke-linecap-round [&_svg]:stroke-linejoin-round ${
                   card.growth ? "[&_svg]:stroke-white group-hover:[&_svg]:stroke-mangrove-accent!" : "[&_svg]:stroke-mangrove-900"
                 }`}
               >

@@ -105,7 +105,6 @@ export default function CreativePageContent() {
           </div>
           <div className="hidden md:flex flex-1 justify-center">
             <nav className="flex items-center space-x-10 text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
-              <a href="#services" className="hover:text-mangrove-900 transition-colors">Services</a>
               <a href="#work" className="hover:text-mangrove-900 transition-colors">Work</a>
               <a href="#industries" className="hover:text-mangrove-900 transition-colors">Industries</a>
               <a href="#contact" className="hover:text-mangrove-900 transition-colors">Contact</a>
@@ -168,10 +167,10 @@ export default function CreativePageContent() {
         {/* TRUST STRIP */}
         <section className="py-8 px-6 lg:px-16 bg-mangrove-50 border-y border-mangrove-100">
           <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-            <span className="text-xs uppercase tracking-wider text-mangrove-800/60">Advertising &amp; Communication</span>
-            <span className="text-xs uppercase tracking-wider text-mangrove-800/60">Digital Marketing</span>
-            <span className="text-xs uppercase tracking-wider text-mangrove-800/60">Branding &amp; Creative</span>
-            <span className="text-xs uppercase tracking-wider text-mangrove-800/60">Web &amp; Digital Experiences</span>
+            <span className="text-xs uppercase tracking-wider text-mangrove-800/60">UAE-Licensed Creative Agency</span>
+            <span className="text-xs uppercase tracking-wider text-mangrove-800/60">Strategy-Led Execution</span>
+            <span className="text-xs uppercase tracking-wider text-mangrove-800/60">Integrated Multi-Channel Delivery</span>
+            <span className="text-xs uppercase tracking-wider text-mangrove-800/60">Objective-Driven Campaigns</span>
           </div>
         </section>
 
@@ -277,7 +276,7 @@ export default function CreativePageContent() {
               {["Branding · Retail", "Digital Marketing · FMCG", "Web & UX · Hospitality"].map((label) => (
                 <div key={label} className="rounded-2xl overflow-hidden border border-mangrove-100">
                   <div
-                    className="aspect-[4/3] flex items-center justify-center border-b border-dashed border-mangrove-500 text-mangrove-500 text-[11px] uppercase tracking-widest"
+                    className="aspect-4/3 flex items-center justify-center border-b border-dashed border-mangrove-500 text-mangrove-500 text-[11px] uppercase tracking-widest"
                     style={{ backgroundImage: "repeating-linear-gradient(45deg, #f2f6f5, #f2f6f5 10px, #dde7e4 10px, #dde7e4 20px)" }}
                   >
                     Image Placeholder — Project

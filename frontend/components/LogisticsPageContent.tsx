@@ -117,7 +117,7 @@ export default function LogisticsPageContent() {
       </header>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-[60] flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
+        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
           <button
             onClick={() => setMobileMenuOpen(false)}
             className="absolute top-6 right-6 text-mangrove-900"
