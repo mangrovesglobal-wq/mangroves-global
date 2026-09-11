@@ -100,6 +100,7 @@ export default async function CreativeBlogPostPage({ params }: { params: Promise
 
         {post.featured_image && (
           <div className="relative h-72 sm:h-96 rounded-2xl overflow-hidden mb-10 border border-mangrove-100">
+            {/* eslint-disable-next-line @next/next/no-img-element -- Laravel-hosted image; next/image optimizer 400s on this host, see backend notes */}
             <img
               src={`${API_BASE_URL}/storage/${post.featured_image}`}
               alt={post.title}
@@ -147,6 +148,7 @@ export default async function CreativeBlogPostPage({ params }: { params: Promise
                     className="group flex gap-3 items-start"
                   >
                     {rp.featured_image ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- Laravel-hosted image; next/image optimizer 400s on this host
                       <img
                         src={`${API_BASE_URL}/storage/${rp.featured_image}`}
                         alt={rp.title}

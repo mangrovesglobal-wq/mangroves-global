@@ -11,26 +11,31 @@ const serviceGroups = [
     title: "Advertising & Communication",
     items: ["Campaign Strategy", "Advertising Campaigns", "Communication Strategy", "Campaign Execution"],
     slug: "advertising",
+    icon: "/images/icons/advertising-icon.png",
   },
   {
     title: "Digital Marketing",
     items: ["Digital Strategy", "SEO", "Social Media Marketing", "Paid Digital Advertising", "Analytics & Reporting"],
     slug: "digital-marketing",
+    icon: "/images/icons/digital-marketing-icon.png",
   },
   {
     title: "Branding & Creative",
     items: ["Brand Strategy", "Naming", "Visual Identity", "Packaging Design"],
     slug: "branding",
+    icon: "/images/icons/branding-icon.png",
   },
   {
     title: "Content & Production",
     items: ["Copywriting", "Product & Corporate Photography", "Video Content", "Motion Graphics"],
     slug: "content-production",
+    icon: "/images/icons/content-production-icon.png",
   },
   {
     title: "Web & Digital Experiences",
     items: ["Corporate Websites", "Landing Pages", "UI/UX", "CMS Development"],
     slug: "web-development",
+    icon: "/images/icons/web-development-icon.png",
   },
 ];
 
@@ -199,6 +204,7 @@ export default function CreativePageContent() {
                   href={`/creative/${group.slug}`}
                   className="block p-6 rounded-2xl border border-mangrove-100 bg-white hover:border-mangrove-accent/50 transition-colors"
                 >
+                  <Image src={group.icon} alt="" width={40} height={40} className="w-10 h-10 mb-4 object-contain" />
                   <h3 className="font-serif text-base font-semibold text-mangrove-900 mb-3">{group.title}</h3>
                   <ul className="text-xs text-mangrove-800/60 space-y-1.5">
                     {group.items.map((item) => (

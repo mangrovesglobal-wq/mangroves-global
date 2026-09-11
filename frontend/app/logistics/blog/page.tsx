@@ -64,6 +64,7 @@ export default async function LogisticsBlogPage() {
               >
                 {post.featured_image && (
                   <div className="relative h-48 bg-mangrove-50">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- Laravel-hosted image; next/image optimizer 400s on this host, see backend notes */}
                     <img
                       src={`${API_BASE_URL}/storage/${post.featured_image}`}
                       alt={post.title}
