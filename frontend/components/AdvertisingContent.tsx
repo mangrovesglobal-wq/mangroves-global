@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 import ServiceHeroImage from "./ServiceHeroImage";
+import ServiceIcon from "./ServiceIcon";
 
 type ContentBlock = {
   heading: string;
@@ -21,9 +22,10 @@ type AdvertisingContentProps = {
   introText: string;
   blocks: ContentBlock[];
   heroImage: HeroImage | null;
+  icon: string | null;
 };
 
-export default function AdvertisingContent({ introText, blocks, heroImage }: AdvertisingContentProps) {
+export default function AdvertisingContent({ introText, blocks, heroImage, icon }: AdvertisingContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -80,7 +82,10 @@ export default function AdvertisingContent({ introText, blocks, heroImage }: Adv
             <span className="text-mangrove-900">Advertising &amp; Communication</span>
           </nav>
 
-          <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest block mb-3">Advertising &amp; Communication</span>
+          <div className="flex items-center gap-2 mb-3">
+            <ServiceIcon name={icon} className="w-5 h-5 text-mangrove-accent" />
+            <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest">Advertising &amp; Communication</span>
+          </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-mangrove-900 leading-tight mb-6">
             Advertising &amp; Communication Agency UAE
           </h1>

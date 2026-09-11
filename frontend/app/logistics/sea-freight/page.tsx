@@ -10,6 +10,7 @@ type ServiceDetail = {
   meta_title: string | null;
   meta_description: string | null;
   featured_image: string | null;
+  icon: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -24,6 +25,7 @@ type ServiceDetail = {
 const FALLBACK: ServiceDetail = {
   name: "Sea Freight",
   featured_image: null,
+  icon: null,
   short_description:
     "We coordinate FCL and LCL sea freight movements between India and the UAE, and onward across the GCC, through established ocean freight providers — covering port-to-port, door-to-port, port-to-door and full door-to-door shipments.",
   meta_title: "Sea Freight UAE | FCL & LCL Coordination",
@@ -131,6 +133,7 @@ export default async function SeaFreightPage() {
         introText={service.short_description || FALLBACK.short_description!}
         blocks={blocks}
         heroImage={heroImage}
+        icon={service.icon}
       />
     </>
   );

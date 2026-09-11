@@ -10,6 +10,7 @@ type ServiceDetail = {
   meta_title: string | null;
   meta_description: string | null;
   featured_image: string | null;
+  icon: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -22,6 +23,7 @@ type ServiceDetail = {
 
 const FALLBACK: ServiceDetail = {
   featured_image: null,
+  icon: null,
   short_description:
     "Copywriting, photography, video and motion graphics — the content that actually fills your campaigns, website and social channels.",
   meta_title: "Content & Production Services UAE",
@@ -111,6 +113,7 @@ export default async function ContentProductionPage() {
         introText={service.short_description || FALLBACK.short_description!}
         blocks={blocks}
         heroImage={heroImage}
+        icon={service.icon}
       />
     </>
   );

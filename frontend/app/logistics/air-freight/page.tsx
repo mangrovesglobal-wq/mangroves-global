@@ -13,6 +13,7 @@ type ServiceDetail = {
   meta_title: string | null;
   meta_description: string | null;
   featured_image: string | null;
+  icon: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -26,6 +27,7 @@ type ServiceDetail = {
 // Fallback copy, used if the CMS record is unavailable so this page never breaks for visitors.
 const FALLBACK: ServiceDetail = {
   featured_image: null,
+  icon: null,
   short_description:
     "We coordinate air freight movements for urgent cargo, samples, small commercial shipments and high-value or time-sensitive goods, between India, the UAE and the wider GCC.",
   meta_title: "Air Freight UAE | India–UAE Cargo Coordination",
@@ -125,6 +127,7 @@ export default async function AirFreightPage() {
         introText={service.short_description || FALLBACK.short_description!}
         blocks={blocks}
         heroImage={heroImage}
+        icon={service.icon}
       />
     </>
   );

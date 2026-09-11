@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 import ServiceHeroImage from "./ServiceHeroImage";
+import ServiceIcon from "./ServiceIcon";
 
 type ContentBlock = {
   heading: string;
@@ -21,9 +22,10 @@ type AirFreightContentProps = {
   introText: string;
   blocks: ContentBlock[];
   heroImage: HeroImage | null;
+  icon: string | null;
 };
 
-export default function AirFreightContent({ introText, blocks, heroImage }: AirFreightContentProps) {
+export default function AirFreightContent({ introText, blocks, heroImage, icon }: AirFreightContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -80,7 +82,10 @@ export default function AirFreightContent({ introText, blocks, heroImage }: AirF
             <span className="text-mangrove-900">Air Freight</span>
           </nav>
 
-          <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest block mb-3">Air Freight</span>
+          <div className="flex items-center gap-2 mb-3">
+            <ServiceIcon name={icon} className="w-5 h-5 text-mangrove-accent" />
+            <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest">Air Freight</span>
+          </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-mangrove-900 leading-tight mb-6">
             Air Freight Solutions UAE — Time-Sensitive India–UAE Cargo
           </h1>

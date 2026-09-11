@@ -13,6 +13,7 @@ type ServiceDetail = {
   meta_title: string | null;
   meta_description: string | null;
   featured_image: string | null;
+  icon: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -25,6 +26,7 @@ type ServiceDetail = {
 
 const FALLBACK: ServiceDetail = {
   featured_image: null,
+  icon: null,
   short_description:
     "We help coordinate the documentation and communication side of customs clearance for shipments moving through UAE and GCC ports, working alongside appropriately licensed customs brokers.",
   meta_title: "Customs Clearance Coordination UAE",
@@ -124,6 +126,7 @@ export default async function CustomsCoordinationPage() {
         introText={service.short_description || FALLBACK.short_description!}
         blocks={blocks}
         heroImage={heroImage}
+        icon={service.icon}
       />
     </>
   );

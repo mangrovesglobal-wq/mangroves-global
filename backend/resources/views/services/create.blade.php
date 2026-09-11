@@ -80,7 +80,45 @@
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Icon (optional)</label>
-                    <input type="text" name="icon" value="{{ old('icon') }}" placeholder="e.g. truck, ship, plane" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm">
+                    <select name="icon" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white">
+                        <option value="" @selected(old('icon') === '')>&mdash; No icon &mdash;</option>
+                        <optgroup label="Logistics">
+                            <option value="Ship" @selected(old('icon') === 'Ship')>Ship (sea freight)</option>
+                            <option value="Plane" @selected(old('icon') === 'Plane')>Plane (air freight)</option>
+                            <option value="Truck" @selected(old('icon') === 'Truck')>Truck (road transport)</option>
+                            <option value="ShieldCheck" @selected(old('icon') === 'ShieldCheck')>Shield Check (customs)</option>
+                            <option value="Warehouse" @selected(old('icon') === 'Warehouse')>Warehouse</option>
+                            <option value="Boxes" @selected(old('icon') === 'Boxes')>Boxes (warehousing/3PL)</option>
+                            <option value="Route" @selected(old('icon') === 'Route')>Route (supply chain)</option>
+                            <option value="Globe" @selected(old('icon') === 'Globe')>Globe (global network)</option>
+                            <option value="MapPin" @selected(old('icon') === 'MapPin')>Map Pin</option>
+                            <option value="Clock" @selected(old('icon') === 'Clock')>Clock (time-sensitive)</option>
+                            <option value="PackageCheck" @selected(old('icon') === 'PackageCheck')>Package Check</option>
+                        </optgroup>
+                        <optgroup label="Creative">
+                            <option value="Megaphone" @selected(old('icon') === 'Megaphone')>Megaphone (advertising)</option>
+                            <option value="TrendingUp" @selected(old('icon') === 'TrendingUp')>Trending Up (digital marketing)</option>
+                            <option value="Palette" @selected(old('icon') === 'Palette')>Palette (branding)</option>
+                            <option value="PenTool" @selected(old('icon') === 'PenTool')>Pen Tool (design)</option>
+                            <option value="Video" @selected(old('icon') === 'Video')>Video (content production)</option>
+                            <option value="Camera" @selected(old('icon') === 'Camera')>Camera</option>
+                            <option value="Code" @selected(old('icon') === 'Code')>Code (web development)</option>
+                            <option value="LayoutGrid" @selected(old('icon') === 'LayoutGrid')>Layout Grid</option>
+                            <option value="Sparkles" @selected(old('icon') === 'Sparkles')>Sparkles</option>
+                            <option value="Search" @selected(old('icon') === 'Search')>Search (SEO)</option>
+                            <option value="Share2" @selected(old('icon') === 'Share2')>Share (social media)</option>
+                            <option value="BarChart3" @selected(old('icon') === 'BarChart3')>Bar Chart (analytics)</option>
+                        </optgroup>
+                        <optgroup label="General">
+                            <option value="Package" @selected(old('icon') === 'Package')>Package</option>
+                            <option value="Users" @selected(old('icon') === 'Users')>Users</option>
+                            <option value="Target" @selected(old('icon') === 'Target')>Target</option>
+                            <option value="MessageSquare" @selected(old('icon') === 'MessageSquare')>Message Square</option>
+                            <option value="FileText" @selected(old('icon') === 'FileText')>File Text</option>
+                            <option value="Smartphone" @selected(old('icon') === 'Smartphone')>Smartphone</option>
+                            <option value="Layers" @selected(old('icon') === 'Layers')>Layers</option>
+                        </optgroup>
+                    </select>
                 </div>
             </div>
 

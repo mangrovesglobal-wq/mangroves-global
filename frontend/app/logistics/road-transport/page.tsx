@@ -13,6 +13,7 @@ type ServiceDetail = {
   meta_title: string | null;
   meta_description: string | null;
   featured_image: string | null;
+  icon: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -25,6 +26,7 @@ type ServiceDetail = {
 
 const FALLBACK: ServiceDetail = {
   featured_image: null,
+  icon: null,
   short_description:
     "We coordinate road transportation across the UAE and into the wider GCC through qualified transport providers, matched to cargo, vehicle and route requirements.",
   meta_title: "Road Transport UAE | GCC Road Logistics",
@@ -124,6 +126,7 @@ export default async function RoadTransportPage() {
         introText={service.short_description || FALLBACK.short_description!}
         blocks={blocks}
         heroImage={heroImage}
+        icon={service.icon}
       />
     </>
   );

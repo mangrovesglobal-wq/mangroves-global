@@ -81,7 +81,46 @@
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-2">Icon (optional)</label>
-                    <input type="text" name="icon" value="{{ old('icon', $service->icon) }}" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm">
+                    @php $currentIcon = old('icon', $service->icon); @endphp
+                    <select name="icon" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white">
+                        <option value="" @selected($currentIcon === '' || $currentIcon === null)>&mdash; No icon &mdash;</option>
+                        <optgroup label="Logistics">
+                            <option value="Ship" @selected($currentIcon === 'Ship')>Ship (sea freight)</option>
+                            <option value="Plane" @selected($currentIcon === 'Plane')>Plane (air freight)</option>
+                            <option value="Truck" @selected($currentIcon === 'Truck')>Truck (road transport)</option>
+                            <option value="ShieldCheck" @selected($currentIcon === 'ShieldCheck')>Shield Check (customs)</option>
+                            <option value="Warehouse" @selected($currentIcon === 'Warehouse')>Warehouse</option>
+                            <option value="Boxes" @selected($currentIcon === 'Boxes')>Boxes (warehousing/3PL)</option>
+                            <option value="Route" @selected($currentIcon === 'Route')>Route (supply chain)</option>
+                            <option value="Globe" @selected($currentIcon === 'Globe')>Globe (global network)</option>
+                            <option value="MapPin" @selected($currentIcon === 'MapPin')>Map Pin</option>
+                            <option value="Clock" @selected($currentIcon === 'Clock')>Clock (time-sensitive)</option>
+                            <option value="PackageCheck" @selected($currentIcon === 'PackageCheck')>Package Check</option>
+                        </optgroup>
+                        <optgroup label="Creative">
+                            <option value="Megaphone" @selected($currentIcon === 'Megaphone')>Megaphone (advertising)</option>
+                            <option value="TrendingUp" @selected($currentIcon === 'TrendingUp')>Trending Up (digital marketing)</option>
+                            <option value="Palette" @selected($currentIcon === 'Palette')>Palette (branding)</option>
+                            <option value="PenTool" @selected($currentIcon === 'PenTool')>Pen Tool (design)</option>
+                            <option value="Video" @selected($currentIcon === 'Video')>Video (content production)</option>
+                            <option value="Camera" @selected($currentIcon === 'Camera')>Camera</option>
+                            <option value="Code" @selected($currentIcon === 'Code')>Code (web development)</option>
+                            <option value="LayoutGrid" @selected($currentIcon === 'LayoutGrid')>Layout Grid</option>
+                            <option value="Sparkles" @selected($currentIcon === 'Sparkles')>Sparkles</option>
+                            <option value="Search" @selected($currentIcon === 'Search')>Search (SEO)</option>
+                            <option value="Share2" @selected($currentIcon === 'Share2')>Share (social media)</option>
+                            <option value="BarChart3" @selected($currentIcon === 'BarChart3')>Bar Chart (analytics)</option>
+                        </optgroup>
+                        <optgroup label="General">
+                            <option value="Package" @selected($currentIcon === 'Package')>Package</option>
+                            <option value="Users" @selected($currentIcon === 'Users')>Users</option>
+                            <option value="Target" @selected($currentIcon === 'Target')>Target</option>
+                            <option value="MessageSquare" @selected($currentIcon === 'MessageSquare')>Message Square</option>
+                            <option value="FileText" @selected($currentIcon === 'FileText')>File Text</option>
+                            <option value="Smartphone" @selected($currentIcon === 'Smartphone')>Smartphone</option>
+                            <option value="Layers" @selected($currentIcon === 'Layers')>Layers</option>
+                        </optgroup>
+                    </select>
                 </div>
             </div>
 

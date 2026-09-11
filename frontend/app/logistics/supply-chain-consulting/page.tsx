@@ -13,6 +13,7 @@ type ServiceDetail = {
   meta_title: string | null;
   meta_description: string | null;
   featured_image: string | null;
+  icon: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -25,6 +26,7 @@ type ServiceDetail = {
 
 const FALLBACK: ServiceDetail = {
   featured_image: null,
+  icon: null,
   short_description:
     "Beyond individual shipment coordination, we work with UAE and GCC businesses on the bigger picture — evaluating routes, suppliers, warehousing and workflows to identify real operational improvements.",
   meta_title: "Supply Chain Consultancy UAE | Logistics Consulting",
@@ -124,6 +126,7 @@ export default async function SupplyChainConsultingPage() {
         introText={service.short_description || FALLBACK.short_description!}
         blocks={blocks}
         heroImage={heroImage}
+        icon={service.icon}
       />
     </>
   );

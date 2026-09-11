@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
 import ServiceHeroImage from "./ServiceHeroImage";
+import ServiceIcon from "./ServiceIcon";
 
 type ContentBlock = {
   heading: string;
@@ -21,9 +22,10 @@ type RoadTransportContentProps = {
   introText: string;
   blocks: ContentBlock[];
   heroImage: HeroImage | null;
+  icon: string | null;
 };
 
-export default function RoadTransportContent({ introText, blocks, heroImage }: RoadTransportContentProps) {
+export default function RoadTransportContent({ introText, blocks, heroImage, icon }: RoadTransportContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -80,7 +82,10 @@ export default function RoadTransportContent({ introText, blocks, heroImage }: R
             <span className="text-mangrove-900">Road Transport</span>
           </nav>
 
-          <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest block mb-3">Road Transportation</span>
+          <div className="flex items-center gap-2 mb-3">
+            <ServiceIcon name={icon} className="w-5 h-5 text-mangrove-accent" />
+            <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest">Road Transportation</span>
+          </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-mangrove-900 leading-tight mb-6">
             Road Transportation — UAE &amp; GCC Coordination
           </h1>
