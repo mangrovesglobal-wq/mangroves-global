@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import AirFreightContent from "@/components/AirFreightContent";
+import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
-const HERO_IMAGE_URL = "https://mangrovesglobal.com/images/air-freight-cargo-plane-port.jpg";
+const HERO_IMAGE_PATH = "/images/air-freight-cargo-plane-port.jpg";
+const HERO_IMAGE_URL = `https://mangrovesglobal.com${HERO_IMAGE_PATH}`;
+const HERO_IMAGE_ALT =
+  "Cargo aircraft climbing out over a container port, representing Mangroves Global's time-sensitive air freight coordination between India and the UAE.";
 
 type ServiceDetail = {
   short_description: string | null;
   meta_title: string | null;
   meta_description: string | null;
+  featured_image: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -20,6 +25,7 @@ type ServiceDetail = {
 
 // Fallback copy, used if the CMS record is unavailable so this page never breaks for visitors.
 const FALLBACK: ServiceDetail = {
+  featured_image: null,
   short_description:
     "We coordinate air freight movements for urgent cargo, samples, small commercial shipments and high-value or time-sensitive goods, between India, the UAE and the wider GCC.",
   meta_title: "Air Freight UAE | India–UAE Cargo Coordination",
@@ -55,6 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const service = await getService();
   const title = service.meta_title || FALLBACK.meta_title!;
   const description = service.meta_description || FALLBACK.meta_description!;
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
 
   return {
     title,
@@ -64,39 +71,16 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "/logistics/air-freight",
-      images: [{ url: HERO_IMAGE_URL, width: 2400, height: 1350, alt: title }],
+      images: [{ url: ogImageUrl, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [HERO_IMAGE_URL],
+      images: [ogImageUrl],
     },
   };
 }
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
-        { "@type": "ListItem", position: 2, name: "Logistics", item: "https://mangrovesglobal.com/logistics" },
-        { "@type": "ListItem", position: 3, name: "Air Freight", item: "https://mangrovesglobal.com/logistics/air-freight" },
-      ],
-    },
-    {
-      "@type": "Service",
-      serviceType: "Air Freight Coordination",
-      provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
-      areaServed: ["United Arab Emirates", "GCC", "India"],
-      image: HERO_IMAGE_URL,
-      description:
-        "Time-sensitive air freight coordination for urgent cargo, samples and high-value shipments between India, the UAE and the GCC.",
-    },
-  ],
-};
 
 export default async function AirFreightPage() {
   const service = await getService();
@@ -108,10 +92,40 @@ export default async function AirFreightPage() {
     }))
     .filter((b): b is { heading: string; content: string } => !!b.heading && !!b.content);
 
+  const heroImage = resolveServiceHeroImage(service.featured_image, API_BASE_URL, HERO_IMAGE_ALT, HERO_IMAGE_PATH);
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
+          { "@type": "ListItem", position: 2, name: "Logistics", item: "https://mangrovesglobal.com/logistics" },
+          { "@type": "ListItem", position: 3, name: "Air Freight", item: "https://mangrovesglobal.com/logistics/air-freight" },
+        ],
+      },
+      {
+        "@type": "Service",
+        serviceType: "Air Freight Coordination",
+        provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
+        areaServed: ["United Arab Emirates", "GCC", "India"],
+        image: ogImageUrl,
+        description:
+          "Time-sensitive air freight coordination for urgent cargo, samples and high-value shipments between India, the UAE and the GCC.",
+      },
+    ],
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <AirFreightContent introText={service.short_description || FALLBACK.short_description!} blocks={blocks} />
+      <AirFreightContent
+        introText={service.short_description || FALLBACK.short_description!}
+        blocks={blocks}
+        heroImage={heroImage}
+      />
     </>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
+import ServiceHeroImage from "./ServiceHeroImage";
 
 type ContentBlock = {
   heading: string;
@@ -13,12 +14,13 @@ type ContentBlock = {
 type HeroImage = {
   src: string;
   alt: string;
+  remote: boolean;
 };
 
 type SeaFreightContentProps = {
   introText: string;
   blocks: ContentBlock[];
-  heroImage: HeroImage;
+  heroImage: HeroImage | null;
 };
 
 export default function SeaFreightContent({ introText, blocks, heroImage }: SeaFreightContentProps) {
@@ -86,16 +88,11 @@ export default function SeaFreightContent({ introText, blocks, heroImage }: SeaF
             {introText}
           </p>
 
-          <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
-            <Image
-              src={heroImage.src}
-              alt={heroImage.alt}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              className="object-cover"
-            />
-          </div>
+          {heroImage && (
+            <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+              <ServiceHeroImage src={heroImage.src} alt={heroImage.alt} remote={heroImage.remote} />
+            </div>
+          )}
 
           <article className="prose-mgt-light text-mangrove-800/80">
             {blocks.map((block) => (

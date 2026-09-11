@@ -4,18 +4,26 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
+import ServiceHeroImage from "./ServiceHeroImage";
 
 type ContentBlock = {
   heading: string;
   content: string;
 };
 
+type HeroImage = {
+  src: string;
+  alt: string;
+  remote: boolean;
+};
+
 type AirFreightContentProps = {
   introText: string;
   blocks: ContentBlock[];
+  heroImage: HeroImage | null;
 };
 
-export default function AirFreightContent({ introText, blocks }: AirFreightContentProps) {
+export default function AirFreightContent({ introText, blocks, heroImage }: AirFreightContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -80,16 +88,11 @@ export default function AirFreightContent({ introText, blocks }: AirFreightConte
             {introText}
           </p>
 
-          <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
-            <Image
-              src="/images/air-freight-cargo-plane-port.jpg"
-              alt="Cargo aircraft climbing out over a container port, representing Mangroves Global's time-sensitive air freight coordination between India and the UAE."
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              className="object-cover"
-            />
-          </div>
+          {heroImage && (
+            <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+              <ServiceHeroImage src={heroImage.src} alt={heroImage.alt} remote={heroImage.remote} />
+            </div>
+          )}
 
           <article className="prose-mgt-light text-mangrove-800/80">
             {blocks.map((block) => (

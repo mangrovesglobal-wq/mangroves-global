@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import SupplyChainConsultingContent from "@/components/SupplyChainConsultingContent";
+import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
-const HERO_IMAGE_URL = "https://mangrovesglobal.com/images/supply-chain-network-coordination.jpg";
+const HERO_IMAGE_PATH = "/images/supply-chain-network-coordination.jpg";
+const HERO_IMAGE_URL = `https://mangrovesglobal.com${HERO_IMAGE_PATH}`;
+const HERO_IMAGE_ALT =
+  "Digital network visualization over a container ship and truck, representing Mangroves Global's coordinated supply chain consultancy.";
 
 type ServiceDetail = {
   short_description: string | null;
   meta_title: string | null;
   meta_description: string | null;
+  featured_image: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -19,6 +24,7 @@ type ServiceDetail = {
 };
 
 const FALLBACK: ServiceDetail = {
+  featured_image: null,
   short_description:
     "Beyond individual shipment coordination, we work with UAE and GCC businesses on the bigger picture — evaluating routes, suppliers, warehousing and workflows to identify real operational improvements.",
   meta_title: "Supply Chain Consultancy UAE | Logistics Consulting",
@@ -54,6 +60,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const service = await getService();
   const title = service.meta_title || FALLBACK.meta_title!;
   const description = service.meta_description || FALLBACK.meta_description!;
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
 
   return {
     title,
@@ -63,39 +70,16 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "/logistics/supply-chain-consulting",
-      images: [{ url: HERO_IMAGE_URL, width: 2400, height: 1350, alt: title }],
+      images: [{ url: ogImageUrl, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [HERO_IMAGE_URL],
+      images: [ogImageUrl],
     },
   };
 }
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
-        { "@type": "ListItem", position: 2, name: "Logistics", item: "https://mangrovesglobal.com/logistics" },
-        { "@type": "ListItem", position: 3, name: "Supply Chain Consulting", item: "https://mangrovesglobal.com/logistics/supply-chain-consulting" },
-      ],
-    },
-    {
-      "@type": "Service",
-      serviceType: "Supply Chain Consultancy",
-      provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
-      areaServed: ["United Arab Emirates", "GCC"],
-      image: HERO_IMAGE_URL,
-      description:
-        "Logistics cost audits, route optimization, supplier network review and distribution planning for UAE and GCC businesses.",
-    },
-  ],
-};
 
 export default async function SupplyChainConsultingPage() {
   const service = await getService();
@@ -107,10 +91,40 @@ export default async function SupplyChainConsultingPage() {
     }))
     .filter((b): b is { heading: string; content: string } => !!b.heading && !!b.content);
 
+  const heroImage = resolveServiceHeroImage(service.featured_image, API_BASE_URL, HERO_IMAGE_ALT, HERO_IMAGE_PATH);
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
+          { "@type": "ListItem", position: 2, name: "Logistics", item: "https://mangrovesglobal.com/logistics" },
+          { "@type": "ListItem", position: 3, name: "Supply Chain Consulting", item: "https://mangrovesglobal.com/logistics/supply-chain-consulting" },
+        ],
+      },
+      {
+        "@type": "Service",
+        serviceType: "Supply Chain Consultancy",
+        provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
+        areaServed: ["United Arab Emirates", "GCC"],
+        image: ogImageUrl,
+        description:
+          "Logistics cost audits, route optimization, supplier network review and distribution planning for UAE and GCC businesses.",
+      },
+    ],
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <SupplyChainConsultingContent introText={service.short_description || FALLBACK.short_description!} blocks={blocks} />
+      <SupplyChainConsultingContent
+        introText={service.short_description || FALLBACK.short_description!}
+        blocks={blocks}
+        heroImage={heroImage}
+      />
     </>
   );
 }

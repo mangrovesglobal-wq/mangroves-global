@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import CustomsCoordinationContent from "@/components/CustomsCoordinationContent";
+import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
-const HERO_IMAGE_URL = "https://mangrovesglobal.com/images/customs-clearance-cargo-ship-uae.jpg";
+const HERO_IMAGE_PATH = "/images/customs-clearance-cargo-ship-uae.jpg";
+const HERO_IMAGE_URL = `https://mangrovesglobal.com${HERO_IMAGE_PATH}`;
+const HERO_IMAGE_ALT =
+  "Aerial view of a container ship at sea, representing cargo moving through customs clearance coordination for UAE and GCC ports.";
 
 type ServiceDetail = {
   short_description: string | null;
   meta_title: string | null;
   meta_description: string | null;
+  featured_image: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -19,6 +24,7 @@ type ServiceDetail = {
 };
 
 const FALLBACK: ServiceDetail = {
+  featured_image: null,
   short_description:
     "We help coordinate the documentation and communication side of customs clearance for shipments moving through UAE and GCC ports, working alongside appropriately licensed customs brokers.",
   meta_title: "Customs Clearance Coordination UAE",
@@ -54,6 +60,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const service = await getService();
   const title = service.meta_title || FALLBACK.meta_title!;
   const description = service.meta_description || FALLBACK.meta_description!;
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
 
   return {
     title,
@@ -63,39 +70,16 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "/logistics/customs-clearance",
-      images: [{ url: HERO_IMAGE_URL, width: 2400, height: 1350, alt: title }],
+      images: [{ url: ogImageUrl, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [HERO_IMAGE_URL],
+      images: [ogImageUrl],
     },
   };
 }
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
-        { "@type": "ListItem", position: 2, name: "Logistics", item: "https://mangrovesglobal.com/logistics" },
-        { "@type": "ListItem", position: 3, name: "Customs Coordination", item: "https://mangrovesglobal.com/logistics/customs-clearance" },
-      ],
-    },
-    {
-      "@type": "Service",
-      serviceType: "Customs Clearance Coordination",
-      provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
-      areaServed: ["United Arab Emirates", "GCC"],
-      image: HERO_IMAGE_URL,
-      description:
-        "Customs documentation and broker communication coordination for UAE and GCC shipments, performed alongside appropriately licensed customs brokers.",
-    },
-  ],
-};
 
 export default async function CustomsCoordinationPage() {
   const service = await getService();
@@ -107,10 +91,40 @@ export default async function CustomsCoordinationPage() {
     }))
     .filter((b): b is { heading: string; content: string } => !!b.heading && !!b.content);
 
+  const heroImage = resolveServiceHeroImage(service.featured_image, API_BASE_URL, HERO_IMAGE_ALT, HERO_IMAGE_PATH);
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
+          { "@type": "ListItem", position: 2, name: "Logistics", item: "https://mangrovesglobal.com/logistics" },
+          { "@type": "ListItem", position: 3, name: "Customs Coordination", item: "https://mangrovesglobal.com/logistics/customs-clearance" },
+        ],
+      },
+      {
+        "@type": "Service",
+        serviceType: "Customs Clearance Coordination",
+        provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
+        areaServed: ["United Arab Emirates", "GCC"],
+        image: ogImageUrl,
+        description:
+          "Customs documentation and broker communication coordination for UAE and GCC shipments, performed alongside appropriately licensed customs brokers.",
+      },
+    ],
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <CustomsCoordinationContent introText={service.short_description || FALLBACK.short_description!} blocks={blocks} />
+      <CustomsCoordinationContent
+        introText={service.short_description || FALLBACK.short_description!}
+        blocks={blocks}
+        heroImage={heroImage}
+      />
     </>
   );
 }

@@ -4,18 +4,26 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
+import ServiceHeroImage from "./ServiceHeroImage";
 
 type ContentBlock = {
   heading: string;
   content: string;
 };
 
+type HeroImage = {
+  src: string;
+  alt: string;
+  remote: boolean;
+};
+
 type AdvertisingContentProps = {
   introText: string;
   blocks: ContentBlock[];
+  heroImage: HeroImage | null;
 };
 
-export default function AdvertisingContent({ introText, blocks }: AdvertisingContentProps) {
+export default function AdvertisingContent({ introText, blocks, heroImage }: AdvertisingContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -79,6 +87,12 @@ export default function AdvertisingContent({ introText, blocks }: AdvertisingCon
           <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
             {introText}
           </p>
+
+          {heroImage && (
+            <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+              <ServiceHeroImage src={heroImage.src} alt={heroImage.alt} remote={heroImage.remote} />
+            </div>
+          )}
 
           <article className="prose-mgt-light text-mangrove-800/80">
             {blocks.map((block) => (

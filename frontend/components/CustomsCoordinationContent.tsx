@@ -4,18 +4,26 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight, Check } from "lucide-react";
+import ServiceHeroImage from "./ServiceHeroImage";
 
 type ContentBlock = {
   heading: string;
   content: string;
 };
 
+type HeroImage = {
+  src: string;
+  alt: string;
+  remote: boolean;
+};
+
 type CustomsCoordinationContentProps = {
   introText: string;
   blocks: ContentBlock[];
+  heroImage: HeroImage | null;
 };
 
-export default function CustomsCoordinationContent({ introText, blocks }: CustomsCoordinationContentProps) {
+export default function CustomsCoordinationContent({ introText, blocks, heroImage }: CustomsCoordinationContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -80,16 +88,11 @@ export default function CustomsCoordinationContent({ introText, blocks }: Custom
             {introText}
           </p>
 
-          <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
-            <Image
-              src="/images/customs-clearance-cargo-ship-uae.jpg"
-              alt="Aerial view of a container ship at sea, representing cargo moving through customs clearance coordination for UAE and GCC ports."
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              className="object-cover"
-            />
-          </div>
+          {heroImage && (
+            <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
+              <ServiceHeroImage src={heroImage.src} alt={heroImage.alt} remote={heroImage.remote} />
+            </div>
+          )}
 
           <article className="prose-mgt-light text-mangrove-800/80">
             {blocks.map((block) => (

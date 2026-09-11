@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SeaFreightContent from "@/components/SeaFreightContent";
+import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -8,6 +9,7 @@ type ServiceDetail = {
   short_description: string | null;
   meta_title: string | null;
   meta_description: string | null;
+  featured_image: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -21,6 +23,7 @@ type ServiceDetail = {
 // Fallback copy, used if the CMS record is unavailable so this page never breaks for visitors.
 const FALLBACK: ServiceDetail = {
   name: "Sea Freight",
+  featured_image: null,
   short_description:
     "We coordinate FCL and LCL sea freight movements between India and the UAE, and onward across the GCC, through established ocean freight providers — covering port-to-port, door-to-port, port-to-door and full door-to-door shipments.",
   meta_title: "Sea Freight UAE | FCL & LCL Coordination",
@@ -62,6 +65,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const service = await getService();
   const title = service.meta_title || FALLBACK.meta_title!;
   const description = service.meta_description || FALLBACK.meta_description!;
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
 
   return {
     title,
@@ -73,39 +77,16 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "/logistics/sea-freight",
-      images: [{ url: HERO_IMAGE_URL, width: 2400, height: 1371, alt: HERO_IMAGE_ALT }],
+      images: [{ url: ogImageUrl, alt: HERO_IMAGE_ALT }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [HERO_IMAGE_URL],
+      images: [ogImageUrl],
     },
   };
 }
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
-        { "@type": "ListItem", position: 2, name: "Logistics", item: "https://mangrovesglobal.com/logistics" },
-        { "@type": "ListItem", position: 3, name: "Sea Freight", item: "https://mangrovesglobal.com/logistics/sea-freight" },
-      ],
-    },
-    {
-      "@type": "Service",
-      serviceType: "Sea Freight Coordination",
-      provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
-      areaServed: ["United Arab Emirates", "GCC", "India"],
-      image: HERO_IMAGE_URL,
-      description:
-        "FCL and LCL sea freight coordination between India, the UAE and the GCC, coordinated through established ocean freight providers.",
-    },
-  ],
-};
 
 export default async function SeaFreightPage() {
   const service = await getService();
@@ -117,13 +98,39 @@ export default async function SeaFreightPage() {
     }))
     .filter((b): b is { heading: string; content: string } => !!b.heading && !!b.content);
 
+  const heroImage = resolveServiceHeroImage(service.featured_image, API_BASE_URL, HERO_IMAGE_ALT, HERO_IMAGE_PATH);
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
+          { "@type": "ListItem", position: 2, name: "Logistics", item: "https://mangrovesglobal.com/logistics" },
+          { "@type": "ListItem", position: 3, name: "Sea Freight", item: "https://mangrovesglobal.com/logistics/sea-freight" },
+        ],
+      },
+      {
+        "@type": "Service",
+        serviceType: "Sea Freight Coordination",
+        provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
+        areaServed: ["United Arab Emirates", "GCC", "India"],
+        image: ogImageUrl,
+        description:
+          "FCL and LCL sea freight coordination between India, the UAE and the GCC, coordinated through established ocean freight providers.",
+      },
+    ],
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <SeaFreightContent
         introText={service.short_description || FALLBACK.short_description!}
         blocks={blocks}
-        heroImage={{ src: HERO_IMAGE_PATH, alt: HERO_IMAGE_ALT }}
+        heroImage={heroImage}
       />
     </>
   );

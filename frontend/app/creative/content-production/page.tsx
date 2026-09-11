@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import ContentProductionContent from "@/components/ContentProductionContent";
+import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+const HERO_IMAGE_ALT = "Content & Production services from Mangroves Global for UAE businesses.";
 
 type ServiceDetail = {
   short_description: string | null;
   meta_title: string | null;
   meta_description: string | null;
+  featured_image: string | null;
   block_1_heading: string | null;
   block_1_content: string | null;
   block_2_heading: string | null;
@@ -18,6 +21,7 @@ type ServiceDetail = {
 };
 
 const FALLBACK: ServiceDetail = {
+  featured_image: null,
   short_description:
     "Copywriting, photography, video and motion graphics — the content that actually fills your campaigns, website and social channels.",
   meta_title: "Content & Production Services UAE",
@@ -52,34 +56,18 @@ export async function generateMetadata(): Promise<Metadata> {
   const service = await getService();
   const title = service.meta_title || FALLBACK.meta_title!;
   const description = service.meta_description || FALLBACK.meta_description!;
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL);
 
   return {
     title,
     description,
     alternates: { canonical: "/creative/content-production" },
+    ...(ogImageUrl && {
+      openGraph: { title, description, url: "/creative/content-production", images: [{ url: ogImageUrl, alt: title }] },
+      twitter: { card: "summary_large_image" as const, title, description, images: [ogImageUrl] },
+    }),
   };
 }
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
-        { "@type": "ListItem", position: 2, name: "Creative", item: "https://mangrovesglobal.com/creative" },
-        { "@type": "ListItem", position: 3, name: "Content & Production", item: "https://mangrovesglobal.com/creative/content-production" },
-      ],
-    },
-    {
-      "@type": "Service",
-      serviceType: "Content & Production",
-      provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
-      areaServed: "United Arab Emirates",
-      description: "Copywriting, product and corporate photography, video content and motion graphics for UAE businesses.",
-    },
-  ],
-};
 
 export default async function ContentProductionPage() {
   const service = await getService();
@@ -91,10 +79,39 @@ export default async function ContentProductionPage() {
     }))
     .filter((b): b is { heading: string; content: string } => !!b.heading && !!b.content);
 
+  const heroImage = resolveServiceHeroImage(service.featured_image, API_BASE_URL, HERO_IMAGE_ALT);
+  const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
+          { "@type": "ListItem", position: 2, name: "Creative", item: "https://mangrovesglobal.com/creative" },
+          { "@type": "ListItem", position: 3, name: "Content & Production", item: "https://mangrovesglobal.com/creative/content-production" },
+        ],
+      },
+      {
+        "@type": "Service",
+        serviceType: "Content & Production",
+        provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
+        areaServed: "United Arab Emirates",
+        ...(ogImageUrl && { image: ogImageUrl }),
+        description: "Copywriting, product and corporate photography, video content and motion graphics for UAE businesses.",
+      },
+    ],
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ContentProductionContent introText={service.short_description || FALLBACK.short_description!} blocks={blocks} />
+      <ContentProductionContent
+        introText={service.short_description || FALLBACK.short_description!}
+        blocks={blocks}
+        heroImage={heroImage}
+      />
     </>
   );
 }
