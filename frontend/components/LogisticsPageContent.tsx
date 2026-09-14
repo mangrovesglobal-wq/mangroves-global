@@ -6,14 +6,14 @@ import Image from "next/image";
 import { Menu, X, ArrowUpRight, CheckCircle2, AlertTriangle } from "lucide-react";
 
 const services: { num: string; name: string; desc: string; slug: string | null; icon: string | null }[] = [
-  { num: "01", name: "Freight Coordination", desc: "Sea and air freight coordination through established logistics providers.", slug: null, icon: null },
+  { num: "01", name: "Freight Coordination", desc: "Sea and air freight coordination through established logistics providers.", slug: "freight-coordination", icon: null },
   { num: "02", name: "Ocean Freight", desc: "FCL and LCL shipment coordination, port-to-port through door-to-door.", slug: "sea-freight", icon: "/images/icons/sea-freight-icon.png" },
   { num: "03", name: "Air Freight", desc: "Time-sensitive and high-value cargo coordination.", slug: "air-freight", icon: "/images/icons/air-freight-icon.png" },
   { num: "04", name: "Road Transportation", desc: "Container transportation and domestic/GCC road logistics through qualified transport partners.", slug: "road-transport", icon: "/images/icons/road-transport-icon.png" },
   { num: "05", name: "Customs Coordination", desc: "Coordination with appropriately licensed customs-clearing partners.", slug: "customs-clearance", icon: "/images/icons/customs-clearance-icon.png" },
   { num: "06", name: "Warehousing & 3PL", desc: "Storage, inventory handling, fulfilment and distribution through selected providers.", slug: "warehousing-3pl", icon: "/images/icons/warehousing-icon.png" },
   { num: "07", name: "Supply Chain Consultancy", desc: "Route planning, cost analysis, distribution planning and operational improvement.", slug: "supply-chain-consulting", icon: "/images/icons/supply-chain-icon.png" },
-  { num: "08", name: "Last-Mile & Distribution", desc: "UAE delivery and distribution coordination.", slug: null, icon: null },
+  { num: "08", name: "Last-Mile & Distribution", desc: "UAE delivery and distribution coordination.", slug: "last-mile-distribution", icon: null },
 ];
 
 const flowSteps = ["Shipment Request", "Route Planning", "Freight", "Customs", "Transport", "Warehouse", "Delivery", "Shipment Update"];
