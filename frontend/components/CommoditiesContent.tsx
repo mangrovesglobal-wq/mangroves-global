@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 import Reveal from "./Reveal";
 import { tradingProducts } from "@/lib/tradingProducts";
 import DivisionHeader from "@/components/DivisionHeader";

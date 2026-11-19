@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Network, FileCheck, Truck } from "lucide-react";
+import { MapPin, Network, FileCheck, Truck, ArrowUpRight } from "lucide-react";
 import Reveal from "./Reveal";
 import DivisionHeader from "@/components/DivisionHeader";
 import SiteFooter from "@/components/SiteFooter";

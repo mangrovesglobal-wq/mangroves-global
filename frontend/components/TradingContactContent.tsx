@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   CheckCircle2, AlertTriangle,
   MapPin, Phone, Mail, Clock,
-  PackageCheck, Globe2, ShieldCheck,
+  PackageCheck, Globe2, ShieldCheck, ArrowUpRight,
 } from "lucide-react";
 import DivisionHeader from "@/components/DivisionHeader";
 import SiteFooter from "@/components/SiteFooter";

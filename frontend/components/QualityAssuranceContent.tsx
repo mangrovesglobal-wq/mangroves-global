@@ -7,7 +7,7 @@ import {
   Check,
   FlaskConical, Sprout, HeartPulse, Wind,
   ShieldCheck, Award, Leaf,
-  ScanLine, Droplets, Microscope, Eye, MapPin,
+  ScanLine, Droplets, Microscope, Eye, MapPin, ArrowUpRight,
 } from "lucide-react";
 import DivisionHeader from "@/components/DivisionHeader";
 import SiteFooter from "@/components/SiteFooter";
