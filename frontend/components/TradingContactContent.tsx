@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Menu, X, ArrowUpRight,
   CheckCircle2, AlertTriangle,
   MapPin, Phone, Mail, Clock,
   PackageCheck, Globe2, ShieldCheck,
 } from "lucide-react";
+import DivisionHeader from "@/components/DivisionHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 /* ── Slide timing (fraction of total scroll 0→1) ─────────────────────
    2 slides. Location + footer are real sections below the wrapper.    */
@@ -34,7 +35,6 @@ const reasons = [
 ];
 
 export default function TradingContactContent() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -107,54 +107,13 @@ export default function TradingContactContent() {
 
   return (
     <div className="bg-white text-mangrove-900 antialiased overflow-x-clip">
-
-      {/* ── Header ──────────────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 w-full z-50 bg-mangrove-accent shadow-lg shadow-black/10">
-        <div className="relative flex items-center h-20 sm:h-24">
-          <div className="relative h-full flex items-center shrink-0 bg-mangrove-800 pl-4 sm:pl-6 pr-10 sm:pr-16" style={{ clipPath: "polygon(0 0, 100% 0, 62% 100%, 0 100%)" }}>
-            <Link href="/trading"><Image src="/images/logo/mangroves-global-logo-badge.png" width={898} height={900} className="h-14 sm:h-16 w-auto block" alt="Mangroves Global" /></Link>
-          </div>
-          <div className="hidden lg:flex flex-1 justify-center">
-            <nav className="flex items-center space-x-10 text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
-              <Link href="/trading" className="hover:text-mangrove-900 transition-colors">Home</Link>
-              <Link href="/trading/about" className="hover:text-mangrove-900 transition-colors">About</Link>
-              <Link href="/trading/commodities" className="hover:text-mangrove-900 transition-colors">Commodities</Link>
-              <Link href="/trading/sourcing-supply" className="hover:text-mangrove-900 transition-colors">Sourcing &amp; Supply</Link>
-              <Link href="/trading/quality-assurance" className="hover:text-mangrove-900 transition-colors">Quality Assurance</Link>
-              <Link href="/trading/blog" className="hover:text-mangrove-900 transition-colors">Insights</Link>
-              <Link href="/trading/contact" className="text-mangrove-900">Contact</Link>
-            </nav>
-          </div>
-          <div className="flex-1 lg:hidden" />
-          <Link href="/trading/contact" className="hidden lg:inline-flex items-center mr-8 lg:mr-16 px-6 py-2.5 border-2 border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-all duration-300 rounded-full text-xs tracking-widest font-semibold uppercase">
-            <span>Trade Inquiry</span><ArrowUpRight className="w-4 h-4 ml-2" />
-          </Link>
-          <button onClick={() => setMobileMenuOpen(true)} className="lg:hidden mr-6 text-mangrove-900" aria-label="Open menu"><Menu className="w-8 h-8" /></button>
-        </div>
-        {/* Scroll progress bar */}
-        <div className="h-0.5 bg-mangrove-100">
-          <div ref={progressRef} className="h-full bg-mangrove-900 origin-left" style={{ transform: "scaleX(0)", transition: "none", willChange: "transform" }} />
-        </div>
-      </header>
-
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
-          <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-6"><X className="w-8 h-8" /></button>
-          <Link href="/trading" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-          <Link href="/trading/about" onClick={() => setMobileMenuOpen(false)}>About Us</Link>
-          <Link href="/trading/commodities" onClick={() => setMobileMenuOpen(false)}>Commodities</Link>
-          <Link href="/trading/sourcing-supply" onClick={() => setMobileMenuOpen(false)}>Sourcing &amp; Supply</Link>
-          <Link href="/trading/quality-assurance" onClick={() => setMobileMenuOpen(false)}>Quality Assurance</Link>
-          <Link href="/trading/blog" onClick={() => setMobileMenuOpen(false)}>Insights</Link>
-          <Link href="/trading/contact" onClick={() => setMobileMenuOpen(false)} className="text-mangrove-accent">Contact</Link>
-        </div>
-      )}
+      <DivisionHeader division="trading" />
 
       {/* ══════════════════════════════════════════════════════════
           SCROLL PRESENTATION — 2 slides
       ══════════════════════════════════════════════════════════ */}
       <div ref={wrapperRef} className="bg-mangrove-900" style={{ height: "400vh" }}>
-        <div className="sticky top-20 sm:top-24 overflow-hidden" style={{ height: "calc(100vh - 5rem)" }}>
+        <div className="sticky top-22 overflow-hidden" style={{ height: "calc(100vh - 5.5rem)" }}>
 
           {/* Progress dots */}
           <div className="absolute right-5 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-center gap-3">
@@ -332,17 +291,7 @@ export default function TradingContactContent() {
         </div>{/* /sticky */}
       </div>{/* /wrapper */}
 
-      {/* ── Footer ──────────────────────────────────────────────── */}
-      <footer className="bg-mangrove-accent text-mangrove-900/80 text-xs">
-        <div className="max-w-7xl mx-auto px-6 lg:px-16 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <Image src="/images/logo/mangroves-global-logo-wordmark.png" width={1200} height={289} className="h-6 sm:h-7 w-auto block" alt="Mangroves Global" />
-          <p>&copy; 2026 Mangroves Global Trading FZ LLC. All rights reserved</p>
-          <div className="flex space-x-6">
-            <Link href="/" className="hover:text-mangrove-900 transition-colors">Privacy Policy</Link>
-            <Link href="/" className="hover:text-mangrove-900 transition-colors">Terms of Trade</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
     </div>
   );

@@ -1,14 +1,16 @@
 ﻿"use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Menu, X, ArrowUpRight, Check,
+  Check,
   FlaskConical, Sprout, HeartPulse, Wind,
   ShieldCheck, Award, Leaf,
   ScanLine, Droplets, Microscope, Eye, MapPin,
 } from "lucide-react";
+import DivisionHeader from "@/components/DivisionHeader";
+import SiteFooter from "@/components/SiteFooter";
 import Reveal from "./Reveal";
 
 const certs = [
@@ -31,7 +33,6 @@ const steps = [
 ];
 
 export default function QualityAssuranceContent() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const heroRef   = useRef<HTMLDivElement>(null);
   const textBoxRef = useRef<HTMLDivElement>(null);
   const metricRef  = useRef<HTMLDivElement>(null);
@@ -71,57 +72,7 @@ export default function QualityAssuranceContent() {
 
   return (
     <div className="bg-white text-mangrove-900 antialiased overflow-x-clip">
-
-      {/* ── Header ─────────────────────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 w-full z-50 bg-mangrove-accent shadow-lg shadow-black/10">
-        <div className="relative flex items-center h-20 sm:h-24">
-          <div
-            className="relative h-full flex items-center shrink-0 bg-mangrove-800 pl-4 sm:pl-6 pr-10 sm:pr-16"
-            style={{ clipPath: "polygon(0 0, 100% 0, 62% 100%, 0 100%)" }}
-          >
-            <Link href="/trading">
-              <Image src="/images/logo/mangroves-global-logo-badge.png" width={898} height={900} className="h-14 sm:h-16 w-auto block" alt="Mangroves Global" />
-            </Link>
-          </div>
-          <div className="hidden lg:flex flex-1 justify-center">
-            <nav className="flex items-center space-x-10 text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
-              <Link href="/trading" className="hover:text-mangrove-900 transition-colors">Home</Link>
-              <Link href="/trading/about" className="hover:text-mangrove-900 transition-colors">About</Link>
-              <Link href="/trading/commodities" className="hover:text-mangrove-900 transition-colors">Commodities</Link>
-              <Link href="/trading/sourcing-supply" className="hover:text-mangrove-900 transition-colors">Sourcing &amp; Supply</Link>
-              <Link href="/trading/quality-assurance" className="text-mangrove-900">Quality Assurance</Link>
-              <Link href="/trading/blog" className="hover:text-mangrove-900 transition-colors">Insights</Link>
-              <Link href="/trading#contact" className="hover:text-mangrove-900 transition-colors">Contact</Link>
-            </nav>
-          </div>
-          <div className="flex-1 lg:hidden" />
-          <Link
-            href="/trading#contact"
-            className="hidden lg:inline-flex items-center mr-8 lg:mr-16 px-6 py-2.5 border-2 border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-all duration-300 rounded-full text-xs tracking-widest font-semibold uppercase"
-          >
-            <span>Trade Inquiry</span>
-            <ArrowUpRight className="w-4 h-4 ml-2" />
-          </Link>
-          <button onClick={() => setMobileMenuOpen(true)} className="lg:hidden mr-6 text-mangrove-900 focus:outline-none" aria-label="Open menu">
-            <Menu className="w-8 h-8" />
-          </button>
-        </div>
-      </header>
-
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
-          <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-6 text-mangrove-900" aria-label="Close menu">
-            <X className="w-8 h-8" />
-          </button>
-          <Link href="/trading" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-          <Link href="/trading/about" onClick={() => setMobileMenuOpen(false)}>About Us</Link>
-          <Link href="/trading/commodities" onClick={() => setMobileMenuOpen(false)}>Commodities</Link>
-          <Link href="/trading/sourcing-supply" onClick={() => setMobileMenuOpen(false)}>Sourcing &amp; Supply</Link>
-          <Link href="/trading/quality-assurance" onClick={() => setMobileMenuOpen(false)} className="text-mangrove-accent">Quality Assurance</Link>
-          <Link href="/trading/blog" onClick={() => setMobileMenuOpen(false)}>Insights</Link>
-          <Link href="/trading#contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
-        </div>
-      )}
+      <DivisionHeader division="trading" />
 
       {/* Scanner animation styles */}
       <style>{`
@@ -159,7 +110,7 @@ export default function QualityAssuranceContent() {
         {/* ══════════════════════════════════════════════════════════════
             HERO — scanner / inspection UI aesthetic
         ══════════════════════════════════════════════════════════════ */}
-        <div ref={heroRef} className="relative h-[calc(100dvh-5rem)] min-h-[580px] mt-20 sm:mt-24 overflow-hidden bg-mangrove-900">
+        <div ref={heroRef} className="relative h-[calc(100dvh-5.5rem)] min-h-[580px] mt-22 overflow-hidden bg-mangrove-900">
 
           {/* Background video */}
           <video
@@ -430,16 +381,7 @@ export default function QualityAssuranceContent() {
 
       </main>
 
-      <footer className="bg-mangrove-accent text-mangrove-900/80 text-xs mt-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-16 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <Image src="/images/logo/mangroves-global-logo-wordmark.png" width={1200} height={289} className="h-6 sm:h-7 w-auto block" alt="Mangroves Global" />
-          <p>&copy; 2026 Mangroves Global Trading FZ LLC. All rights reserved</p>
-          <div className="flex space-x-6">
-            <Link href="/" className="hover:text-mangrove-900 transition-colors">Privacy Policy</Link>
-            <Link href="/" className="hover:text-mangrove-900 transition-colors">Terms of Trade</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
