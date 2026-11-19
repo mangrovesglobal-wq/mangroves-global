@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SeaFreightContent from "@/components/SeaFreightContent";
 import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -69,7 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = service.meta_description || FALLBACK.meta_description!;
   const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
 
-  return {
+  const serviceDefaults: Metadata = {
     title,
     description,
     alternates: {
@@ -88,6 +89,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [ogImageUrl],
     },
   };
+  return getSeoMetadata("logistics-sea-freight", serviceDefaults);
 }
 
 export default async function SeaFreightPage() {

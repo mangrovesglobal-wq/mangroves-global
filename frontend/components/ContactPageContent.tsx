@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { MapPin, Phone, Mail, CheckCircle2, AlertTriangle } from "lucide-react";
+import SiteHeader from "./SiteHeader";
+import SiteFooter from "./SiteFooter";
+import Reveal from "./Reveal";
 
 export default function ContactPageContent() {
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -52,33 +53,11 @@ export default function ContactPageContent() {
 
   return (
     <div className="bg-white text-mangrove-900 antialiased">
-      {/* Header */}
-      <header className="w-full bg-mangrove-accent">
-        <div className="relative flex items-center h-20 sm:h-24">
-          <div
-            className="relative h-full flex items-center shrink-0 bg-mangrove-800 pl-4 sm:pl-6 pr-10 sm:pr-16"
-            style={{ clipPath: "polygon(0 0, 100% 0, 62% 100%, 0 100%)" }}
-          >
-            <Link href="/">
-              <Image src="/images/logo/mangroves-global-logo-badge.png" width={64} height={64} className="h-14 sm:h-16 w-auto block" alt="Mangroves Global" />
-            </Link>
-          </div>
-          <div className="hidden md:flex flex-1 justify-center">
-            <nav className="flex items-center space-x-10 text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
-              <Link href="/trading" className="hover:text-mangrove-900 transition-colors">Trading</Link>
-              <Link href="/logistics" className="hover:text-mangrove-900 transition-colors">Logistics</Link>
-              <Link href="/creative" className="hover:text-mangrove-900 transition-colors">Creative</Link>
-              <Link href="/about" className="hover:text-mangrove-900 transition-colors">About</Link>
-              <Link href="/contact" className="text-mangrove-900">Contact</Link>
-            </nav>
-          </div>
-          <div className="flex-1 md:hidden"></div>
-        </div>
-      </header>
+      <SiteHeader />
 
-      <main className="px-6 lg:px-16 py-20 sm:py-28">
+      <main className="pt-20 sm:pt-24 px-6 lg:px-16 py-20 sm:py-28">
         <div className="max-w-5xl mx-auto grid lg:grid-cols-12 gap-16">
-          <div className="lg:col-span-5">
+          <Reveal className="lg:col-span-5">
             <span className="text-mangrove-accent text-xs uppercase tracking-widest font-semibold">Contact</span>
             <h1 className="font-serif text-3xl sm:text-5xl font-bold text-mangrove-900 mt-3 mb-8">
               Talk to the Right Division
@@ -122,9 +101,9 @@ export default function ContactPageContent() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="lg:col-span-7">
+          <Reveal className="lg:col-span-7" delay={120}>
             {formStatus === "success" ? (
               <div className="bg-mangrove-50 border border-mangrove-100 rounded-3xl p-10 text-center">
                 <CheckCircle2 className="w-10 h-10 text-mangrove-accent mx-auto mb-4" />
@@ -181,20 +160,11 @@ export default function ContactPageContent() {
                 )}
               </form>
             )}
-          </div>
+          </Reveal>
         </div>
       </main>
 
-      <footer className="bg-mangrove-900 text-white/70 text-xs">
-        <div className="max-w-7xl mx-auto px-6 lg:px-16 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <Image src="/images/logo/mangroves-global-logo-wordmark.png" width={140} height={28} className="h-6 sm:h-7 w-auto block" alt="Mangroves Global" />
-          <p>&copy; 2026 Mangroves Global Trading FZ LLC. All rights reserved</p>
-          <div className="flex space-x-6">
-            <Link href="/" className="hover:text-mangrove-accent transition-colors">Privacy Policy</Link>
-            <Link href="/" className="hover:text-mangrove-accent transition-colors">Terms</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

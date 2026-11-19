@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import BrandingContent from "@/components/BrandingContent";
 import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 const HERO_IMAGE_ALT = "Branding & Creative services from Mangroves Global for UAE businesses.";
@@ -60,7 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = service.meta_description || FALLBACK.meta_description!;
   const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL);
 
-  return {
+  const serviceDefaults: Metadata = {
     title,
     description,
     alternates: { canonical: "/creative/branding" },
@@ -69,6 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
       twitter: { card: "summary_large_image" as const, title, description, images: [ogImageUrl] },
     }),
   };
+  return getSeoMetadata("creative-branding", serviceDefaults);
 }
 
 export default async function BrandingPage() {
@@ -81,7 +83,7 @@ export default async function BrandingPage() {
     }))
     .filter((b): b is { heading: string; content: string } => !!b.heading && !!b.content);
 
-  const heroImage = resolveServiceHeroImage(service.featured_image, API_BASE_URL, HERO_IMAGE_ALT);
+  const heroImage = resolveServiceHeroImage(service.featured_image, API_BASE_URL, HERO_IMAGE_ALT, "/images/Branding.jpg");
   const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL);
 
   const jsonLd = {

@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import GreenCardamomContent from "@/components/GreenCardamomContent";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
-export const metadata: Metadata = {
-  title: "Indian Green Cardamom Exporter UAE | Idukki Kerala Supplier",
-  description:
-    "Bulk Indian green cardamom for UAE and GCC buyers, sourced from Idukki, Kerala. Grades 6mm to 8mm+, export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata("trading-product-green-cardamom", {
+    title: "Indian Green Cardamom Exporter UAE | Idukki Kerala Supplier",
+    description:
+      "Bulk Indian green cardamom for UAE and GCC buyers, sourced from Idukki, Kerala. Grades 6mm to 8mm+, export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
+    alternates: { canonical: "/trading/products/green-cardamom" },
+  });
+}
 
 const jsonLd = {
   "@context": "https://schema.org",

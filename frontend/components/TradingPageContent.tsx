@@ -1,116 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Menu,
-  X,
-  ArrowUpRight,
-  ArrowDown,
-  Sprout,
-  ShieldCheck,
-  FileText,
-  Anchor,
-  CheckCircle2,
-  Award,
-  Eye,
-  Layers,
-  Truck,
-  MessageSquare,
-  Check,
-  MapPin,
-  Phone,
-  Mail,
-  AlertTriangle,
-} from "lucide-react";
-
-type Product = {
-  slug: string;
-  name: string;
-  category: "spices" | "beverages";
-  categoryLabel: string;
-  grades: string;
-  description: string;
-  highlight: string;
-  image: string;
-  alt: string;
-};
-
-const products: Product[] = [
-  {
-    slug: "black-pepper",
-    name: "Black Pepper",
-    category: "spices",
-    categoryLabel: "Spices",
-    grades: "Tellicherry (TGEB), Malabar Garbled (MG1), Cracked & Powder.",
-    description:
-      "Bulk black pepper export to UAE and GCC buyers, sourced from prime Malabar coastal regions with maximum piperine heat and bold uniform berry density.",
-    highlight: "High Piperine Heat",
-    image: "/trading/images/indian-black-pepper-supplier.jpg",
-    alt: "Indian black pepper supplier for UAE and GCC — Tellicherry and Malabar Garbled grades",
-  },
-  {
-    slug: "cloves",
-    name: "Cloves",
-    category: "spices",
-    categoryLabel: "Spices",
-    grades: "Whole Quills (Ceylon/Cassia) & Handpicked Cloves.",
-    description:
-      "Cloves supplier to UAE and GCC markets, featuring high eugenol essential oil content, rich sweet aroma, and zero headless flower bud defects.",
-    highlight: "Rich Eugenol Oil",
-    image: "/trading/images/indian-cloves-export.jpg",
-    alt: "Indian cloves exporter for UAE and GCC — whole quills and handpicked grades",
-  },
-  {
-    slug: "nutmeg-mace",
-    name: "Nutmeg & Mace",
-    category: "spices",
-    categoryLabel: "Spices",
-    grades: "Whole ABCD Nutmeg, Red Mace Arils, Fine Powder.",
-    description:
-      "Nutmeg and mace exporter serving UAE and GCC buyers, with rich volatile oil profile, vibrant deep crimson mace arils, and zero-shell defect lots.",
-    highlight: "Zero Shell Defect",
-    image: "/trading/images/indian-nutmeg-export.jpg",
-    alt: "Indian nutmeg and mace exporter for UAE and GCC — ABCD grade whole nutmeg",
-  },
-  {
-    slug: "green-cardamom",
-    name: "Green Cardamom",
-    category: "spices",
-    categoryLabel: "Spices",
-    grades: "Bold Green Pods (6–8mm+), Seeds, Fine Powder.",
-    description:
-      "Green cardamom exporter to UAE and GCC, sourced from Idukki, Kerala — India's premier cardamom region — with vibrant green retention and high oil yields.",
-    highlight: "6-8mm+ Bold Pods",
-    image: "/trading/images/indian-green-cardamom-export.jpg",
-    alt: "Indian green cardamom exporter for UAE and GCC — Idukki Kerala bold green pods",
-  },
-  {
-    slug: "dry-ginger",
-    name: "Dry Ginger",
-    category: "spices",
-    categoryLabel: "Spices",
-    grades: "Washed Whole Dried, Split & Fine Ground Powder.",
-    description:
-      "Dry ginger supplier to UAE and GCC importers, cleaned and sun-dried for a distinct pungent flavor profile and minimal fibrous content.",
-    highlight: "Pungent Flavor Profile",
-    image: "/trading/images/fresh-ginger-export-india.jpg",
-    alt: "Fresh ginger exporter to UAE and GCC — washed whole dried ginger from India",
-  },
-  {
-    slug: "coffee-beans",
-    name: "Coffee Beans",
-    category: "beverages",
-    categoryLabel: "Coffee",
-    grades: "Green Beans (Grades AA, A, PB).",
-    description:
-      "Green coffee bean exporter for UAE and GCC roasters, high-altitude shade-grown with uniform moisture levels and rigorous 0 defect scoring.",
-    highlight: "Grades AA, A, Peaberry",
-    image: "/trading/images/indian-coffee-beans-export.jpg",
-    alt: "Indian green coffee beans exporter for UAE and GCC roasters — grades AA, A, peaberry",
-  },
-];
+import Reveal from "./Reveal";
+import { ArrowUpRight } from "lucide-react";
+import SiteFooter from "@/components/SiteFooter";
+import HeroSocialBar from "@/components/HeroSocialBar";
 
 const marketRates = [
   { label: "8mm+", value: "Dhs 170-162" },
@@ -123,195 +19,305 @@ const marketRates = [
   { label: "BULK", value: "Dhs 146-132" },
 ];
 
-export default function TradingPageContent() {
+export default function TradingPageContent({ heroVideo, heroPoster }: { heroVideo?: string; heroPoster?: string } = {}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [filter, setFilter] = useState<"all" | "spices" | "beverages">("all");
-  const [formStatus, setFormStatus] = useState<
-    "idle" | "sending" | "success" | "error"
-  >("idle");
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const heroStickyRef = useRef<HTMLDivElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const heroC1Ref = useRef<HTMLDivElement>(null);
+  const heroC2Ref = useRef<HTMLDivElement>(null);
+  const heroC3Ref = useRef<HTMLDivElement>(null);
+  const heroC4Ref = useRef<HTMLDivElement>(null);
+  const heroProgressRef = useRef<HTMLDivElement>(null);
+  const heroHintRef = useRef<HTMLDivElement>(null);
 
-  const filteredProducts =
-    filter === "all" ? products : products.filter((p) => p.category === filter);
+  const HERO_VIDEO_START = 3;
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setFormStatus("sending");
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+  // Scroll-driven hero: a tall section with a `position: sticky` inner viewport
+  // (not a JS-simulated pin), progress recomputed from scratch every animation
+  // frame from actual layout geometry, and an eased (lerp) approach to the
+  // target so motion stays smooth regardless of how choppy real scroll events
+  // are. This avoids the asymmetric up/down + seek-stutter issues a
+  // scroll-event-driven tween can have on a pinned video.
+  useEffect(() => {
+    const section = heroSectionRef.current;
+    const sticky = heroStickyRef.current;
+    const video = heroVideoRef.current;
+    const copies = [heroC1Ref.current, heroC2Ref.current, heroC3Ref.current, heroC4Ref.current];
+    if (!section || !sticky || !video || copies.some((c) => !c)) return;
+    const copyEls = copies as HTMLDivElement[];
 
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+    // Each stage's resting transform (its own centering/anchoring) before the
+    // scroll-driven reveal offset is layered on top of it.
+    const baseTransforms = ["translateY(calc(-50% + 48px))", "", "translateY(-50%)", "translateY(-50%)"];
 
-    const payload = {
-      division: "trading",
-      name: formData.get("name"),
-      company: formData.get("company"),
-      email: formData.get("email"),
-      subject: formData.get("commodity"),
-      message: formData.get("message"),
-    };
+    // [fadeInStart, fadeInEnd, holdEnd, fadeOutEnd] as fractions of total scroll progress.
+    const windows: [number, number, number, number][] = [
+      [-1, -0.5, 0.18, 0.28],
+      [0.28, 0.36, 0.46, 0.54],
+      [0.54, 0.62, 0.74, 0.84],
+      [0.84, 0.92, 2, 3],
+    ];
+    const windowOpacity = (a: number, b: number, c: number, d: number, x: number) =>
+      x <= a || x >= d ? 0 : x < b ? (x - a) / (b - a) : x <= c ? 1 : 1 - (x - c) / (d - c);
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/quote-requests`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const result = await response.json();
-      if (response.ok && result.success) {
-        setFormStatus("success");
-        form.reset();
-      } else {
-        setFormStatus("error");
-      }
-    } catch {
-      setFormStatus("error");
+    function getProgress() {
+      const total = section!.offsetHeight - window.innerHeight;
+      if (total <= 0) return 0;
+      const rect = section!.getBoundingClientRect();
+      return Math.min(1, Math.max(0, -rect.top / total));
     }
-  }
+
+    let target = 0;
+    let current = 0;
+    let duration = 0;
+    let lastSeekTime = -1;
+    let rafId = 0;
+    const EASE = 0.07;
+
+    function applyUI(p: number) {
+      copyEls.forEach((el, i) => {
+        const o = windowOpacity(...windows[i], p);
+        const y = (1 - o) * 24;
+        el.style.opacity = String(o);
+        el.style.transform = `${baseTransforms[i]} translateY(${y}px)`.trim();
+      });
+      if (heroProgressRef.current) heroProgressRef.current.style.width = `${p * 100}%`;
+      if (heroHintRef.current) heroHintRef.current.style.opacity = p > 0.02 ? "0" : "0.7";
+    }
+
+    function tick() {
+      if (!video) return;
+      target = getProgress();
+      current += (target - current) * EASE;
+      if (Math.abs(target - current) < 1e-4) current = target;
+
+      if (duration > 0) {
+        const t = HERO_VIDEO_START + current * (duration - 0.05 - HERO_VIDEO_START);
+        if (Math.abs(t - lastSeekTime) > 1 / 120 && !video.seeking) {
+          video.currentTime = t;
+          lastSeekTime = t;
+        }
+      }
+
+      applyUI(current);
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function onMetadata() {
+      if (!video) return;
+      duration = video.duration;
+      video.pause();
+      video.currentTime = HERO_VIDEO_START;
+      rafId = requestAnimationFrame(tick);
+    }
+
+    if (video.readyState >= 1 && video.duration) {
+      onMetadata();
+    } else {
+      video.addEventListener("loadedmetadata", onMetadata, { once: true });
+    }
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      video.removeEventListener("loadedmetadata", onMetadata);
+    };
+  }, []);
+
 
   return (
-    <div className="bg-mangrove-900 text-slate-100 antialiased overflow-x-hidden">
-      {/* Header */}
-      <header className="fixed top-0 left-0 w-full z-50 bg-mangrove-accent shadow-lg shadow-black/10">
-        <div className="relative flex items-center h-20 sm:h-24">
-          <div
-            className="relative h-full flex items-center shrink-0 bg-mangrove-800 pl-4 sm:pl-6 pr-10 sm:pr-16"
-            style={{ clipPath: "polygon(0 0, 100% 0, 62% 100%, 0 100%)" }}
-          >
-            <Link href="/">
-              <Image
-                src="/images/logo/mangroves-global-logo-badge.png"
-                width={64}
-                height={64}
-                className="h-14 sm:h-16 w-auto block"
-                alt="Mangroves Global"
-              />
-            </Link>
-          </div>
-
-          <div className="hidden md:flex flex-1 justify-center">
-            <nav className="flex items-center space-x-10 text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
-              <a href="#home" className="hover:text-mangrove-900 transition-colors">Home</a>
-              <a href="#about" className="hover:text-mangrove-900 transition-colors">About</a>
-              <a href="#products" className="hover:text-mangrove-900 transition-colors">Commodities</a>
-              <a href="#quality" className="hover:text-mangrove-900 transition-colors">Quality Assurance</a>
-              <a href="#contact" className="hover:text-mangrove-900 transition-colors">Contact</a>
+    <div className="bg-white text-mangrove-900 antialiased overflow-x-clip">
+      {/* ── DIVISION HEADER ── */}
+      <header className="fixed top-0 left-0 w-full z-50" style={{ height: 88 }}>
+        {/* Gold bar */}
+        <div className="absolute inset-x-0 bg-mangrove-accent" style={{ top: 22, height: 44 }}>
+          {/* Desktop */}
+          <div className="hidden lg:flex h-full max-w-screen-2xl mx-auto">
+            <nav className="flex-1 flex items-center justify-evenly px-4 xl:px-8">
+              {[["Home","#home"],["About","/trading/about"],["Commodities","/trading/commodities"],["Contact","/trading/contact"]].map(([l,h])=>(
+                <a key={l} href={h} className="relative group text-mangrove-900 text-[10.5px] tracking-[0.15em] font-bold uppercase">
+                  {l}<span className="absolute -bottom-0.75 left-0 h-[1.5px] w-0 bg-mangrove-900 rounded-full transition-[width] duration-300 group-hover:w-full" />
+                </a>
+              ))}
+            </nav>
+            <div style={{ width: 210, flexShrink: 0 }} />
+            <nav className="flex-1 flex items-center justify-evenly px-4 xl:px-8">
+              {[["Sourcing & Supply","/trading/sourcing-supply"],["Quality Assurance","/trading/quality-assurance"],["Blog","/trading/blog"],["Explore Other Businesses","/"]].map(([l,h])=>(
+                <a key={l} href={h} className="relative group text-mangrove-900 text-[10.5px] tracking-[0.15em] font-bold uppercase">
+                  {l}<span className="absolute -bottom-0.75 left-0 h-[1.5px] w-0 bg-mangrove-900 rounded-full transition-[width] duration-300 group-hover:w-full" />
+                </a>
+              ))}
             </nav>
           </div>
-          <div className="flex-1 md:hidden"></div>
-
-          <Link
-            href="/"
-            className="hidden lg:inline-flex items-center mr-4 text-[11px] tracking-widest font-semibold uppercase text-mangrove-900/70 hover:text-mangrove-900"
-          >
-            Explore Other Businesses
-          </Link>
-
-          <a
-            href="#contact"
-            className="hidden md:inline-flex items-center mr-8 lg:mr-16 px-6 py-2.5 border-2 border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-all duration-300 rounded-full text-xs tracking-widest font-semibold uppercase"
-          >
-            <span>Trade Inquiry</span>
-            <ArrowUpRight className="w-4 h-4 ml-2" />
-          </a>
-
-          <button
-            onClick={() => setMobileMenuOpen(true)}
-            className="md:hidden mr-6 text-mangrove-900 focus:outline-none"
-            aria-label="Open menu"
-          >
-            <Menu className="w-8 h-8" />
-          </button>
+          {/* Mobile hamburger */}
+          <div className="lg:hidden flex h-full items-center justify-end px-5">
+            <button onClick={() => setMobileMenuOpen((v) => !v)} className="relative flex flex-col justify-center items-center w-9 h-9 focus:outline-none" aria-label="Toggle menu">
+              <span className={`absolute block h-0.5 w-5 bg-mangrove-900 rounded-full transition-all duration-300 ${mobileMenuOpen ? "rotate-45" : "-translate-y-1.5"}`} />
+              <span className={`absolute block h-0.5 bg-mangrove-900 rounded-full transition-all duration-300 ${mobileMenuOpen ? "w-0 opacity-0" : "w-5 opacity-100"}`} />
+              <span className={`absolute block h-0.5 w-5 bg-mangrove-900 rounded-full transition-all duration-300 ${mobileMenuOpen ? "-rotate-45" : "translate-y-1.5"}`} />
+            </button>
+          </div>
         </div>
+        {/* Shield */}
+        <Link href="/" className="absolute left-1/2 -translate-x-1/2 bg-mangrove-900 flex items-center justify-center group" style={{ top: 0, height: 88, width: 210, clipPath: "polygon(0 0, 100% 0, 83% 100%, 17% 100%)", zIndex: 1 }}>
+          <Image src="/images/logo/mangroves-global-logo-badge.png" width={898} height={900} className="h-17.5 w-auto transition-transform duration-500 ease-out group-hover:scale-[1.08] group-active:scale-95" alt="Mangroves Global" priority />
+        </Link>
       </header>
 
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-mangrove-900/95 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-white">
-          <button
-            onClick={() => setMobileMenuOpen(false)}
-            className="absolute top-6 right-6 text-white"
-            aria-label="Close menu"
-          >
-            <X className="w-8 h-8" />
+      {/* Mobile backdrop */}
+      <div aria-hidden className={`fixed inset-0 z-59 bg-mangrove-900/40 backdrop-blur-sm transition-opacity duration-300 ${mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`} onClick={() => setMobileMenuOpen(false)} />
+      {/* Mobile panel */}
+      <aside className={`fixed top-0 right-0 h-full z-60 flex flex-col bg-white shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`} style={{ width: "min(100vw, 340px)" }}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-mangrove-100 shrink-0">
+          <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+            <Image src="/images/logo/mangroves-global-logo-badge.png" width={898} height={900} className="h-10 w-auto" alt="Mangroves Global" />
+          </Link>
+          <button onClick={() => setMobileMenuOpen(false)} className="w-9 h-9 flex items-center justify-center rounded-full text-mangrove-700 hover:bg-mangrove-50 transition-colors" aria-label="Close">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l12 12M13 1L1 13" /></svg>
           </button>
-          <a href="#home" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">Home</a>
-          <a href="#about" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">About Us</a>
-          <a href="#products" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">Commodities</a>
-          <a href="#quality" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">Quality Control</a>
-          <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">Contact</a>
         </div>
-      )}
+        <nav className="flex-1 overflow-y-auto py-2">
+          {[["Home","#home"],["About","/trading/about"],["Commodities","/trading/commodities"],["Sourcing & Supply","/trading/sourcing-supply"],["Quality Assurance","/trading/quality-assurance"],["Blog","/trading/blog"],["Contact","/trading/contact"],["Explore Other Businesses","/"]].map(([label,href])=>(
+            <a key={label} href={href} onClick={() => setMobileMenuOpen(false)}
+              className="group flex items-center justify-between px-6 py-4 font-serif text-xl text-mangrove-900 border-b border-mangrove-50 hover:bg-mangrove-50/60 hover:text-mangrove-accent hover:pl-9 transition-all duration-200">
+              {label}
+              <span className="text-mangrove-300 text-base group-hover:text-mangrove-accent group-hover:translate-x-1 transition-all duration-200">→</span>
+            </a>
+          ))}
+        </nav>
+      </aside>
 
-      <main className="pt-20 sm:pt-24">
+      <main className="pt-22">
         {/* HERO */}
-        <section id="home" className="relative min-h-screen flex items-center justify-center px-6 lg:px-16 overflow-hidden">
-          <div className="absolute inset-0 z-0 opacity-20">
-            <div className="absolute top-1/4 left-10 w-96 h-96 rounded-full bg-mangrove-500 blur-3xl"></div>
-            <div className="absolute bottom-1/4 right-10 w-96 h-96 rounded-full bg-mangrove-accent blur-3xl"></div>
-          </div>
+        <section ref={heroSectionRef} id="home" className="relative h-[420vh] bg-mangrove-900 -mt-22">
+          <div
+            ref={heroStickyRef}
+            className="sticky w-full overflow-hidden bg-mangrove-900"
+            style={{ top: 0, height: "100dvh" }}
+          >
+            <video
+              ref={heroVideoRef}
+              className="absolute inset-0 w-full h-full object-cover"
+              src={heroVideo ?? "/videos/kerala-cardamom-estate-hero.mp4"}
+              poster={heroPoster ?? "/images/trading-hero-video-poster.jpg"}
+              muted
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+            />
+            <div className="absolute inset-0 bg-mangrove-900/60" />
 
-          <div className="relative z-10 max-w-7xl mx-auto text-center flex flex-col items-center">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-mangrove-500/30 bg-mangrove-800/40 text-mangrove-accent text-xs uppercase tracking-widest mb-8">
-              <span>UAE Headquartered • Exporting Indian Spices to the GCC</span>
-            </div>
-
-            <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-none mb-8">
-              Rooted in Nature,<br />
-              <span className="font-normal text-mangrove-accent">Connecting Globally.</span>
-            </h1>
-
-            <p className="max-w-2xl text-slate-300 text-base sm:text-lg md:text-xl font-light leading-relaxed mb-12">
-              Supplying UAE and GCC buyers with reliable, origin-linked Indian agricultural commodities through transparent sourcing, disciplined quality control, and export-ready trade execution.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <a href="#products" className="w-full sm:w-auto px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-white transition-colors duration-300 rounded-full font-semibold text-xs tracking-widest uppercase flex items-center justify-center">
-                Explore Commodities
-                <ArrowDown className="w-4 h-4 ml-2" />
-              </a>
-              <a href="#about" className="w-full sm:w-auto px-8 py-4 border border-slate-700 hover:border-mangrove-accent text-white transition-colors duration-300 rounded-full font-medium text-xs tracking-widest uppercase flex items-center justify-center">
-                Our Philosophy
-              </a>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 pt-12 border-t border-slate-800/80 w-full max-w-5xl">
-              <div>
-                <span className="block font-serif text-3xl sm:text-4xl text-mangrove-accent font-semibold">99.5%+</span>
-                <span className="text-xs uppercase tracking-wider text-slate-400 mt-1 block">Physical Purity Target</span>
+            {/* C1 — Intro */}
+            <div
+              ref={heroC1Ref}
+              className="pointer-events-none absolute left-6 right-6 lg:left-16 lg:right-16 text-center flex flex-col items-center"
+              style={{ top: "50%", transform: "translateY(calc(-50% + 48px))" }}
+            >
+              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-mangrove-accent/50 bg-white/90 backdrop-blur-md text-mangrove-900 text-xs uppercase tracking-widest mb-8">
+                <span>UAE Headquartered • Exporting Indian Spices to the GCC</span>
               </div>
-              <div>
-                <span className="block font-serif text-3xl sm:text-4xl text-mangrove-accent font-semibold">Dual</span>
-                <span className="text-xs uppercase tracking-wider text-slate-400 mt-1 block">India &amp; UAE Presence</span>
-              </div>
-              <div>
-                <span className="block font-serif text-3xl sm:text-4xl text-mangrove-accent font-semibold">0 Defect</span>
-                <span className="text-xs uppercase tracking-wider text-slate-400 mt-1 block">Coffee &amp; Spice Grading</span>
-              </div>
-              <div>
-                <span className="block font-serif text-3xl sm:text-4xl text-mangrove-accent font-semibold">100%</span>
-                <span className="text-xs uppercase tracking-wider text-slate-400 mt-1 block">Traceability &amp; Compliance</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Commodities strip */}
-        <section className="py-10 px-6 lg:px-16 border-t border-slate-800/50 bg-mangrove-900/60">
-          <div className="max-w-7xl mx-auto grid grid-cols-3 sm:grid-cols-6 gap-4 sm:gap-8">
-            {products.map((p) => (
-              <Link
-                key={p.slug}
-                href={`/trading/products/${p.slug}`}
-                className="group flex flex-col items-center gap-2 text-center"
+              <h1
+                className="font-serif leading-none mb-8"
+                style={{ textShadow: "0 2px 24px rgba(0,0,0,0.35)" }}
               >
-                <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border border-slate-800 group-hover:border-mangrove-accent/60 transition-colors relative">
-                  <Image src={p.image} alt={p.name} fill className="object-cover" />
-                </div>
-                <span className="text-[10px] sm:text-xs text-slate-400 group-hover:text-mangrove-accent transition-colors">
-                  {p.name}
-                </span>
+                <span className="block text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-light text-white/80 tracking-tight">Rooted in Nature,</span>
+                <span className="block text-5xl sm:text-7xl md:text-8xl lg:text-[6.5rem] font-bold text-mangrove-accent tracking-tight leading-none">Connecting Globally.</span>
+              </h1>
+              <p className="max-w-2xl text-white/85 text-base sm:text-lg md:text-xl font-light leading-relaxed">
+                Supplying UAE and GCC buyers with reliable, origin-linked Indian agricultural commodities through transparent sourcing, disciplined quality control, and export-ready trade execution.
+              </p>
+            </div>
+
+            {/* C2 — Source */}
+            <div
+              ref={heroC2Ref}
+              className="trading-hero-stage pointer-events-none absolute left-6 right-6 lg:left-16 lg:right-16 bottom-[14vh] max-w-xl"
+            >
+              <span className="text-mangrove-accent text-xs uppercase tracking-[0.25em] font-semibold block mb-4">01 — Source</span>
+              <h2
+                className="font-serif leading-none mb-4"
+                style={{ textShadow: "0 2px 24px rgba(0,0,0,0.35)" }}
+              >
+                <span className="block text-base sm:text-xl font-light text-white/50 uppercase tracking-[0.18em] mb-2">Directly From</span>
+                <span className="block text-5xl sm:text-7xl lg:text-8xl font-bold text-white">Farm To Port.</span>
+              </h2>
+              <p className="text-white/80 text-sm sm:text-base leading-relaxed mb-6 max-w-md">
+                A short, traceable supply chain from Indian growing regions to UAE and GCC buyers.
+              </p>
+              <Link
+                href="/trading/sourcing-supply"
+                className="group pointer-events-auto inline-flex items-center text-xs uppercase tracking-widest font-semibold text-white hover:text-mangrove-accent transition-colors"
+              >
+                See How We Source
+                <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1.5">→</span>
               </Link>
-            ))}
+            </div>
+
+            {/* C3 — Quality */}
+            <div
+              ref={heroC3Ref}
+              className="trading-hero-stage pointer-events-none absolute left-6 right-6 lg:left-16 lg:right-16 top-1/2 text-right flex flex-col items-end"
+              style={{ transform: "translateY(-50%)" }}
+            >
+              <span className="text-mangrove-accent text-xs uppercase tracking-[0.25em] font-semibold block mb-4">02 — Quality</span>
+              <h2
+                className="font-serif leading-none mb-4"
+                style={{ textShadow: "0 2px 24px rgba(0,0,0,0.35)" }}
+              >
+                <span className="block text-4xl sm:text-6xl lg:text-7xl font-normal italic text-mangrove-accent tracking-tight">Signature Quality</span>
+                <span className="block text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight mt-1">In Every Batch.</span>
+              </h2>
+              <p className="text-white/80 text-sm sm:text-base leading-relaxed mb-6 max-w-md">
+                Structured multi-point inspection, lot by lot, before anything ships.
+              </p>
+              <Link
+                href="/trading/quality-assurance"
+                className="group pointer-events-auto inline-flex items-center text-xs uppercase tracking-widest font-semibold text-white hover:text-mangrove-accent transition-colors"
+              >
+                Our Quality Process
+                <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1.5">→</span>
+              </Link>
+            </div>
+
+            {/* C4 — Partner */}
+            <div
+              ref={heroC4Ref}
+              className="trading-hero-stage pointer-events-none absolute left-6 right-6 lg:left-16 lg:right-16 top-1/2 text-center flex flex-col items-center"
+              style={{ transform: "translateY(-50%)" }}
+            >
+              <span className="text-mangrove-accent text-xs uppercase tracking-[0.25em] font-semibold block mb-4">03 — Partner</span>
+              <h2
+                className="font-serif leading-none mb-6"
+                style={{ textShadow: "0 2px 24px rgba(0,0,0,0.35)" }}
+              >
+                <span className="block text-xs sm:text-sm font-semibold text-mangrove-accent uppercase tracking-[0.3em] mb-3">Partnered To Help You</span>
+                <span className="block text-5xl sm:text-7xl lg:text-8xl font-bold text-white leading-tight">Establish In<br/>The Market.</span>
+              </h2>
+              <Link
+                href="/trading/become-a-partner"
+                className="pointer-events-auto px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-white transition-colors duration-300 rounded-full font-semibold text-xs tracking-widest uppercase"
+              >
+                Become a Supplier Partner
+              </Link>
+            </div>
+
+            {/* Scroll hint */}
+            <div
+              ref={heroHintRef}
+              className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-7 text-[11px] uppercase tracking-[0.3em] text-white/70 transition-opacity duration-300"
+            >
+              Scroll
+            </div>
+
+            {/* Social icons — bottom-left of sticky hero */}
+            <div className="absolute left-6 lg:left-10 bottom-7 z-10">
+              <HeroSocialBar />
+            </div>
+
+            {/* Progress bar */}
+            <div className="absolute left-0 bottom-0 h-0.75 w-full bg-white/10">
+              <div ref={heroProgressRef} className="h-full bg-mangrove-accent" style={{ width: "0%" }} />
+            </div>
           </div>
         </section>
 
@@ -343,404 +349,205 @@ export default function TradingPageContent() {
           </div>
         </section>
 
-        {/* About */}
-        <section id="about" className="py-28 px-6 lg:px-16 border-t border-slate-800/50 bg-mangrove-900/60">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-            <div className="lg:col-span-5 lg:sticky lg:top-32 space-y-6">
-              <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest block">
-                About The Company
-              </span>
-              <h2 className="font-serif text-3xl sm:text-5xl font-normal text-white leading-tight">
-                Connecting Farmlands to UAE &amp; GCC Trade Gateways.
+        {/* About — white section, text left, 3 bottles in dark panel right */}
+        <section id="about" className="py-20 sm:py-32 px-6 lg:px-16 bg-white">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Text */}
+            <Reveal className="space-y-6">
+              <span className="text-mangrove-accent text-xs uppercase tracking-widest font-semibold">About The Company</span>
+              <h2 className="font-serif text-3xl sm:text-5xl font-semibold text-mangrove-900 leading-snug">
+                Connecting Farmlands<br />to UAE &amp; GCC Trade Gateways.
               </h2>
-              <p className="text-slate-400 leading-relaxed font-light text-sm sm:text-base">
-                Mangroves Global Trading FZ LLC was established to bridge UAE and GCC buyers directly with authentic Indian agricultural origins. Headquartered in the UAE—one of the world&apos;s most strategic trade hubs—and backed by deep agricultural roots in India, we ensure transparent, efficient, and seamless trade execution.
+              <p className="text-mangrove-800/60 leading-relaxed max-w-md">
+                Mangroves Global Trading FZ LLC bridges UAE and GCC buyers directly with authentic Indian agricultural origins — direct farm sourcing, structured quality inspections, and disciplined export compliance under one roof.
               </p>
-              <div className="pt-4">
-                <div className="flex items-center space-x-4 text-xs tracking-wider text-slate-300">
-                  <div className="px-4 py-3 rounded-lg bg-mangrove-800/50 border border-slate-700/50">
-                    <span className="block font-semibold text-white">Origin Sourcing</span>
-                    <span className="text-slate-400">Kerala &amp; Pan-India</span>
-                  </div>
-                  <div className="px-4 py-3 rounded-lg bg-mangrove-800/50 border border-slate-700/50">
-                    <span className="block font-semibold text-white">Commercial Gateway</span>
-                    <span className="text-slate-400">Ras Al Khaimah, UAE</span>
-                  </div>
-                </div>
-              </div>
+              <Link
+                href="/trading/about"
+                className="group inline-flex items-center text-xs uppercase tracking-widest font-semibold text-mangrove-900 hover:text-mangrove-accent transition-colors"
+              >
+                Learn About Us
+                <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1.5">→</span>
+              </Link>
+            </Reveal>
 
-              <div className="relative w-full aspect-4/3 rounded-2xl overflow-hidden border border-slate-800">
-                <Image
-                  src="/trading/images/premium-indian-spices-uae.jpg"
-                  alt="Flat lay of premium Indian spices — cloves, dried chillies, turmeric, cardamom, cinnamon and cumin — sourced by Mangroves Global for UAE and GCC buyers"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 480px"
-                  className="object-cover"
+            {/* Bottles floating on white — height-based sizing keeps all 3 within the panel */}
+            <Reveal className="w-full">
+              <div className="relative w-full overflow-hidden h-[360px] sm:h-[420px] bg-white">
+                {/* Black pepper — left, shorter */}
+                <img
+                  src="/images/Bottles/Bottle Black pepper.png"
+                  draggable="false"
+                  alt=""
+                  className="bottle-float absolute left-[8%] bottom-0 h-[50%] w-auto select-none mix-blend-multiply"
+                  style={{ "--r": "-7deg", animationDuration: "6.4s", animationDelay: "0s", filter: "invert(1) sepia(1) saturate(2) brightness(1.85)" } as React.CSSProperties}
+                />
+                {/* Cardamom — centre, tallest, top-anchored with breathing room for float animation */}
+                <img
+                  src="/images/Bottles/Bottle Cradamom.png"
+                  draggable="false"
+                  alt=""
+                  className="bottle-float absolute left-1/2 -translate-x-1/2 top-[5%] h-[72%] w-auto select-none mix-blend-multiply"
+                  style={{ "--r": "2deg", animationDuration: "8s", animationDelay: "-3s", filter: "invert(1) sepia(1) saturate(2) brightness(1.85)" } as React.CSSProperties}
+                />
+                {/* Coffee bean — right, mid-height */}
+                <img
+                  src="/images/Bottles/Bottle Coffee Bean.png"
+                  draggable="false"
+                  alt=""
+                  className="bottle-float absolute right-[8%] bottom-[2%] h-[46%] w-auto select-none mix-blend-multiply opacity-85"
+                  style={{ "--r": "9deg", animationDuration: "9.5s", animationDelay: "-5.5s", filter: "invert(1) sepia(1) saturate(2) brightness(1.85)" } as React.CSSProperties}
                 />
               </div>
-            </div>
+            </Reveal>
+          </div>
+        </section>
 
-            <div className="lg:col-span-7 space-y-8">
-              <h3 className="text-xl font-serif text-white mb-6 border-b border-slate-800 pb-4">
-                Our Core Operating Philosophy
-              </h3>
-              <div className="space-y-6">
-                {[
-                  {
-                    icon: Sprout,
-                    title: "Direct Farm-Level Sourcing",
-                    desc: "Source closer to the farm to ensure absolute authenticity, origin purity, and complete lot traceability from harvest to export.",
-                  },
-                  {
-                    icon: ShieldCheck,
-                    title: "Structured Quality Inspections",
-                    desc: "Verify quality before movement through structured multi-point inspections, grading, and laboratory analysis.",
-                  },
-                  {
-                    icon: FileText,
-                    title: "Disciplined Export Compliance",
-                    desc: "Manage trade documentation professionally for smooth customs clearance and strict global export compliance.",
-                  },
-                  {
-                    icon: Anchor,
-                    title: "End-to-End Delivery Integrity",
-                    desc: "Deliver with absolute commercial integrity from origin dispatch to destination port, offering flexible Incoterms.",
-                  },
-                ].map(({ icon: Icon, title, desc }) => (
-                  <div
-                    key={title}
-                    className="p-8 rounded-2xl bg-mangrove-800/20 border border-slate-800 hover:border-mangrove-500/50 transition-all duration-300 group"
-                  >
-                    <div className="flex items-start space-x-6">
-                      <div className="w-12 h-12 rounded-xl bg-mangrove-500/10 text-mangrove-accent flex items-center justify-center shrink-0 group-hover:bg-mangrove-accent group-hover:text-mangrove-900 transition-colors">
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-white mb-2">{title}</h4>
-                        <p className="text-slate-400 text-sm leading-relaxed">{desc}</p>
-                      </div>
+        {/* Golden scroll divider */}
+        <div className="px-6 lg:px-16 py-6 bg-white">
+          <Reveal>
+            <div className="max-w-7xl mx-auto flex items-center gap-5">
+              <div className="flex-1 h-px bg-mangrove-accent timeline-fill" />
+              <span className="text-mangrove-accent text-[11px] uppercase tracking-[0.3em] font-semibold whitespace-nowrap shrink-0">
+                Mangroves Global · Trading
+              </span>
+              <div className="flex-1 h-px bg-mangrove-accent timeline-fill-right" />
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Sourcing & Supply — white section, 3 bottles in dark panel left, text right */}
+        <section className="py-20 sm:py-32 px-6 lg:px-16 bg-white">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Bottles floating on white — same height-based sizing as About panel */}
+            <Reveal className="w-full">
+              <div className="relative w-full overflow-hidden h-[360px] sm:h-[420px] bg-white">
+                {/* Cinnamon — left, shorter */}
+                <img
+                  src="/images/Bottles/Bottle Cinnamon.png"
+                  draggable="false"
+                  alt=""
+                  className="bottle-float absolute left-[8%] bottom-0 h-[50%] w-auto select-none mix-blend-multiply"
+                  style={{ "--r": "6deg", animationDuration: "7s", animationDelay: "-1s", filter: "invert(1) sepia(1) saturate(2) brightness(1.85)" } as React.CSSProperties}
+                />
+                {/* Ginger — centre, tallest, top-anchored */}
+                <img
+                  src="/images/Bottles/Bottle Ginger.png"
+                  draggable="false"
+                  alt=""
+                  className="bottle-float absolute left-1/2 -translate-x-1/2 top-[5%] h-[72%] w-auto select-none mix-blend-multiply"
+                  style={{ "--r": "-3deg", animationDuration: "8.5s", animationDelay: "-4s", filter: "invert(1) sepia(1) saturate(2) brightness(1.85)" } as React.CSSProperties}
+                />
+                {/* Clove — right, mid-height */}
+                <img
+                  src="/images/Bottles/Bottle Clove.png"
+                  draggable="false"
+                  alt=""
+                  className="bottle-float absolute right-[8%] bottom-[2%] h-[46%] w-auto select-none mix-blend-multiply opacity-85"
+                  style={{ "--r": "-8deg", animationDuration: "6.8s", animationDelay: "-2.5s", filter: "invert(1) sepia(1) saturate(2) brightness(1.85)" } as React.CSSProperties}
+                />
+              </div>
+            </Reveal>
+
+            {/* Text + 3-step sourcing chain */}
+            <Reveal className="space-y-6">
+              <span className="text-mangrove-accent text-xs uppercase tracking-widest font-semibold">How We Source</span>
+              <h2 className="font-serif text-3xl sm:text-5xl font-semibold text-mangrove-900 leading-snug">
+                Sourcing &amp; Supply —<br />Direct From Origin
+              </h2>
+              <p className="text-mangrove-800/60 leading-relaxed max-w-md">
+                A short, traceable chain — from grower and farm-gate aggregation in India, through our sourcing network, to export-ready lots for UAE and GCC buyers.
+              </p>
+
+              <div className="space-y-5 pt-2">
+                {([
+                  { step: "01", label: "Farm Procurement", desc: "Direct from growers and farm-gate aggregators across producing regions." },
+                  { step: "02", label: "Quality Inspection", desc: "Multi-point checks on grade, moisture, and physical condition before dispatch." },
+                  { step: "03", label: "Port Dispatch", desc: "Export-ready, documented, and compliant for UAE and GCC import requirements." },
+                ] as const).map((item) => (
+                  <div key={item.step} className="flex gap-4 items-start">
+                    <span className="text-mangrove-accent text-xs font-bold tracking-widest shrink-0 mt-0.5">{item.step}</span>
+                    <div>
+                      <span className="font-semibold text-mangrove-900 text-sm block">{item.label}</span>
+                      <span className="text-mangrove-800/55 text-sm leading-relaxed">{item.desc}</span>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+
+              <Link
+                href="/trading/sourcing-supply"
+                className="group inline-flex items-center text-xs uppercase tracking-widest font-semibold text-mangrove-900 hover:text-mangrove-accent transition-colors"
+              >
+                See How We Source
+                <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1.5">→</span>
+              </Link>
+            </Reveal>
           </div>
         </section>
 
-        {/* Products */}
-        <section id="products" className="py-28 px-6 lg:px-16 border-t border-slate-800/50 bg-mangrove-900">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
-              <div>
-                <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest block mb-3">
-                  Signature Commodities
-                </span>
-                <h2 className="font-serif text-3xl sm:text-5xl font-normal text-white">
-                  Export-Grade Portfolio for UAE &amp; GCC Buyers
-                </h2>
-              </div>
-              <div className="flex flex-wrap gap-2 mt-6 md:mt-0">
-                {(["all", "spices", "beverages"] as const).map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setFilter(cat)}
-                    className={`px-5 py-2 rounded-full text-xs uppercase tracking-wider font-semibold border transition-all ${
-                      filter === cat
-                        ? "border-mangrove-accent bg-mangrove-accent text-mangrove-900"
-                        : "border-slate-800 bg-mangrove-800/40 text-slate-300 hover:border-mangrove-accent"
-                    }`}
-                  >
-                    {cat === "all" ? "All Items" : cat === "spices" ? "Spices" : "Coffee"}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 gap-3">
-              {filteredProducts.map((p) => (
-                <div
-                  key={p.slug}
-                  className="group rounded-2xl bg-mangrove-800/30 border border-slate-800/80 overflow-hidden hover:border-mangrove-accent/50 transition-all duration-500"
-                >
-                  <div className="h-56 bg-slate-800 relative overflow-hidden">
-                    <Image
-                      src={p.image}
-                      alt={p.alt}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <span className="absolute top-4 right-4 bg-mangrove-900/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase text-mangrove-accent border border-mangrove-accent/30">
-                      {p.categoryLabel}
-                    </span>
-                  </div>
-                  <div className="p-8">
-                    <h3 className="font-serif text-2xl text-white mb-2">{p.name}</h3>
-                    <p className="text-mangrove-accent text-xs uppercase tracking-wider mb-4">{p.grades}</p>
-                    <p className="text-slate-400 text-sm leading-relaxed mb-6">{p.description}</p>
-                    <div className="pt-4 border-t border-slate-800/60 flex justify-between items-center text-xs text-slate-300">
-                      <span>{p.highlight}</span>
-                      <CheckCircle2 className="w-4 h-4 text-mangrove-accent" />
-                    </div>
-                    <Link
-                      href={`/trading/products/${p.slug}`}
-                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-mangrove-accent hover:text-white transition-colors"
-                    >
-                      View Full Specifications
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Quality — short teaser */}
+        <section id="quality" className="py-20 sm:py-28 px-6 lg:px-16 bg-mangrove-50 border-y border-mangrove-100">
+          <Reveal className="max-w-3xl mx-auto text-center">
+            <span className="text-mangrove-accent text-xs uppercase tracking-widest font-semibold">Structured QA Approach</span>
+            <h2 className="font-serif text-2xl sm:text-4xl font-semibold text-mangrove-900 mt-4 leading-snug">
+              Quality Control Priorities
+            </h2>
+            <p className="text-mangrove-800/60 leading-relaxed mt-6 max-w-xl mx-auto">
+              From initial farm grading to port dispatch, our structured multi-tier inspection protocols guarantee export-ready consistency for UAE and GCC buyers.
+            </p>
+            <Link href="/trading/quality-assurance" className="group inline-flex items-center mt-8 text-xs uppercase tracking-widest font-semibold text-mangrove-900 hover:text-mangrove-accent transition-colors">
+              Our Quality Process
+              <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1.5">→</span>
+            </Link>
+          </Reveal>
         </section>
 
-        {/* Quality */}
-        <section id="quality" className="py-28 px-6 lg:px-16 border-t border-slate-800/50 bg-mangrove-900/80">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-            <div className="lg:col-span-6 space-y-8">
-              <div>
-                <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest block mb-3">
-                  Structured QA Approach
-                </span>
-                <h2 className="font-serif text-3xl sm:text-5xl font-normal text-white leading-tight">
-                  Quality Control Priorities
-                </h2>
-              </div>
-              <p className="text-slate-400 leading-relaxed text-sm sm:text-base">
-                Quality is central to our sourcing and export workflow. From initial farm grading to port dispatch, our structured multi-tier inspection protocols guarantee export-ready consistency for UAE and GCC buyers.
+        {/* Supplier partnership CTA */}
+        <section className="py-16 px-6 lg:px-16 bg-white">
+          <Reveal className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 p-8 sm:p-10 rounded-3xl bg-mangrove-900">
+            <div>
+              <span className="text-mangrove-accent text-xs uppercase tracking-widest font-semibold block mb-2">For Producers &amp; Exporters</span>
+              <h3 className="font-serif text-2xl text-white mb-2">Are You a Supplier Looking to Enter the UAE?</h3>
+              <p className="text-slate-300 text-sm max-w-lg">Mangroves Global can act as your local commercial and sales arm in the UAE.</p>
+            </div>
+            <Link href="/trading/become-a-partner" className="shrink-0 px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-white transition-colors duration-300 rounded-full font-semibold text-xs tracking-widest uppercase">
+              Become a Supplier Partner
+            </Link>
+          </Reveal>
+        </section>
+
+        {/* ── Contact redirect CTA ────────────────────────────────── */}
+        <section className="py-24 px-6 lg:px-16 border-t border-mangrove-800/30 bg-mangrove-900">
+          <div className="max-w-4xl mx-auto text-center space-y-6">
+            <Reveal className="space-y-6">
+              <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-[0.3em] block">Commercial Desk</span>
+              <h2 className="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight">
+                Ready to Start a Trade Conversation?
+              </h2>
+              <p className="text-slate-400 text-base leading-relaxed max-w-xl mx-auto">
+                Tell us the commodity, grade, volume and destination port. Our team responds within one business day.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                {[
-                  "99.5%+ Physical Purity Target.",
-                  "Moisture Level Checks.",
-                  "Foreign Matter Reduction.",
-                  "Lot Visual Grading.",
-                  "Microbiological Lab Testing.",
-                  "Farm-to-Port Traceability.",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-start space-x-3 p-4 rounded-xl bg-mangrove-800/30 border border-slate-800"
-                  >
-                    <Check className="w-5 h-5 text-mangrove-accent shrink-0 mt-0.5" />
-                    <span className="text-xs text-slate-300 font-medium">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="lg:col-span-6 bg-mangrove-800/20 border border-slate-800 p-8 sm:p-12 rounded-3xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-mangrove-accent/10 rounded-full blur-3xl pointer-events-none"></div>
-              <h3 className="font-serif text-2xl text-white mb-6">Positioned for UAE &amp; GCC Buyers</h3>
-              <ul className="space-y-4 text-sm text-slate-300">
-                {[
-                  { icon: Award, text: "Signature Indian spice & commodity origins." },
-                  { icon: Eye, text: "Transparent farm-to-port procurement workflows." },
-                  { icon: Layers, text: "Reduced intermediary layers for competitive pricing." },
-                  { icon: Truck, text: "Flexible Incoterm-based shipment execution (FOB, CIF, CFR)." },
-                  { icon: MessageSquare, text: "Professional B2B commercial support & fast responses." },
-                ].map(({ icon: Icon, text }, i, arr) => (
-                  <li
-                    key={text}
-                    className={`flex items-center space-x-3 pb-3 ${
-                      i < arr.length - 1 ? "border-b border-slate-800/60" : ""
-                    }`}
-                  >
-                    <Icon className="w-5 h-5 text-mangrove-accent shrink-0" />
-                    <span>{text}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Contact */}
-        <section id="contact" className="py-28 px-6 lg:px-16 border-t border-slate-800/50 bg-mangrove-900">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16">
-            <div className="lg:col-span-5 space-y-8">
-              <div>
-                <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest block mb-3">
-                  Global Commercial Desk
-                </span>
-                <h2 className="font-serif text-3xl sm:text-5xl font-normal text-white">
-                  Start a Trade Conversation
-                </h2>
-              </div>
-              <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-                Looking to procure premium Indian agricultural commodities for the UAE or GCC market? Contact our commercial team for specifications, pricing, or custom shipping contracts.
-              </p>
-
-              <div className="space-y-6 pt-4">
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-lg bg-mangrove-800/60 border border-slate-800 flex items-center justify-center text-mangrove-accent shrink-0">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="block text-xs uppercase tracking-wider text-slate-400">Headquarters</span>
-                    <span className="text-sm font-medium text-white block mt-1">
-                      CWEP9605, Compass Bldg, Al Hamra Ind Zone, Ras Al Khaimah, UAE
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-lg bg-mangrove-800/60 border border-slate-800 flex items-center justify-center text-mangrove-accent shrink-0">
-                    <Phone className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="block text-xs uppercase tracking-wider text-slate-400">
-                      Direct Phone / WhatsApp
-                    </span>
-                    <a
-                      href="tel:+971541242100"
-                      className="text-sm font-medium text-white hover:text-mangrove-accent transition-colors block mt-1"
-                    >
-                      +971 54 1242 100
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-lg bg-mangrove-800/60 border border-slate-800 flex items-center justify-center text-mangrove-accent shrink-0">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="block text-xs uppercase tracking-wider text-slate-400">Email Inquiry</span>
-                    <a
-                      href="mailto:info@mangrovesglobal.com"
-                      className="text-sm font-medium text-white hover:text-mangrove-accent transition-colors block mt-1"
-                    >
-                      info@mangrovesglobal.com
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-7 bg-mangrove-800/20 border border-slate-800 p-8 sm:p-12 rounded-3xl">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="tf-name" className="block text-xs uppercase tracking-wider text-slate-400 mb-2">
-                      Your Name
-                    </label>
-                    <input
-                      id="tf-name"
-                      name="name"
-                      type="text"
-                      required
-                      maxLength={100}
-                      className="w-full bg-mangrove-900/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-mangrove-accent transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="tf-company" className="block text-xs uppercase tracking-wider text-slate-400 mb-2">
-                      Company Name
-                    </label>
-                    <input
-                      id="tf-company"
-                      name="company"
-                      type="text"
-                      required
-                      maxLength={150}
-                      className="w-full bg-mangrove-900/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-mangrove-accent transition-colors"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="tf-email" className="block text-xs uppercase tracking-wider text-slate-400 mb-2">
-                      Corporate Email
-                    </label>
-                    <input
-                      id="tf-email"
-                      name="email"
-                      type="email"
-                      required
-                      maxLength={150}
-                      className="w-full bg-mangrove-900/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-mangrove-accent transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="tf-commodity" className="block text-xs uppercase tracking-wider text-slate-400 mb-2">
-                      Commodity of Interest
-                    </label>
-                    <select
-                      id="tf-commodity"
-                      name="commodity"
-                      className="w-full bg-mangrove-900/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-300 focus:outline-none focus:border-mangrove-accent transition-colors"
-                    >
-                      <option>Black Pepper</option>
-                      <option>Cloves</option>
-                      <option>Nutmeg &amp; Mace</option>
-                      <option>Green Cardamom</option>
-                      <option>Dry Ginger</option>
-                      <option>Robusta Coffee Beans</option>
-                      <option>Multiple Items</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="tf-message" className="block text-xs uppercase tracking-wider text-slate-400 mb-2">
-                    Message &amp; Quantity Requirements
-                  </label>
-                  <textarea
-                    id="tf-message"
-                    name="message"
-                    rows={4}
-                    required
-                    minLength={10}
-                    maxLength={2000}
-                    placeholder="Please state destination port, volume, and required Incoterms..."
-                    className="w-full bg-mangrove-900/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-mangrove-accent transition-colors"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={formStatus === "sending"}
-                  className="w-full py-4 bg-mangrove-accent text-mangrove-900 hover:bg-white transition-colors duration-300 rounded-xl font-semibold text-xs tracking-widest uppercase disabled:opacity-60 disabled:cursor-not-allowed"
+              <div className="flex flex-wrap justify-center gap-4 pt-2">
+                <Link
+                  href="/trading/contact"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-white transition-colors duration-300 rounded-full font-semibold text-xs tracking-widest uppercase"
                 >
-                  {formStatus === "sending" ? "Sending..." : "Send Trade Inquiry"}
-                </button>
-
-                {formStatus === "success" && (
-                  <div className="flex items-start gap-3 p-4 rounded-xl bg-mangrove-500/10 border border-mangrove-500/40 text-sm text-slate-200">
-                    <CheckCircle2 className="w-5 h-5 text-mangrove-accent shrink-0 mt-0.5" />
-                    <span>Thank you — your trade inquiry has been sent. Our commercial desk will respond shortly.</span>
-                  </div>
-                )}
-                {formStatus === "error" && (
-                  <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/40 text-sm text-slate-200">
-                    <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-                    <span>Something went wrong sending your inquiry. Please try again or email us directly.</span>
-                  </div>
-                )}
-              </form>
-            </div>
+                  Send a Trade Inquiry
+                  <ArrowUpRight className="w-4 h-4" />
+                </Link>
+                <a
+                  href="tel:+971541242100"
+                  className="inline-flex items-center gap-2 px-8 py-4 border-2 border-mangrove-accent/40 text-mangrove-accent hover:border-mangrove-accent transition-colors duration-300 rounded-full font-semibold text-xs tracking-widest uppercase"
+                >
+                  +971 54 1242 100
+                </a>
+              </div>
+            </Reveal>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-mangrove-accent text-mangrove-900/80 text-xs">
-        <div className="max-w-7xl mx-auto px-6 lg:px-16 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <Image
-            src="/images/logo/mangroves-global-logo-wordmark.png"
-            width={140}
-            height={28}
-            className="h-6 sm:h-7 w-auto block"
-            alt="Mangroves Global"
-          />
-          <p>&copy; 2026 Mangroves Global Trading FZ LLC. All rights reserved</p>
-          <div className="flex space-x-6">
-            <a href="#" className="hover:text-mangrove-900 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-mangrove-900 transition-colors">Terms of Trade</a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

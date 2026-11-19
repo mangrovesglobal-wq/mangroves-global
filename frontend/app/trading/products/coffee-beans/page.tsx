@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import CoffeeBeansContent from "@/components/CoffeeBeansContent";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
-export const metadata: Metadata = {
-  title: "Green Coffee Beans Exporter UAE | Indian Coffee Supplier GCC",
-  description:
-    "Bulk Indian green coffee beans for UAE and GCC roasters — Grades AA, A and Peaberry, high-altitude shade-grown, zero-defect scoring. FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata("trading-product-coffee-beans", {
+    title: "Green Coffee Beans Exporter UAE | Indian Coffee Supplier GCC",
+    description:
+      "Bulk Indian green coffee beans for UAE and GCC roasters — Grades AA, A and Peaberry, high-altitude shade-grown, zero-defect scoring. FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
+    alternates: { canonical: "/trading/products/coffee-beans" },
+  });
+}
 
 const jsonLd = {
   "@context": "https://schema.org",

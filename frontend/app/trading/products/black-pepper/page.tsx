@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import BlackPepperContent from "@/components/BlackPepperContent";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
-export const metadata: Metadata = {
-  title: "Black Pepper Exporter UAE | Bulk Malabar Pepper Supplier",
-  description:
-    "Bulk Indian black pepper for UAE and GCC buyers — Tellicherry (TGEB), Malabar Garbled (MG1), cracked and powder. Export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata("trading-product-black-pepper", {
+    title: "Black Pepper Exporter UAE | Bulk Malabar Pepper Supplier",
+    description:
+      "Bulk Indian black pepper for UAE and GCC buyers — Tellicherry (TGEB), Malabar Garbled (MG1), cracked and powder. Export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
+    alternates: { canonical: "/trading/products/black-pepper" },
+  });
+}
 
 const jsonLd = {
   "@context": "https://schema.org",

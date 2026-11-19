@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import CustomsCoordinationContent from "@/components/CustomsCoordinationContent";
 import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 const HERO_IMAGE_PATH = "/images/customs-clearance-cargo-ship-uae.jpg";
@@ -64,7 +65,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = service.meta_description || FALLBACK.meta_description!;
   const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
 
-  return {
+  const serviceDefaults: Metadata = {
     title,
     description,
     alternates: { canonical: "/logistics/customs-clearance" },
@@ -81,6 +82,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [ogImageUrl],
     },
   };
+  return getSeoMetadata("logistics-customs-clearance", serviceDefaults);
 }
 
 export default async function CustomsCoordinationPage() {
@@ -104,7 +106,7 @@ export default async function CustomsCoordinationPage() {
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com/" },
           { "@type": "ListItem", position: 2, name: "Logistics", item: "https://mangrovesglobal.com/logistics" },
-          { "@type": "ListItem", position: 3, name: "Customs Coordination", item: "https://mangrovesglobal.com/logistics/customs-clearance" },
+          { "@type": "ListItem", position: 3, name: "Customs Clearance", item: "https://mangrovesglobal.com/logistics/customs-clearance" },
         ],
       },
       {

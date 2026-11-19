@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import ClovesContent from "@/components/ClovesContent";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
-export const metadata: Metadata = {
-  title: "Cloves Supplier UAE | Indian Cloves Exporter to GCC",
-  description:
-    "Bulk Indian cloves for UAE and GCC buyers — whole quills and handpicked grades, high eugenol oil content. Export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata("trading-product-cloves", {
+    title: "Cloves Supplier UAE | Indian Cloves Exporter to GCC",
+    description:
+      "Bulk Indian cloves for UAE and GCC buyers — whole quills and handpicked grades, high eugenol oil content. Export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
+    alternates: { canonical: "/trading/products/cloves" },
+  });
+}
 
 const jsonLd = {
   "@context": "https://schema.org",

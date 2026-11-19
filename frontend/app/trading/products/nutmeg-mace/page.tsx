@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import NutmegMaceContent from "@/components/NutmegMaceContent";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
-export const metadata: Metadata = {
-  title: "Nutmeg & Mace Exporter UAE | Bulk Supplier to GCC",
-  description:
-    "Bulk Indian nutmeg and mace for UAE and GCC buyers — whole ABCD nutmeg, red mace arils, fine powder. Export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata("trading-product-nutmeg-mace", {
+    title: "Nutmeg & Mace Exporter UAE | Bulk Supplier to GCC",
+    description:
+      "Bulk Indian nutmeg and mace for UAE and GCC buyers — whole ABCD nutmeg, red mace arils, fine powder. Export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
+    alternates: { canonical: "/trading/products/nutmeg-mace" },
+  });
+}
 
 const jsonLd = {
   "@context": "https://schema.org",

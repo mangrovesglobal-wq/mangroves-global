@@ -1,141 +1,92 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { Menu, X, ArrowUpRight, Check } from "lucide-react";
-import ServiceHeroImage from "./ServiceHeroImage";
-import ServiceIcon from "./ServiceIcon";
+import CreativeServiceLayout, { type SubService, type ProcessStep, type Outcome, type Faq } from "./CreativeServiceLayout";
 
-type ContentBlock = {
-  heading: string;
-  content: string;
-};
+type ContentBlock = { heading: string; content: string };
+type HeroImage = { src: string; alt: string; remote: boolean };
+type Props = { introText: string; blocks: ContentBlock[]; heroImage: HeroImage | null; icon: string | null };
 
-type HeroImage = {
-  src: string;
-  alt: string;
-  remote: boolean;
-};
+const SUB_SERVICES: SubService[] = [
+  {
+    name: "Strategic Copywriting",
+    desc: "Website copy, campaign messaging, and brand content built on your positioning — not generic filler that could belong to anyone.",
+  },
+  {
+    name: "Product & Corporate Photography",
+    desc: "Professional photography with full direction and styling for products, teams, locations, and campaign assets. Shot to your brief.",
+  },
+  {
+    name: "Video Content Production",
+    desc: "Corporate films, product showcases, testimonials, and social reels — from scripted brief to finished edit, delivered in your required formats.",
+  },
+  {
+    name: "Motion Graphics & Animation",
+    desc: "Animated explainers, branded social assets, and motion design that communicate faster and land harder than static images.",
+  },
+  {
+    name: "Ongoing Content Management",
+    desc: "A rolling content calendar across platforms — planned, produced, and published as a managed service so your brand never goes quiet.",
+  },
+  {
+    name: "Arabic & English Content",
+    desc: "All content produced bilingually where required — with native Arabic copywriters, not translation tools. Tone and meaning preserved.",
+  },
+];
 
-type ContentProductionContentProps = {
-  introText: string;
-  blocks: ContentBlock[];
-  heroImage: HeroImage | null;
-  icon: string | null;
-};
+const PROCESS: ProcessStep[] = [
+  { n: "01", title: "Content Strategy", desc: "Objectives, audience, formats, and volume agreed — a content plan your business can actually use." },
+  { n: "02", title: "Production Planning", desc: "Shoot schedules, scripts, storyboards, and logistics confirmed before any equipment is hired." },
+  { n: "03", title: "Shoot & Creation", desc: "Professional production executed to brief with structured creative direction and client review points." },
+  { n: "04", title: "Edit, Delivery & Deploy", desc: "Post-production, format exports, and distribution-ready files delivered with deployment support." },
+];
 
-export default function ContentProductionContent({ introText, blocks, heroImage, icon }: ContentProductionContentProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const OUTCOMES: Outcome[] = [
+  { metric: "In-house", label: "Production Studio" },
+  { metric: "Arabic &", label: "English Content" },
+  { metric: "Multi-", label: "Platform Ready" },
+  { metric: "Fast", label: "Turnaround" },
+];
 
+const FAQS: Faq[] = [
+  {
+    q: "Do you have your own production studio?",
+    a: "Yes. We operate an in-house studio for product photography and controlled shoots. For location shoots — offices, facilities, and outdoor — we bring the full production setup to you.",
+  },
+  {
+    q: "Can you manage our content on an ongoing basis rather than project-by-project?",
+    a: "Yes, and it's often more cost-effective. Monthly content retainers cover planning, production, and publishing across your agreed channels. This approach also builds a consistent visual language over time, which individual projects can't replicate.",
+  },
+  {
+    q: "What's the typical turnaround for a video project?",
+    a: "A 60–90 second corporate or product video: 2–3 weeks from approved script to final delivery. Social reels with simpler production: 5–7 business days. Longer brand films or projects requiring extensive location work run 4–6 weeks. Timelines are confirmed at briefing.",
+  },
+  {
+    q: "Do you produce content in Arabic?",
+    a: "Yes, with native Arabic copywriters, not translation tools. All content — scripts, copy, captions — is written to perform in Arabic, not converted from English. Where bilingual versions are required, both are produced to the same standard.",
+  },
+  {
+    q: "What deliverable formats do you provide?",
+    a: "We deliver in every format your channels require: high-res images (TIFF/PNG), web-optimised files (JPG/WebP), video in MP4/MOV at specified resolutions, and social-specific crops. Source files are retained and available on request.",
+  },
+];
+
+export default function ContentProductionContent({ introText, blocks, heroImage, icon }: Props) {
   return (
-    <div className="bg-white text-mangrove-900 antialiased overflow-x-hidden">
-      <header className="fixed top-0 left-0 w-full z-50 bg-mangrove-accent shadow-lg shadow-black/5">
-        <div className="relative flex items-center h-20 sm:h-24">
-          <div className="relative h-full flex items-center shrink-0 bg-mangrove-800 pl-4 sm:pl-6 pr-10 sm:pr-16" style={{ clipPath: "polygon(0 0, 100% 0, 62% 100%, 0 100%)" }}>
-            <Link href="/creative">
-              <Image src="/images/logo/mangroves-global-logo-badge.png" width={64} height={64} className="h-14 sm:h-16 w-auto block" alt="Mangroves Global" />
-            </Link>
-          </div>
-          <div className="hidden md:flex flex-1 justify-center">
-            <nav className="flex items-center space-x-10 text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
-              <Link href="/creative#services" className="hover:text-mangrove-900 transition-colors">Services</Link>
-              <Link href="/creative#work" className="hover:text-mangrove-900 transition-colors">Work</Link>
-              <Link href="/creative#industries" className="hover:text-mangrove-900 transition-colors">Industries</Link>
-              <Link href="/creative#contact" className="hover:text-mangrove-900 transition-colors">Contact</Link>
-            </nav>
-          </div>
-          <div className="flex-1 md:hidden"></div>
-          <Link href="/" className="hidden lg:inline-flex items-center mr-4 text-[11px] tracking-widest font-semibold uppercase text-mangrove-900/70 hover:text-mangrove-900">
-            Explore Other Businesses
-          </Link>
-          <Link href="/creative#contact" className="hidden md:inline-flex items-center mr-8 lg:mr-16 px-6 py-2.5 border-2 border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-all duration-300 rounded-full text-xs tracking-widest font-semibold uppercase">
-            <span>Talk to Our Creative Team</span>
-            <ArrowUpRight className="w-4 h-4 ml-2" />
-          </Link>
-          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden mr-6 text-mangrove-900 focus:outline-none" aria-label="Open menu">
-            <Menu className="w-8 h-8" />
-          </button>
-        </div>
-      </header>
-
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
-          <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-6 text-mangrove-900" aria-label="Close menu">
-            <X className="w-8 h-8" />
-          </button>
-          <Link href="/creative#services" onClick={() => setMobileMenuOpen(false)}>Services</Link>
-          <Link href="/creative#work" onClick={() => setMobileMenuOpen(false)}>Work</Link>
-          <Link href="/creative#industries" onClick={() => setMobileMenuOpen(false)}>Industries</Link>
-          <Link href="/creative#contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
-        </div>
-      )}
-
-      <main className="pt-32 sm:pt-36 pb-24 px-6 lg:px-16">
-        <div className="max-w-5xl mx-auto">
-          <nav className="text-xs text-mangrove-800/50 mb-8 flex items-center gap-2" aria-label="Breadcrumb">
-            <Link href="/creative" className="hover:text-mangrove-accent transition-colors">Creative</Link>
-            <span>/</span>
-            <span className="text-mangrove-900">Content &amp; Production</span>
-          </nav>
-
-          <div className="flex items-center gap-2 mb-3">
-            <ServiceIcon name={icon} className="w-5 h-5 text-mangrove-accent" />
-            <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest">Content &amp; Production</span>
-          </div>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-mangrove-900 leading-tight mb-6">
-            Content &amp; Production Services UAE
-          </h1>
-          <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            {introText}
-          </p>
-
-          {heroImage && (
-            <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
-              <ServiceHeroImage src={heroImage.src} alt={heroImage.alt} remote={heroImage.remote} />
-            </div>
-          )}
-
-          <article className="prose-mgt-light text-mangrove-800/80">
-            {blocks.map((block) => (
-              <div key={block.heading}>
-                <h2>{block.heading}</h2>
-                <div dangerouslySetInnerHTML={{ __html: block.content }} />
-              </div>
-            ))}
-          </article>
-
-          <div className="mt-6 grid sm:grid-cols-2 gap-4">
-            {["Copywriting & messaging", "Product & corporate photography", "Video production", "Motion graphics"].map((item) => (
-              <div key={item} className="flex items-start gap-3 p-4 rounded-xl bg-mangrove-50 border border-mangrove-100">
-                <Check className="w-5 h-5 text-mangrove-accent shrink-0 mt-0.5" />
-                <span className="text-sm text-mangrove-800">{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-16 p-8 sm:p-10 rounded-3xl bg-mangrove-50 border border-mangrove-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <h3 className="font-serif text-2xl text-mangrove-900 mb-2">Talk to Our Creative Team</h3>
-              <p className="text-mangrove-800/60 text-sm">Tell us what content you need and where it&apos;s going.</p>
-            </div>
-            <Link href="/creative#contact" className="shrink-0 px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-colors duration-300 rounded-full font-semibold text-xs tracking-widest uppercase">
-              Talk to Our Creative Team
-            </Link>
-          </div>
-        </div>
-      </main>
-
-      <footer className="bg-mangrove-900 text-white/70 text-xs">
-        <div className="max-w-7xl mx-auto px-6 lg:px-16 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <Image src="/images/logo/mangroves-global-logo-wordmark.png" width={140} height={28} className="h-6 sm:h-7 w-auto block" alt="Mangroves Global" />
-          <p>&copy; 2026 Mangroves Global Trading FZ LLC. All rights reserved</p>
-          <div className="flex space-x-6">
-            <Link href="/" className="hover:text-mangrove-accent transition-colors">Privacy Policy</Link>
-            <Link href="/" className="hover:text-mangrove-accent transition-colors">Terms</Link>
-          </div>
-        </div>
-      </footer>
-    </div>
+    <CreativeServiceLayout
+      introText={introText}
+      blocks={blocks}
+      heroImage={heroImage}
+      icon={icon}
+      categoryLabel="Content & Production"
+      breadcrumbLabel="Content & Production"
+      h1="Content That Works as Hard as Your Business Does"
+      subServices={SUB_SERVICES}
+      process={PROCESS}
+      outcomes={OUTCOMES}
+      faqs={FAQS}
+      ctaHeadline="Let's Create Content That Actually Converts"
+      ctaSubline="Brief us on your next project or content challenge. We'll scope it honestly."
+      ctaButton="Request a Content Proposal"
+    />
   );
 }

@@ -1,141 +1,92 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { Menu, X, ArrowUpRight, Check } from "lucide-react";
-import ServiceHeroImage from "./ServiceHeroImage";
-import ServiceIcon from "./ServiceIcon";
+import CreativeServiceLayout, { type SubService, type ProcessStep, type Outcome, type Faq } from "./CreativeServiceLayout";
 
-type ContentBlock = {
-  heading: string;
-  content: string;
-};
+type ContentBlock = { heading: string; content: string };
+type HeroImage = { src: string; alt: string; remote: boolean };
+type Props = { introText: string; blocks: ContentBlock[]; heroImage: HeroImage | null; icon: string | null };
 
-type HeroImage = {
-  src: string;
-  alt: string;
-  remote: boolean;
-};
+const SUB_SERVICES: SubService[] = [
+  {
+    name: "Brand Strategy",
+    desc: "Before a logo is drawn, we define what your brand stands for, who it's for, how it's positioned, and what it promises — the foundation everything else is built on.",
+  },
+  {
+    name: "Brand Naming",
+    desc: "A name that works linguistically, legally, and commercially across Arabic and English-speaking markets. Tested for availability and cultural fit.",
+  },
+  {
+    name: "Visual Identity Design",
+    desc: "Logo, colour palette, typography, and usage guidelines that hold together across every touchpoint — digital, print, environmental, and packaging.",
+  },
+  {
+    name: "Packaging Design",
+    desc: "Structural and graphic design for products that need to perform on the shelf, in transit, and in an unboxing moment. Designed for manufacturing reality.",
+  },
+  {
+    name: "Brand Guidelines",
+    desc: "A complete brand standards document so every team member, agency, and printer can apply the brand consistently — without asking you each time.",
+  },
+  {
+    name: "Brand Refresh & Rebrand",
+    desc: "Evolving an existing brand without losing what works — research-led decisions on what to keep, refine, and replace so the refresh lands without confusion.",
+  },
+];
 
-type BrandingContentProps = {
-  introText: string;
-  blocks: ContentBlock[];
-  heroImage: HeroImage | null;
-  icon: string | null;
-};
+const PROCESS: ProcessStep[] = [
+  { n: "01", title: "Research & Discovery", desc: "Market landscape, competitor positioning, and audience expectations mapped before strategy is written." },
+  { n: "02", title: "Brand Strategy", desc: "Positioning, personality, voice, and messaging architecture agreed before any visual direction begins." },
+  { n: "03", title: "Design Development", desc: "Visual concepts developed in rounds against the agreed strategy — with structured feedback at each stage." },
+  { n: "04", title: "System Delivery", desc: "Complete brand assets and guidelines delivered in formats ready for immediate use across every channel." },
+];
 
-export default function BrandingContent({ introText, blocks, heroImage, icon }: BrandingContentProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const OUTCOMES: Outcome[] = [
+  { metric: "15+", label: "Brand Systems Built" },
+  { metric: "Bilingual", label: "English & Arabic" },
+  { metric: "GCC-ready", label: "Market Positioning" },
+  { metric: "Full System", label: "Every Touchpoint" },
+];
 
+const FAQS: Faq[] = [
+  {
+    q: "We already have a brand — can you just refresh it rather than start over?",
+    a: "Most of the time, yes. A brand refresh retains the equity in what already works — recognition, associations, existing assets — while updating what has dated or no longer positions you correctly. We always audit before recommending. A full rebrand is only justified when the positioning itself is broken, not when the logo feels old.",
+  },
+  {
+    q: "Does the visual identity include Arabic language versions?",
+    a: "Yes, bilingual execution is standard. Arabic typography selection, right-to-left layout guidelines, and Arabic brand naming (where applicable) are included in our UAE projects. We work with specialist Arabic calligraphers for mark-based wordmarks when needed.",
+  },
+  {
+    q: "What do we receive at the end of the project?",
+    a: "A complete brand system: master logo files in all required formats, the colour and typography system, a brand guidelines document, and all application files. We deliver in source formats (AI, Figma, indd) alongside production-ready exports (SVG, PNG, PDF).",
+  },
+  {
+    q: "How long does a full brand project take?",
+    a: "Brand strategy + visual identity: typically 8–12 weeks. Visual identity only (strategy already exists): 4–6 weeks. Packaging design as an add-on: 2–4 additional weeks depending on complexity. Timelines are defined in the project agreement.",
+  },
+  {
+    q: "Do you help with implementation after the brand is delivered?",
+    a: "Yes. Post-delivery support includes applying the brand to stationery, website, signage, and marketing materials. Some clients engage us on an ongoing creative direction retainer to ensure brand consistency as new materials are produced over time.",
+  },
+];
+
+export default function BrandingContent({ introText, blocks, heroImage, icon }: Props) {
   return (
-    <div className="bg-white text-mangrove-900 antialiased overflow-x-hidden">
-      <header className="fixed top-0 left-0 w-full z-50 bg-mangrove-accent shadow-lg shadow-black/5">
-        <div className="relative flex items-center h-20 sm:h-24">
-          <div className="relative h-full flex items-center shrink-0 bg-mangrove-800 pl-4 sm:pl-6 pr-10 sm:pr-16" style={{ clipPath: "polygon(0 0, 100% 0, 62% 100%, 0 100%)" }}>
-            <Link href="/creative">
-              <Image src="/images/logo/mangroves-global-logo-badge.png" width={64} height={64} className="h-14 sm:h-16 w-auto block" alt="Mangroves Global" />
-            </Link>
-          </div>
-          <div className="hidden md:flex flex-1 justify-center">
-            <nav className="flex items-center space-x-10 text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
-              <Link href="/creative#services" className="hover:text-mangrove-900 transition-colors">Services</Link>
-              <Link href="/creative#work" className="hover:text-mangrove-900 transition-colors">Work</Link>
-              <Link href="/creative#industries" className="hover:text-mangrove-900 transition-colors">Industries</Link>
-              <Link href="/creative#contact" className="hover:text-mangrove-900 transition-colors">Contact</Link>
-            </nav>
-          </div>
-          <div className="flex-1 md:hidden"></div>
-          <Link href="/" className="hidden lg:inline-flex items-center mr-4 text-[11px] tracking-widest font-semibold uppercase text-mangrove-900/70 hover:text-mangrove-900">
-            Explore Other Businesses
-          </Link>
-          <Link href="/creative#contact" className="hidden md:inline-flex items-center mr-8 lg:mr-16 px-6 py-2.5 border-2 border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-all duration-300 rounded-full text-xs tracking-widest font-semibold uppercase">
-            <span>Build Your Brand</span>
-            <ArrowUpRight className="w-4 h-4 ml-2" />
-          </Link>
-          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden mr-6 text-mangrove-900 focus:outline-none" aria-label="Open menu">
-            <Menu className="w-8 h-8" />
-          </button>
-        </div>
-      </header>
-
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
-          <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-6 text-mangrove-900" aria-label="Close menu">
-            <X className="w-8 h-8" />
-          </button>
-          <Link href="/creative#services" onClick={() => setMobileMenuOpen(false)}>Services</Link>
-          <Link href="/creative#work" onClick={() => setMobileMenuOpen(false)}>Work</Link>
-          <Link href="/creative#industries" onClick={() => setMobileMenuOpen(false)}>Industries</Link>
-          <Link href="/creative#contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
-        </div>
-      )}
-
-      <main className="pt-32 sm:pt-36 pb-24 px-6 lg:px-16">
-        <div className="max-w-5xl mx-auto">
-          <nav className="text-xs text-mangrove-800/50 mb-8 flex items-center gap-2" aria-label="Breadcrumb">
-            <Link href="/creative" className="hover:text-mangrove-accent transition-colors">Creative</Link>
-            <span>/</span>
-            <span className="text-mangrove-900">Branding &amp; Creative</span>
-          </nav>
-
-          <div className="flex items-center gap-2 mb-3">
-            <ServiceIcon name={icon} className="w-5 h-5 text-mangrove-accent" />
-            <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest">Branding &amp; Creative</span>
-          </div>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-mangrove-900 leading-tight mb-6">
-            Brand Identity Agency UAE
-          </h1>
-          <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            {introText}
-          </p>
-
-          {heroImage && (
-            <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
-              <ServiceHeroImage src={heroImage.src} alt={heroImage.alt} remote={heroImage.remote} />
-            </div>
-          )}
-
-          <article className="prose-mgt-light text-mangrove-800/80">
-            {blocks.map((block) => (
-              <div key={block.heading}>
-                <h2>{block.heading}</h2>
-                <div dangerouslySetInnerHTML={{ __html: block.content }} />
-              </div>
-            ))}
-          </article>
-
-          <div className="mt-6 grid sm:grid-cols-2 gap-4">
-            {["Brand strategy before design", "Full visual identity systems", "Packaging design", "Ongoing creative direction"].map((item) => (
-              <div key={item} className="flex items-start gap-3 p-4 rounded-xl bg-mangrove-50 border border-mangrove-100">
-                <Check className="w-5 h-5 text-mangrove-accent shrink-0 mt-0.5" />
-                <span className="text-sm text-mangrove-800">{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-16 p-8 sm:p-10 rounded-3xl bg-mangrove-50 border border-mangrove-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <h3 className="font-serif text-2xl text-mangrove-900 mb-2">Build Your Brand</h3>
-              <p className="text-mangrove-800/60 text-sm">Tell us about your business and where the brand needs to go.</p>
-            </div>
-            <Link href="/creative#contact" className="shrink-0 px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-colors duration-300 rounded-full font-semibold text-xs tracking-widest uppercase">
-              Build Your Brand
-            </Link>
-          </div>
-        </div>
-      </main>
-
-      <footer className="bg-mangrove-900 text-white/70 text-xs">
-        <div className="max-w-7xl mx-auto px-6 lg:px-16 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <Image src="/images/logo/mangroves-global-logo-wordmark.png" width={140} height={28} className="h-6 sm:h-7 w-auto block" alt="Mangroves Global" />
-          <p>&copy; 2026 Mangroves Global Trading FZ LLC. All rights reserved</p>
-          <div className="flex space-x-6">
-            <Link href="/" className="hover:text-mangrove-accent transition-colors">Privacy Policy</Link>
-            <Link href="/" className="hover:text-mangrove-accent transition-colors">Terms</Link>
-          </div>
-        </div>
-      </footer>
-    </div>
+    <CreativeServiceLayout
+      introText={introText}
+      blocks={blocks}
+      heroImage={heroImage}
+      icon={icon}
+      categoryLabel="Branding & Creative"
+      breadcrumbLabel="Branding & Creative"
+      h1="Brand Identity That Earns Its Place in the Market"
+      subServices={SUB_SERVICES}
+      process={PROCESS}
+      outcomes={OUTCOMES}
+      faqs={FAQS}
+      ctaHeadline="Build a Brand Worth Remembering"
+      ctaSubline="Tell us what you're building and where you want it to stand. We'll show you how to get there."
+      ctaButton="Start Your Brand Project"
+    />
   );
 }

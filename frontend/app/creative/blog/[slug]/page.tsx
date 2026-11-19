@@ -1,180 +1,139 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-
-type BlogPost = {
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  content: string;
-  featured_image: string | null;
-  video_url: string | null;
-  author: string | null;
-  published_at: string | null;
-  meta_title: string | null;
-  meta_description: string | null;
-  division: string;
-};
+import BlogPostDetailContent, { type BlogPostFull, type RelatedPost } from "@/components/BlogPostDetailContent";
+import { JsonLd } from "@/components/JsonLd";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
-async function getPost(slug: string): Promise<BlogPost | null> {
+type SeoPost = BlogPostFull & {
+  meta_title?: string | null;
+  meta_description?: string | null;
+  og_title?: string | null;
+  og_description?: string | null;
+  og_image?: string | null;
+  twitter_card?: string | null;
+  twitter_title?: string | null;
+  twitter_description?: string | null;
+  twitter_image?: string | null;
+  canonical_url?: string | null;
+  robots?: string | null;
+  updated_at?: string | null;
+  schema_type?: string | null;
+  custom_schema_json?: string | null;
+};
+
+async function getPost(slug: string): Promise<SeoPost | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/blog-posts/creative/${slug}`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(`${API_BASE_URL}/api/blog-posts/creative/${slug}`, { next: { revalidate: 60 } });
     if (!res.ok) return null;
     const json = await res.json();
     return json.data || null;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
-type BlogPostSummary = {
-  title: string;
-  slug: string;
-  featured_image: string | null;
-  published_at: string | null;
-};
-
-async function getRecentPosts(currentSlug: string): Promise<BlogPostSummary[]> {
+async function getRelatedPosts(currentSlug: string): Promise<RelatedPost[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/blog-posts?division=creative`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(`${API_BASE_URL}/api/blog-posts?division=creative`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const json = await res.json();
-    const posts: BlogPostSummary[] = json.data || [];
-    return posts.filter((p) => p.slug !== currentSlug).slice(0, 4);
-  } catch {
-    return [];
-  }
-}
-
-function getYouTubeEmbedUrl(url: string): string | null {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
-  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+    const posts: RelatedPost[] = json.data || [];
+    return posts.filter((p) => p.slug !== currentSlug).slice(0, 3);
+  } catch { return []; }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return { title: "Article Not Found" };
+
+  const title       = post.meta_title       || post.title;
+  const description = post.meta_description || post.excerpt || undefined;
+  const ogTitle     = post.og_title         || title;
+  const ogDesc      = post.og_description   || description;
+  const twTitle     = post.twitter_title    || ogTitle;
+  const twDesc      = post.twitter_description || ogDesc;
+  const twImage     = post.twitter_image    || post.og_image;
+
   return {
-    title: post.meta_title || post.title,
-    description: post.meta_description || post.excerpt || undefined,
+    title,
+    description,
+    alternates: { canonical: post.canonical_url || `https://mangrovesglobal.com/creative/blog/${post.slug}` },
+    robots: (post.robots || "index,follow") as Metadata["robots"],
+    openGraph: {
+      title: ogTitle,
+      description: ogDesc,
+      type: "article",
+      ...(post.og_image ? { images: [{ url: post.og_image }] } : {}),
+    },
+    twitter: {
+      card: (post.twitter_card as "summary_large_image" | "summary") || "summary_large_image",
+      title: twTitle,
+      description: twDesc,
+      ...(twImage ? { images: [twImage] } : {}),
+    },
+  };
+}
+
+const ORG = {
+  "@type": "Organization",
+  "@id": "https://mangrovesglobal.com/#organization",
+  name: "Mangroves Global Trading FZ LLC",
+  logo: { "@type": "ImageObject", url: "https://mangrovesglobal.com/images/logo/mangroves-global-logo-badge.png" },
+};
+
+function buildArticleSchema(post: SeoPost, pageUrl: string): object {
+  const type = (post.schema_type && post.schema_type !== "Custom") ? post.schema_type : "BlogPosting";
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://mangrovesglobal.com" },
+          { "@type": "ListItem", position: 2, name: "Creative", item: "https://mangrovesglobal.com/creative" },
+          { "@type": "ListItem", position: 3, name: "Creative Insights", item: "https://mangrovesglobal.com/creative/blog" },
+          { "@type": "ListItem", position: 4, name: post.title, item: pageUrl },
+        ],
+      },
+      {
+        "@type": type,
+        "@id": pageUrl,
+        headline: post.title,
+        mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+        url: pageUrl,
+        inLanguage: "en",
+        articleSection: "Creative",
+        ...(post.excerpt ? { description: post.excerpt } : {}),
+        ...(post.tags ? { keywords: post.tags } : {}),
+        ...(post.published_at ? { datePublished: post.published_at } : {}),
+        ...(post.updated_at ? { dateModified: post.updated_at } : {}),
+        author: { "@type": "Organization", "@id": "https://mangrovesglobal.com/#organization", name: "Mangroves Global Trading FZ LLC" },
+        publisher: ORG,
+        ...(post.featured_image ? { image: { "@type": "ImageObject", url: post.featured_image } } : {}),
+      },
+    ],
   };
 }
 
 export default async function CreativeBlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await getPost(slug);
-
   if (!post) notFound();
+  const relatedPosts = await getRelatedPosts(slug);
 
-  const recentPosts = await getRecentPosts(slug);
-
-  const embedUrl = post.video_url ? getYouTubeEmbedUrl(post.video_url) : null;
+  const pageUrl = `https://mangrovesglobal.com/creative/blog/${post.slug}`;
+  let schema: object;
+  if (post.schema_type === "Custom" && post.custom_schema_json) {
+    try { schema = JSON.parse(post.custom_schema_json); }
+    catch { schema = buildArticleSchema(post, pageUrl); }
+  } else {
+    schema = buildArticleSchema(post, pageUrl);
+  }
 
   return (
-    <div className="bg-white text-mangrove-900 min-h-screen">
-      <div className="max-w-6xl mx-auto px-6 lg:px-16 py-24">
-        <div className="grid lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2">
-        <nav className="text-xs text-mangrove-800/50 mb-8">
-          <Link href="/creative" className="hover:text-mangrove-accent">Creative</Link>
-          <span className="mx-2">/</span>
-          <Link href="/creative/blog" className="hover:text-mangrove-accent">Insights</Link>
-          <span className="mx-2">/</span>
-          <span className="text-mangrove-900">{post.title}</span>
-        </nav>
-
-        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-mangrove-900 mb-4">{post.title}</h1>
-        <div className="text-xs text-mangrove-800/40 mb-10">
-          {post.author && <span>{post.author} · </span>}
-          {post.published_at && (
-            <span>{new Date(post.published_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span>
-          )}
-        </div>
-
-        {post.featured_image && (
-          <div className="relative h-72 sm:h-96 rounded-2xl overflow-hidden mb-10 border border-mangrove-100">
-            {/* eslint-disable-next-line @next/next/no-img-element -- Laravel-hosted image; next/image optimizer 400s on this host, see backend notes */}
-            <img
-              src={`${API_BASE_URL}/storage/${post.featured_image}`}
-              alt={post.title}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          </div>
-        )}
-
-        {embedUrl && (
-          <div className="relative aspect-video rounded-2xl overflow-hidden mb-10 border border-mangrove-100">
-            <iframe
-              src={embedUrl}
-              className="absolute inset-0 w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title={post.title}
-            />
-          </div>
-        )}
-
-        <article
-          className="prose-mgt-light text-mangrove-800/80 leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
-
-        <div className="mt-16 pt-8 border-t border-mangrove-100">
-          <Link href="/creative/blog" className="text-xs uppercase tracking-widest text-mangrove-accent hover:text-mangrove-900 transition-colors">
-            ← Back to Creative Insights
-          </Link>
-        </div>
-        </div>
-
-        {/* Sidebar */}
-        <aside className="lg:col-span-1">
-          <div className="sticky top-8">
-            <h3 className="font-serif text-lg font-semibold text-mangrove-900 mb-6">Recent Posts</h3>
-            {recentPosts.length === 0 ? (
-              <p className="text-sm text-mangrove-800/60">No other posts yet.</p>
-            ) : (
-              <div className="space-y-5">
-                {recentPosts.map((rp) => (
-                  <Link
-                    key={rp.slug}
-                    href={`/creative/blog/${rp.slug}`}
-                    className="group flex gap-3 items-start"
-                  >
-                    {rp.featured_image ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- Laravel-hosted image; next/image optimizer 400s on this host
-                      <img
-                        src={`${API_BASE_URL}/storage/${rp.featured_image}`}
-                        alt={rp.title}
-                        className="w-16 h-16 rounded-lg object-cover border border-mangrove-100 shrink-0"
-                      />
-                    ) : (
-                      <div className="w-16 h-16 rounded-lg bg-mangrove-50 border border-mangrove-100 shrink-0" />
-                    )}
-                    <div>
-                      <div className="text-sm text-mangrove-900 group-hover:text-mangrove-accent transition-colors leading-snug">
-                        {rp.title}
-                      </div>
-                      {rp.published_at && (
-                        <div className="text-xs text-mangrove-800/40 mt-1">
-                          {new Date(rp.published_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
-                        </div>
-                      )}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        </aside>
-      </div>
-      </div>
-    </div>
+    <>
+      <JsonLd schema={schema} />
+      <BlogPostDetailContent post={post} relatedPosts={relatedPosts} apiBase={API_BASE_URL} division="creative" />
+    </>
   );
 }

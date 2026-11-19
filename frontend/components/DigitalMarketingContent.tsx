@@ -1,144 +1,92 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { Menu, X, ArrowUpRight, Check } from "lucide-react";
-import ServiceHeroImage from "./ServiceHeroImage";
-import ServiceIcon from "./ServiceIcon";
+import CreativeServiceLayout, { type SubService, type ProcessStep, type Outcome, type Faq } from "./CreativeServiceLayout";
 
-type ContentBlock = {
-  heading: string;
-  content: string;
-};
+type ContentBlock = { heading: string; content: string };
+type HeroImage = { src: string; alt: string; remote: boolean };
+type Props = { introText: string; blocks: ContentBlock[]; heroImage: HeroImage | null; icon: string | null };
 
-type HeroImage = {
-  src: string;
-  alt: string;
-  remote: boolean;
-};
+const SUB_SERVICES: SubService[] = [
+  {
+    name: "Digital Strategy",
+    desc: "An integrated plan that connects your business goals to the right digital channels — not random activity across platforms because they're popular.",
+  },
+  {
+    name: "SEO & Organic Growth",
+    desc: "Technical, content, and authority-building that earns consistent organic visibility and qualified traffic without paying per click.",
+  },
+  {
+    name: "Social Media Marketing",
+    desc: "Platform-native content and community strategy that builds real audience relationships and drives measurable engagement — not just follower counts.",
+  },
+  {
+    name: "Paid Digital Advertising",
+    desc: "Meta, Google, LinkedIn — budget-efficient campaigns built around cost per acquisition, not vanity reach metrics. Every dirham tracked.",
+  },
+  {
+    name: "Analytics & Performance Reporting",
+    desc: "Clear dashboards and regular reporting cadences so you always know what's working, what to shift, and where you're growing.",
+  },
+  {
+    name: "Lead Generation Funnels",
+    desc: "End-to-end digital funnels from first touch to qualified lead — landing pages, nurture sequences, and conversion tracking built as one system.",
+  },
+];
 
-type DigitalMarketingContentProps = {
-  introText: string;
-  blocks: ContentBlock[];
-  heroImage: HeroImage | null;
-  icon: string | null;
-};
+const PROCESS: ProcessStep[] = [
+  { n: "01", title: "Audit & Baseline", desc: "We assess your current digital presence, channels, and competitive landscape before recommending anything." },
+  { n: "02", title: "Strategy & Channel Plan", desc: "A prioritised digital plan built around your growth objective and your budget — not a full-channel wish list." },
+  { n: "03", title: "Execute & Publish", desc: "Campaigns, content, and paid placements go live with clear naming, tracking, and attribution from day one." },
+  { n: "04", title: "Measure & Optimise", desc: "Regular review cycles to cut what isn't working and scale what is — the loop that compounds results over time." },
+];
 
-export default function DigitalMarketingContent({ introText, blocks, heroImage, icon }: DigitalMarketingContentProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const OUTCOMES: Outcome[] = [
+  { metric: "3×", label: "Avg. ROI Improvement" },
+  { metric: "12+", label: "Platforms Managed" },
+  { metric: "UAE & GCC", label: "Market Coverage" },
+  { metric: "Performance", label: "Focused Delivery" },
+];
 
+const FAQS: Faq[] = [
+  {
+    q: "How long before we see results from SEO?",
+    a: "For a new domain with no prior SEO work: meaningful organic traffic typically builds in months 3–6, with compounding results through 12 months. For established domains with existing authority, targeted improvements show results in 4–8 weeks. We set realistic timelines in writing at the strategy stage.",
+  },
+  {
+    q: "What's the minimum budget for paid campaigns?",
+    a: "We typically recommend a minimum media spend of AED 5,000/month to generate statistically meaningful data for optimisation. Below that threshold, the data volume is too low to make reliable decisions. Our management fees are separate from your media spend.",
+  },
+  {
+    q: "Do you manage our social accounts or only create content?",
+    a: "Both options are available. Full-service social management includes strategy, content creation, scheduling, community management, and reporting. Content-only engagements provide planned and produced assets for your team to publish. Most clients start full-service and move to a hybrid model once internal capability grows.",
+  },
+  {
+    q: "How often do you report on performance?",
+    a: "Monthly performance reports are standard, with dashboard access available daily. For active paid campaigns we review performance weekly and make optimisation decisions in real time. Quarterly business reviews look at channel trends and strategic direction.",
+  },
+  {
+    q: "Can you take over existing campaigns that another agency started?",
+    a: "Yes. We conduct a full audit of existing account structure, creative, and performance history before making changes. Where campaigns are performing we improve incrementally; where they aren't we present a rebuild recommendation with rationale before acting.",
+  },
+];
+
+export default function DigitalMarketingContent({ introText, blocks, heroImage, icon }: Props) {
   return (
-    <div className="bg-white text-mangrove-900 antialiased overflow-x-hidden">
-      <header className="fixed top-0 left-0 w-full z-50 bg-mangrove-accent shadow-lg shadow-black/5">
-        <div className="relative flex items-center h-20 sm:h-24">
-          <div
-            className="relative h-full flex items-center shrink-0 bg-mangrove-800 pl-4 sm:pl-6 pr-10 sm:pr-16"
-            style={{ clipPath: "polygon(0 0, 100% 0, 62% 100%, 0 100%)" }}
-          >
-            <Link href="/creative">
-              <Image src="/images/logo/mangroves-global-logo-badge.png" width={64} height={64} className="h-14 sm:h-16 w-auto block" alt="Mangroves Global" />
-            </Link>
-          </div>
-          <div className="hidden md:flex flex-1 justify-center">
-            <nav className="flex items-center space-x-10 text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
-              <Link href="/creative#services" className="hover:text-mangrove-900 transition-colors">Services</Link>
-              <Link href="/creative#work" className="hover:text-mangrove-900 transition-colors">Work</Link>
-              <Link href="/creative#industries" className="hover:text-mangrove-900 transition-colors">Industries</Link>
-              <Link href="/creative#contact" className="hover:text-mangrove-900 transition-colors">Contact</Link>
-            </nav>
-          </div>
-          <div className="flex-1 md:hidden"></div>
-          <Link href="/" className="hidden lg:inline-flex items-center mr-4 text-[11px] tracking-widest font-semibold uppercase text-mangrove-900/70 hover:text-mangrove-900">
-            Explore Other Businesses
-          </Link>
-          <Link href="/creative#contact" className="hidden md:inline-flex items-center mr-8 lg:mr-16 px-6 py-2.5 border-2 border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-all duration-300 rounded-full text-xs tracking-widest font-semibold uppercase">
-            <span>Plan Your Digital Strategy</span>
-            <ArrowUpRight className="w-4 h-4 ml-2" />
-          </Link>
-          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden mr-6 text-mangrove-900 focus:outline-none" aria-label="Open menu">
-            <Menu className="w-8 h-8" />
-          </button>
-        </div>
-      </header>
-
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
-          <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-6 text-mangrove-900" aria-label="Close menu">
-            <X className="w-8 h-8" />
-          </button>
-          <Link href="/creative#services" onClick={() => setMobileMenuOpen(false)}>Services</Link>
-          <Link href="/creative#work" onClick={() => setMobileMenuOpen(false)}>Work</Link>
-          <Link href="/creative#industries" onClick={() => setMobileMenuOpen(false)}>Industries</Link>
-          <Link href="/creative#contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
-        </div>
-      )}
-
-      <main className="pt-32 sm:pt-36 pb-24 px-6 lg:px-16">
-        <div className="max-w-5xl mx-auto">
-          <nav className="text-xs text-mangrove-800/50 mb-8 flex items-center gap-2" aria-label="Breadcrumb">
-            <Link href="/creative" className="hover:text-mangrove-accent transition-colors">Creative</Link>
-            <span>/</span>
-            <span className="text-mangrove-900">Digital Marketing</span>
-          </nav>
-
-          <div className="flex items-center gap-2 mb-3">
-            <ServiceIcon name={icon} className="w-5 h-5 text-mangrove-accent" />
-            <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest">Digital Marketing</span>
-          </div>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-mangrove-900 leading-tight mb-6">
-            Digital Marketing Agency UAE
-          </h1>
-          <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-12 max-w-3xl">
-            {introText}
-          </p>
-
-          {heroImage && (
-            <div className="relative aspect-video rounded-2xl overflow-hidden mb-12 border border-mangrove-100">
-              <ServiceHeroImage src={heroImage.src} alt={heroImage.alt} remote={heroImage.remote} />
-            </div>
-          )}
-
-          <article className="prose-mgt-light text-mangrove-800/80">
-            {blocks.map((block) => (
-              <div key={block.heading}>
-                <h2>{block.heading}</h2>
-                <div dangerouslySetInnerHTML={{ __html: block.content }} />
-              </div>
-            ))}
-          </article>
-
-          <div className="mt-6 grid sm:grid-cols-2 gap-4">
-            {["SEO & content strategy", "Paid social & search advertising", "Lead generation focus", "Clear performance reporting"].map((item) => (
-              <div key={item} className="flex items-start gap-3 p-4 rounded-xl bg-mangrove-50 border border-mangrove-100">
-                <Check className="w-5 h-5 text-mangrove-accent shrink-0 mt-0.5" />
-                <span className="text-sm text-mangrove-800">{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-16 p-8 sm:p-10 rounded-3xl bg-mangrove-50 border border-mangrove-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <h3 className="font-serif text-2xl text-mangrove-900 mb-2">Plan Your Digital Strategy</h3>
-              <p className="text-mangrove-800/60 text-sm">Tell us your goals and current digital presence.</p>
-            </div>
-            <Link href="/creative#contact" className="shrink-0 px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-colors duration-300 rounded-full font-semibold text-xs tracking-widest uppercase">
-              Plan Your Digital Strategy
-            </Link>
-          </div>
-        </div>
-      </main>
-
-      <footer className="bg-mangrove-900 text-white/70 text-xs">
-        <div className="max-w-7xl mx-auto px-6 lg:px-16 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <Image src="/images/logo/mangroves-global-logo-wordmark.png" width={140} height={28} className="h-6 sm:h-7 w-auto block" alt="Mangroves Global" />
-          <p>&copy; 2026 Mangroves Global Trading FZ LLC. All rights reserved</p>
-          <div className="flex space-x-6">
-            <Link href="/" className="hover:text-mangrove-accent transition-colors">Privacy Policy</Link>
-            <Link href="/" className="hover:text-mangrove-accent transition-colors">Terms</Link>
-          </div>
-        </div>
-      </footer>
-    </div>
+    <CreativeServiceLayout
+      introText={introText}
+      blocks={blocks}
+      heroImage={heroImage}
+      icon={icon}
+      categoryLabel="Digital Marketing"
+      breadcrumbLabel="Digital Marketing"
+      h1="Digital Marketing That Turns Channels Into a Sales Engine"
+      subServices={SUB_SERVICES}
+      process={PROCESS}
+      outcomes={OUTCOMES}
+      faqs={FAQS}
+      ctaHeadline="Let's Build Your Digital Growth Plan"
+      ctaSubline="Tell us your goals and current digital presence. We'll show you the gap and how to close it."
+      ctaButton="Book a Strategy Session"
+    />
   );
 }

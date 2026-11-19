@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import WarehousingContent from "@/components/WarehousingContent";
 import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 const HERO_IMAGE_PATH = "/images/warehousing-3pl-storage-uae.jpg";
@@ -64,7 +65,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = service.meta_description || FALLBACK.meta_description!;
   const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
 
-  return {
+  const serviceDefaults: Metadata = {
     title,
     description,
     alternates: { canonical: "/logistics/warehousing-3pl" },
@@ -81,6 +82,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [ogImageUrl],
     },
   };
+  return getSeoMetadata("logistics-warehousing", serviceDefaults);
 }
 
 export default async function WarehousingPage() {

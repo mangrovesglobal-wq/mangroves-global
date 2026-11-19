@@ -1,15 +1,16 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ArrowUpRight } from "lucide-react";
+import Reveal from "./Reveal";
 
 export default function BlackPepperContent() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="bg-mangrove-900 text-slate-100 antialiased overflow-x-hidden">
+    <div className="bg-white text-mangrove-900 antialiased overflow-x-hidden">
       {/* Header */}
       <header className="fixed top-0 left-0 w-full z-50 bg-mangrove-accent shadow-lg shadow-black/10">
         <div className="relative flex items-center h-20 sm:h-24">
@@ -27,26 +28,28 @@ export default function BlackPepperContent() {
               />
             </Link>
           </div>
-          <div className="hidden md:flex flex-1 justify-center">
-            <nav className="flex items-center space-x-10 text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
+          <div className="hidden lg:flex flex-1 justify-center">
+            <nav className="flex items-center space-x-4 xl:space-x-8 text-[11px] xl:text-sm tracking-widest font-medium text-mangrove-900/80 uppercase">
               <Link href="/trading" className="hover:text-mangrove-900 transition-colors">Home</Link>
-              <Link href="/trading#about" className="hover:text-mangrove-900 transition-colors">About</Link>
-              <Link href="/trading#products" className="hover:text-mangrove-900 transition-colors">Commodities</Link>
-              <Link href="/trading#quality" className="hover:text-mangrove-900 transition-colors">Quality Assurance</Link>
+              <Link href="/trading/about" className="hover:text-mangrove-900 transition-colors">About</Link>
+              <Link href="/trading/commodities" className="hover:text-mangrove-900 transition-colors">Commodities</Link>
+              <Link href="/trading/sourcing-supply" className="hover:text-mangrove-900 transition-colors">Sourcing &amp; Supply</Link>
+              <Link href="/trading/quality-assurance" className="hover:text-mangrove-900 transition-colors">Quality Assurance</Link>
+              <Link href="/trading/blog" className="hover:text-mangrove-900 transition-colors">Insights</Link>
               <Link href="/trading#contact" className="hover:text-mangrove-900 transition-colors">Contact</Link>
             </nav>
           </div>
-          <div className="flex-1 md:hidden"></div>
+          <div className="flex-1 lg:hidden"></div>
           <Link
             href="/trading#contact"
-            className="hidden md:inline-flex items-center mr-8 lg:mr-16 px-6 py-2.5 border-2 border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-all duration-300 rounded-full text-xs tracking-widest font-semibold uppercase"
+            className="hidden lg:inline-flex items-center mr-8 lg:mr-16 px-6 py-2.5 border-2 border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-all duration-300 rounded-full text-xs tracking-widest font-semibold uppercase"
           >
             <span>Trade Inquiry</span>
             <ArrowUpRight className="w-4 h-4 ml-2" />
           </Link>
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="md:hidden mr-6 text-mangrove-900 focus:outline-none"
+            className="lg:hidden mr-6 text-mangrove-900 focus:outline-none"
             aria-label="Open menu"
           >
             <Menu className="w-8 h-8" />
@@ -55,43 +58,47 @@ export default function BlackPepperContent() {
       </header>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-mangrove-900/95 backdrop-blur-xl z-[60] flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-white">
+        <div className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60 flex flex-col justify-center items-center space-y-8 text-2xl font-serif text-mangrove-900">
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="absolute top-6 right-6 text-white"
+            className="absolute top-6 right-6 text-mangrove-900"
             aria-label="Close menu"
           >
             <X className="w-8 h-8" />
           </button>
-          <Link href="/trading" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">Home</Link>
-          <Link href="/trading#about" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">About Us</Link>
-          <Link href="/trading#products" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">Commodities</Link>
-          <Link href="/trading#quality" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">Quality Control</Link>
-          <Link href="/trading#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-mangrove-accent">Contact</Link>
+          <Link href="/trading" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+          <Link href="/trading/about" onClick={() => setMobileMenuOpen(false)}>About Us</Link>
+          <Link href="/trading/commodities" onClick={() => setMobileMenuOpen(false)} className="text-mangrove-accent">Commodities</Link>
+          <Link href="/trading/sourcing-supply" onClick={() => setMobileMenuOpen(false)}>Sourcing &amp; Supply</Link>
+          <Link href="/trading/quality-assurance" onClick={() => setMobileMenuOpen(false)}>Quality Assurance</Link>
+          <Link href="/trading/blog" onClick={() => setMobileMenuOpen(false)}>Insights</Link>
+          <Link href="/trading#contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
         </div>
       )}
 
       <main className="pt-32 sm:pt-36 pb-24 px-6 lg:px-16">
         <div className="max-w-5xl mx-auto">
-          <nav className="text-xs text-slate-400 mb-8 flex items-center gap-2" aria-label="Breadcrumb">
+          <nav className="text-xs text-mangrove-800/50 mb-8 flex items-center gap-2" aria-label="Breadcrumb">
             <Link href="/trading" className="hover:text-mangrove-accent transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/trading#products" className="hover:text-mangrove-accent transition-colors">Commodities</Link>
+            <Link href="/trading/commodities" className="hover:text-mangrove-accent transition-colors">Commodities</Link>
             <span>/</span>
-            <span className="text-slate-300">Black Pepper</span>
+            <span className="text-mangrove-900">Black Pepper</span>
           </nav>
 
+          <Reveal>
           <span className="text-mangrove-accent text-xs font-semibold uppercase tracking-widest block mb-3">
             Signature Commodity — Spices
           </span>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight mb-6">
+          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-mangrove-900 leading-tight mb-6">
             Black Pepper Exporter to UAE &amp; GCC — Malabar &amp; Tellicherry Grades
           </h1>
-          <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-10 max-w-3xl">
+          <p className="text-mangrove-800/70 text-base sm:text-lg leading-relaxed mb-10 max-w-3xl">
             Mangroves Global Trading FZ LLC supplies export-grade Indian black pepper sourced from the Malabar coastal belt — a region long recognised for producing some of the world&apos;s most aromatic, high-piperine pepper. We supply Tellicherry (TGEB), Malabar Garbled (MG1), cracked and powder formats for buyers across the UAE and GCC.
           </p>
+          </Reveal>
 
-          <div className="relative w-full h-72 sm:h-96 rounded-2xl mb-12 border border-slate-800 overflow-hidden">
+          <Reveal delay={80} className="relative w-full h-72 sm:h-96 rounded-2xl mb-12 border border-mangrove-100 overflow-hidden">
             <Image
               src="/trading/images/indian-black-pepper-supplier.jpg"
               alt="Indian black pepper, Tellicherry and Malabar Garbled grades, for UAE and GCC buyers"
@@ -99,9 +106,10 @@ export default function BlackPepperContent() {
               sizes="(max-width: 768px) 100vw, 1024px"
               className="object-cover"
             />
-          </div>
+          </Reveal>
 
-          <article className="prose-mgt text-slate-300">
+          <Reveal>
+          <article className="prose-mgt-light text-mangrove-800/80">
             <h2>Origin: Malabar Coast, India</h2>
             <p>
               Our black pepper is sourced from the Malabar coastal region spanning Kerala and Karnataka — the traditional heartland of Indian pepper cultivation, and the origin from which pepper first reached global spice trade routes centuries ago. This growing belt&apos;s climate and soil conditions produce berries with bold aroma and consistently high piperine content, the compound responsible for pepper&apos;s characteristic heat. We work with supplier partners based in this region, including our own sister company in India, to source directly.
@@ -172,11 +180,12 @@ export default function BlackPepperContent() {
             <h3>Can you supply bulk quantities for export to the UAE and GCC?</h3>
             <p>Yes — contact our commercial desk with your destination port, volume and Incoterm requirements for a formal quote.</p>
           </article>
+          </Reveal>
 
-          <div className="mt-16 p-8 sm:p-10 rounded-3xl bg-mangrove-800/30 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <Reveal className="mt-16 p-8 sm:p-10 rounded-3xl bg-mangrove-900 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="font-serif text-2xl text-white mb-2">Request Black Pepper Specifications &amp; Pricing</h3>
-              <p className="text-slate-400 text-sm">Tell us your destination port, volume and grade requirement.</p>
+              <p className="text-slate-300 text-sm">Tell us your destination port, volume and grade requirement.</p>
             </div>
             <Link
               href="/trading#contact"
@@ -184,7 +193,7 @@ export default function BlackPepperContent() {
             >
               Request a Quote
             </Link>
-          </div>
+          </Reveal>
         </div>
       </main>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import AirFreightContent from "@/components/AirFreightContent";
 import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 const HERO_IMAGE_PATH = "/images/air-freight-cargo-plane-port.jpg";
@@ -65,7 +66,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = service.meta_description || FALLBACK.meta_description!;
   const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
 
-  return {
+  const serviceDefaults: Metadata = {
     title,
     description,
     alternates: { canonical: "/logistics/air-freight" },
@@ -82,6 +83,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [ogImageUrl],
     },
   };
+  return getSeoMetadata("logistics-air-freight", serviceDefaults);
 }
 
 export default async function AirFreightPage() {

@@ -105,3 +105,303 @@ body {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+.prose-mgt-light table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+.prose-mgt-light th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: rgba(213, 173, 117, 0.15);
+  color: #141f1c;
+  font-weight: 600;
+  border: 1px solid #dde7e4;
+}
+.prose-mgt-light td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #dde7e4;
+  color: #22332e;
+}
+
+/* Creative — Work page hero & grid motion */
+.hero-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.32;
+  pointer-events: none;
+  z-index: 0;
+  animation: blobDrift 17s ease-in-out infinite;
+}
+.hero-blob.b2 {
+  opacity: 0.22;
+  animation-duration: 21s;
+  animation-delay: -6s;
+}
+
+.marquee-track {
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+
+.hero-float {
+  position: absolute;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #dde7e4;
+  box-shadow: 0 20px 44px -20px rgba(20, 31, 28, 0.4);
+  animation-name: floatCard;
+  animation-duration: 7.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.scroll-rail {
+  position: relative;
+  display: inline-block;
+  width: 1px;
+  height: 30px;
+  background: #dde7e4;
+  overflow: hidden;
+}
+.scroll-rail::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -100%;
+  width: 100%;
+  height: 100%;
+  background: #a97a3c;
+  animation: scrollRail 1.9s ease-in-out infinite;
+}
+
+.reveal {
+  opacity: 0;
+  animation: revealUp 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes blobDrift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(26px, -18px); }
+}
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-16px) rotate(var(--r, 0deg)); }
+}
+@keyframes floatCardDiag {
+  0%, 100% { transform: translate(0, 0) rotate(var(--r, 0deg)); }
+  50% { transform: translate(-14px, -18px) rotate(var(--r, 0deg)); }
+}
+@keyframes floatCardDrift {
+  0%, 100% { transform: translate(0, 0) rotate(var(--r, 0deg)); }
+  50% { transform: translate(12px, 14px) rotate(var(--r, 0deg)); }
+}
+@keyframes scrollRail {
+  0% { top: -100%; }
+  50% { top: 0; }
+  100% { top: 100%; }
+}
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Main Home — cinematic hero motion */
+.hero-contour {
+  position: absolute;
+  opacity: 0.16;
+  pointer-events: none;
+  animation: contourDrift 40s ease-in-out infinite;
+}
+.hero-contour.c2 {
+  opacity: 0.1;
+  animation-duration: 55s;
+  animation-delay: -12s;
+}
+@keyframes contourDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-2%, 1.5%) scale(1.03); }
+}
+
+.hero-particle {
+  position: absolute;
+  border-radius: 9999px;
+  background: #d5ad75;
+  pointer-events: none;
+  animation: particleDrift 12s ease-in-out infinite;
+}
+@keyframes particleDrift {
+  0%, 100% { transform: translateY(0); opacity: 0.25; }
+  50% { transform: translateY(-22px); opacity: 0.6; }
+}
+
+/* Drifting fog over a photographic hero */
+.hero-fog {
+  position: absolute;
+  border-radius: 9999px;
+  background: #ffffff;
+  filter: blur(50px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: fogDrift 24s ease-in-out infinite;
+}
+.hero-fog.f2 { animation-duration: 32s; animation-delay: -9s; }
+.hero-fog.f3 { animation-duration: 28s; animation-delay: -16s; }
+@keyframes fogDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.16; }
+  50% { transform: translate(5%, -3%) scale(1.08); opacity: 0.32; }
+}
+
+/* Slow morning-to-evening light cycle on a hero overlay */
+.hero-daylight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: daylightShift 26s ease-in-out infinite alternate;
+}
+@keyframes daylightShift {
+  0% { background-color: rgba(58, 89, 81, 0.28); }
+  100% { background-color: rgba(213, 173, 117, 0.35); }
+}
+
+/* Scroll-triggered reveal (About page and similar editorial sections) */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Directional slide reveals for alternating service panels */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-52px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(52px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Hero word-rise: each word slides up from behind an overflow:hidden clip */
+@keyframes wordRise {
+  from { opacity: 0; transform: translateY(1em) skewY(6deg); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0)   skewY(0deg); filter: blur(0);  }
+}
+/* Morphing headline word transitions */
+@keyframes morphFadeOut {
+  from { opacity: 1; transform: translateY(0);       filter: blur(0);  }
+  to   { opacity: 0; transform: translateY(-0.45em); filter: blur(6px); }
+}
+@keyframes morphFadeIn {
+  from { opacity: 0; transform: translateY(0.45em);  filter: blur(6px); }
+  to   { opacity: 1; transform: translateY(0);       filter: blur(0);  }
+}
+/* Shimmer sweep for CTA button */
+@keyframes ctaShimmer {
+  from { background-position: -200% center; }
+  to   { background-position:  200% center; }
+}
+/* Pulsing glow ring on the primary CTA */
+@keyframes pulseRing {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(242,201,76,0.45); }
+  50%       { box-shadow: 0 0 0 10px rgba(242,201,76,0); }
+}
+
+/* Horizontal timeline connector that fills in once its step is revealed */
+.timeline-fill {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+.reveal-up.is-visible .timeline-fill {
+  transform: scaleX(1);
+}
+
+/* Mirror of timeline-fill but extends from the right */
+.timeline-fill-right {
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+.reveal-up.is-visible .timeline-fill-right {
+  transform: scaleX(1);
+}
+
+/* Vertical timeline connector variant */
+.timeline-fill-v {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+.reveal-up.is-visible .timeline-fill-v {
+  transform: scaleY(1);
+}
+
+/* Bottle illustrations — pure float animation without the card border/overflow
+   that hero-float adds. Position and size are set by Tailwind on the element. */
+.bottle-float {
+  animation-name: floatCard;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.bottle-float.diag {
+  animation-name: floatCardDiag;
+}
+.bottle-float.drift {
+  animation-name: floatCardDrift;
+}
+
+/* Trading home hero — scroll-driven stages (Source/Quality/Partner), animated
+   by a requestAnimationFrame loop that writes opacity/transform directly, not
+   a CSS transition (which would just fight the per-frame updates). This class
+   only sets the pre-JS hidden state for the stages that start hidden. */
+.trading-hero-stage {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-blob, .marquee-track, .hero-float, .bottle-float, .scroll-rail::after, .hero-contour, .hero-particle, .hero-fog {
+    animation: none;
+  }
+  .hero-daylight {
+    animation: none;
+    background-color: rgba(213, 173, 117, 0.3);
+  }
+  .reveal, .reveal-up {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .timeline-fill, .timeline-fill-right, .timeline-fill-v {
+    transform: none;
+    transition: none;
+  }
+}

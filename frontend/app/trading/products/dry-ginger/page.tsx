@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import DryGingerContent from "@/components/DryGingerContent";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
-export const metadata: Metadata = {
-  title: "Dry Ginger Supplier UAE | Indian Ginger Exporter GCC",
-  description:
-    "Bulk Indian dry ginger for UAE and GCC buyers — washed whole dried, split and fine ground powder. Export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata("trading-product-dry-ginger", {
+    title: "Dry Ginger Supplier UAE | Indian Ginger Exporter GCC",
+    description:
+      "Bulk Indian dry ginger for UAE and GCC buyers — washed whole dried, split and fine ground powder. Export-ready quality, FSSAI / Spice Board / APEDA registered supplier partners. Request specifications and pricing.",
+    alternates: { canonical: "/trading/products/dry-ginger" },
+  });
+}
 
 const jsonLd = {
   "@context": "https://schema.org",

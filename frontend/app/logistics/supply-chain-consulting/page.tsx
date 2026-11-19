@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SupplyChainConsultingContent from "@/components/SupplyChainConsultingContent";
 import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 const HERO_IMAGE_PATH = "/images/supply-chain-network-coordination.jpg";
@@ -29,7 +30,7 @@ const FALLBACK: ServiceDetail = {
   icon: null,
   short_description:
     "Beyond individual shipment coordination, we work with UAE and GCC businesses on the bigger picture — evaluating routes, suppliers, warehousing and workflows to identify real operational improvements.",
-  meta_title: "Supply Chain Consultancy UAE | Logistics Consulting",
+  meta_title: "Supply Chain Consulting UAE | Logistics Consulting Services",
   meta_description:
     "Logistics cost audits, route optimization and distribution planning for UAE and GCC businesses. Request a supply chain consultation.",
   block_1_heading: "What We Offer",
@@ -64,7 +65,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = service.meta_description || FALLBACK.meta_description!;
   const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL, HERO_IMAGE_URL)!;
 
-  return {
+  const serviceDefaults: Metadata = {
     title,
     description,
     alternates: { canonical: "/logistics/supply-chain-consulting" },
@@ -81,6 +82,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [ogImageUrl],
     },
   };
+  return getSeoMetadata("logistics-supply-chain", serviceDefaults);
 }
 
 export default async function SupplyChainConsultingPage() {
@@ -109,7 +111,7 @@ export default async function SupplyChainConsultingPage() {
       },
       {
         "@type": "Service",
-        serviceType: "Supply Chain Consultancy",
+        serviceType: "Supply Chain Consulting",
         provider: { "@type": "Organization", name: "Mangroves Global Trading FZ LLC" },
         areaServed: ["United Arab Emirates", "GCC"],
         image: ogImageUrl,

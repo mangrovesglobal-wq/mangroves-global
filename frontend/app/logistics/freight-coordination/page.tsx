@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import FreightCoordinationContent from "@/components/FreightCoordinationContent";
 import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
+import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -61,7 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = service.meta_description || FALLBACK.meta_description!;
   const ogImageUrl = resolveOgImageUrl(service.featured_image, API_BASE_URL);
 
-  return {
+  const serviceDefaults: Metadata = {
     title,
     description,
     alternates: { canonical: "/logistics/freight-coordination" },
@@ -70,6 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
       twitter: { card: "summary_large_image" as const, title, description, images: [ogImageUrl] },
     }),
   };
+  return getSeoMetadata("logistics-freight-coordination", serviceDefaults);
 }
 
 export default async function FreightCoordinationPage() {
