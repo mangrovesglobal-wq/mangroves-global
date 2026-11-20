@@ -18,17 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// TEMPORARY — delete after use
-Route::get('/setup-admin', function () {
-    \App\Models\User::where('email', 'mangrovesglobal@gmail.com')->delete();
-    \App\Models\User::create([
-        'name' => 'Admin',
-        'email' => 'mangrovesglobal@gmail.com',
-        'password' => bcrypt('MGTenak@2026'),
-        'email_verified_at' => now(),
-    ]);
-    return 'Admin user created successfully. Delete this route now.';
-});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
