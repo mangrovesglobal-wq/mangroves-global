@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Clock, ChevronRight } from "lucide-react";
 import DivisionHeader from "@/components/DivisionHeader";
@@ -36,7 +36,7 @@ function fmtDate(d: string | null) {
 }
 
 export default function BlogListingContent({
-  posts,
+  posts: serverPosts,
   apiBase,
   config,
   division,
@@ -47,6 +47,18 @@ export default function BlogListingContent({
   division: "trading" | "logistics" | "creative";
 }) {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [clientPosts, setClientPosts] = useState<BlogPostSummary[] | null>(null);
+
+  useEffect(() => {
+    if (serverPosts.length === 0) {
+      fetch(`${apiBase}/api/blog-posts?division=${division}`)
+        .then((r) => r.json())
+        .then((d) => setClientPosts(d.data ?? []))
+        .catch(() => setClientPosts([]));
+    }
+  }, [serverPosts.length, apiBase, division]);
+
+  const posts = clientPosts ?? serverPosts;
 
   const allFiltered = useMemo(() => {
     if (activeFilter === "all") return posts;
