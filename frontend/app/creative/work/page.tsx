@@ -3,7 +3,7 @@ import CreativeWorkContent, { type Tile } from "@/components/CreativeWorkContent
 import { JsonLd } from "@/components/JsonLd";
 import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.mangrovesglobal.com";
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata("creative-work", {

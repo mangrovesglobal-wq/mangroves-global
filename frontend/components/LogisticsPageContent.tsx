@@ -32,7 +32,7 @@ export default function LogisticsPageContent({ heroImage }: { heroImage?: string
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.mangrovesglobal.com";
 
     const origin = formData.get("origin");
     const destination = formData.get("destination");

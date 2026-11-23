@@ -82,7 +82,7 @@ const schema = {
 const LAYER_KEYS = ["layer_bg", "layer_0", "layer_1", "layer_2", "layer_3", "layer_4", "layer_5", "layer_6"] as const;
 
 export default async function CreativePage() {
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api.mangrovesglobal.com";
   let heroLayerSrcs: string[] | undefined;
   try {
     const res = await fetch(`${API_BASE}/api/pages/creative`, { next: { revalidate: 60 } });

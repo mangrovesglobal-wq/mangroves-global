@@ -84,7 +84,7 @@ const schema = {
 };
 
 export default async function LogisticsPage() {
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api.mangrovesglobal.com";
   let heroImage: string | undefined;
   try {
     const res = await fetch(`${API_BASE}/api/pages/logistics`, { next: { revalidate: 60 } });

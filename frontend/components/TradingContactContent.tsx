@@ -85,7 +85,7 @@ export default function TradingContactContent() {
     setFormStatus("sending");
     const form = e.currentTarget;
     const data = new FormData(form);
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.mangrovesglobal.com";
     try {
       const res = await fetch(`${API_BASE_URL}/api/quote-requests`, {
         method: "POST",

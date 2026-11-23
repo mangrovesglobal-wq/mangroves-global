@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import BlogPostDetailContent, { type BlogPostFull, type RelatedPost } from "@/components/BlogPostDetailContent";
 import { JsonLd } from "@/components/JsonLd";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.mangrovesglobal.com";
 
 type SeoPost = BlogPostFull & {
   meta_title?: string | null;

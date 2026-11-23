@@ -10,7 +10,7 @@ import SiteFooter from "@/components/SiteFooter";
 import Reveal from "./Reveal";
 import HeroSocialBar from "@/components/HeroSocialBar";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.mangrovesglobal.com";
 
 // Back → Front  |  anchor: "cover"=sky fill  "top"=clouds  "bottom"=ground elements
 // offset: extra px pushed DOWN from natural anchor at rest (layers start lower → travel further up = more evident parallax)

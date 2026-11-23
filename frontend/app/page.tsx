@@ -66,7 +66,7 @@ const insights = [
 ];
 
 export default async function HomePage() {
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api.mangrovesglobal.com";
   let cmsHeroImage: string | undefined;
   try {
     const res = await fetch(`${API_BASE}/api/pages/home`, { next: { revalidate: 60 } });

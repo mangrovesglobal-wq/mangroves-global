@@ -3,7 +3,7 @@ import AdvertisingContent from "@/components/AdvertisingContent";
 import { resolveServiceHeroImage, resolveOgImageUrl } from "@/lib/resolveServiceHeroImage";
 import { getSeoMetadata } from "@/lib/getSeoMetadata";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.mangrovesglobal.com";
 const HERO_IMAGE_ALT = "Advertising & Communication services from Mangroves Global for UAE businesses.";
 
 type ServiceDetail = {

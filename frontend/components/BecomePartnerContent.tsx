@@ -8,7 +8,7 @@ import FaqAccordion from "./FaqAccordion";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.mangrovesglobal.com";
 
 const pillars = [
   { num: "01", title: "Market Access", desc: "Helping selected products reach relevant UAE B2B audiences — distributors, wholesalers and food processors already active in the category." },

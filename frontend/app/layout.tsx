@@ -16,7 +16,7 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-const API = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+const API = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.mangrovesglobal.com";
 
 type SeoIntegrations = {
   ga4_measurement_id?: string | null;
