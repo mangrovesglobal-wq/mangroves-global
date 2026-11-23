@@ -138,6 +138,113 @@
             </div>
         </div>
 
+        {{-- Advanced SEO --}}
+        <div x-data="{ seoOpen: {{ ($blogPost->og_title || $blogPost->og_image || $blogPost->schema_type) ? 'true' : 'false' }} }" class="border-t border-mangrove-100 pt-5">
+            <button type="button" @click="seoOpen = !seoOpen" class="flex items-center gap-3 text-xs uppercase tracking-widest font-semibold text-mangrove-800/60 hover:text-mangrove-900 transition-colors w-full">
+                <span x-text="seoOpen ? '▾' : '▸'" class="text-base leading-none w-4 text-left"></span>
+                Advanced SEO — Open Graph, Twitter Card, Schema
+            </button>
+
+            <div x-show="seoOpen" x-cloak class="mt-5 space-y-5">
+
+                {{-- OG --}}
+                <div class="p-5 rounded-xl bg-mangrove-50 border border-mangrove-100 space-y-4">
+                    <div class="text-[10px] uppercase tracking-widest text-mangrove-800/40 font-semibold">Open Graph (Facebook · LinkedIn · WhatsApp)</div>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">OG Title</label>
+                            <input type="text" name="og_title" value="{{ old('og_title', $blogPost->og_title) }}" placeholder="Fallback: Meta Title" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">OG Description</label>
+                            <input type="text" name="og_description" value="{{ old('og_description', $blogPost->og_description) }}" placeholder="Fallback: Meta Description" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">OG Image <span class="font-normal normal-case tracking-normal text-mangrove-800/30">Recommended: 1200×630 px</span></label>
+                        @if($blogPost->og_image)
+                            <img src="{{ Storage::url($blogPost->og_image) }}" class="h-20 w-auto mb-2 rounded-xl object-cover border border-mangrove-100" alt="">
+                        @endif
+                        <input type="file" name="og_image" accept="image/*" class="w-full text-sm text-mangrove-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-mangrove-accent/20 file:text-mangrove-900 file:text-xs file:tracking-widest file:uppercase">
+                        <p class="text-xs text-mangrove-800/40 mt-1">Leave blank to keep the current OG image.</p>
+                    </div>
+                </div>
+
+                {{-- Twitter --}}
+                <div class="p-5 rounded-xl bg-mangrove-50 border border-mangrove-100 space-y-4">
+                    <div class="text-[10px] uppercase tracking-widest text-mangrove-800/40 font-semibold">Twitter / X Card</div>
+                    <div class="grid sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Card Type</label>
+                            <select name="twitter_card" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                                <option value="summary_large_image" @selected(old('twitter_card', $blogPost->twitter_card ?? 'summary_large_image') === 'summary_large_image')>Large Image</option>
+                                <option value="summary" @selected(old('twitter_card', $blogPost->twitter_card) === 'summary')>Summary (small thumbnail)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Twitter Title</label>
+                            <input type="text" name="twitter_title" value="{{ old('twitter_title', $blogPost->twitter_title) }}" placeholder="Fallback: OG Title" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Twitter Description</label>
+                            <input type="text" name="twitter_description" value="{{ old('twitter_description', $blogPost->twitter_description) }}" placeholder="Fallback: OG Description" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Twitter Image <span class="font-normal normal-case tracking-normal text-mangrove-800/30">Recommended: 1200×600 px</span></label>
+                        @if($blogPost->twitter_image)
+                            <img src="{{ Storage::url($blogPost->twitter_image) }}" class="h-16 w-auto mb-2 rounded-xl object-cover border border-mangrove-100" alt="">
+                        @endif
+                        <input type="file" name="twitter_image" accept="image/*" class="w-full text-sm text-mangrove-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-mangrove-accent/20 file:text-mangrove-900 file:text-xs file:tracking-widest file:uppercase">
+                    </div>
+                </div>
+
+                {{-- Technical --}}
+                <div class="p-5 rounded-xl bg-mangrove-50 border border-mangrove-100 space-y-4">
+                    <div class="text-[10px] uppercase tracking-widest text-mangrove-800/40 font-semibold">Technical SEO</div>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Canonical URL</label>
+                            <input type="text" name="canonical_url" value="{{ old('canonical_url', $blogPost->canonical_url) }}" placeholder="https://mangrovesglobal.com/trading/blog/..." class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm font-mono bg-white focus:outline-none focus:border-mangrove-accent">
+                            <p class="text-xs text-mangrove-800/40 mt-1">Leave blank for the default canonical URL.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Robots Directive</label>
+                            <select name="robots" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                                <option value="index,follow"     @selected(old('robots', $blogPost->robots ?? 'index,follow') === 'index,follow')>index, follow (default)</option>
+                                <option value="noindex,follow"   @selected(old('robots', $blogPost->robots) === 'noindex,follow')>noindex, follow</option>
+                                <option value="index,nofollow"   @selected(old('robots', $blogPost->robots) === 'index,nofollow')>index, nofollow</option>
+                                <option value="noindex,nofollow" @selected(old('robots', $blogPost->robots) === 'noindex,nofollow')>noindex, nofollow</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Schema --}}
+                <div class="p-5 rounded-xl bg-mangrove-50 border border-mangrove-100 space-y-4">
+                    <div class="text-[10px] uppercase tracking-widest text-mangrove-800/40 font-semibold">Structured Data / Schema</div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Schema Type</label>
+                        <select name="schema_type" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                            <option value="">— None —</option>
+                            <option value="Article"      @selected(old('schema_type', $blogPost->schema_type) === 'Article')>Article</option>
+                            <option value="BlogPosting"  @selected(old('schema_type', $blogPost->schema_type) === 'BlogPosting')>BlogPosting</option>
+                            <option value="NewsArticle"  @selected(old('schema_type', $blogPost->schema_type) === 'NewsArticle')>NewsArticle</option>
+                            <option value="FAQPage"      @selected(old('schema_type', $blogPost->schema_type) === 'FAQPage')>FAQPage</option>
+                            <option value="Custom"       @selected(old('schema_type', $blogPost->schema_type) === 'Custom')>Custom (use editor below)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Custom JSON-LD <span class="font-normal normal-case tracking-normal text-mangrove-800/30">Rendered as &lt;script type="application/ld+json"&gt;</span></label>
+                        <textarea name="custom_schema_json" rows="8" spellcheck="false"
+                            placeholder='{&#10;  "@@context": "https://schema.org",&#10;  "@@type": "BlogPosting",&#10;  "headline": "...",&#10;  "author": { "@@type": "Person", "name": "..." }&#10;}'
+                            class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm font-mono bg-white focus:outline-none focus:border-mangrove-accent leading-relaxed">{{ old('custom_schema_json', $blogPost->custom_schema_json) }}</textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <div class="flex gap-4">
             <button type="button" id="preview-toggle" class="px-8 py-4 border border-mangrove-900 text-mangrove-900 hover:bg-mangrove-900 hover:text-white transition-colors rounded-full font-semibold text-xs tracking-widest uppercase">
                 Preview

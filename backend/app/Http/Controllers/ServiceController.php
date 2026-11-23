@@ -49,6 +49,17 @@ class ServiceController extends Controller
             'focus_keyword' => 'nullable|string|max:255',
             'meta_keywords' => 'nullable|string|max:500',
             'tags' => 'nullable|string|max:500',
+            'og_title' => 'nullable|string|max:255',
+            'og_description' => 'nullable|string|max:500',
+            'og_image' => 'nullable|image|max:4096',
+            'twitter_card' => 'nullable|in:summary_large_image,summary',
+            'twitter_title' => 'nullable|string|max:255',
+            'twitter_description' => 'nullable|string|max:500',
+            'twitter_image' => 'nullable|image|max:4096',
+            'canonical_url' => 'nullable|string|max:500',
+            'robots' => 'nullable|string|max:100',
+            'schema_type' => 'nullable|string|max:100',
+            'custom_schema_json' => 'nullable|string',
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
         ];
@@ -66,6 +77,14 @@ class ServiceController extends Controller
 
         if ($request->hasFile('featured_image')) {
             $validated['featured_image'] = $request->file('featured_image')->store('service-images', 'public');
+        }
+        if ($request->hasFile('og_image')) {
+            $path = $request->file('og_image')->store('service-og-images', 'public');
+            $validated['og_image'] = rtrim(config('app.url'), '/') . '/storage/' . $path;
+        }
+        if ($request->hasFile('twitter_image')) {
+            $path = $request->file('twitter_image')->store('service-og-images', 'public');
+            $validated['twitter_image'] = rtrim(config('app.url'), '/') . '/storage/' . $path;
         }
 
         Service::create($validated);
@@ -94,6 +113,22 @@ class ServiceController extends Controller
             }
             $validated['featured_image'] = $request->file('featured_image')->store('service-images', 'public');
         }
+        if ($request->hasFile('og_image')) {
+            if ($service->og_image) {
+                $existingPath = str_replace(rtrim(config('app.url'), '/') . '/storage/', '', $service->og_image);
+                Storage::disk('public')->delete($existingPath);
+            }
+            $path = $request->file('og_image')->store('service-og-images', 'public');
+            $validated['og_image'] = rtrim(config('app.url'), '/') . '/storage/' . $path;
+        }
+        if ($request->hasFile('twitter_image')) {
+            if ($service->twitter_image) {
+                $existingPath = str_replace(rtrim(config('app.url'), '/') . '/storage/', '', $service->twitter_image);
+                Storage::disk('public')->delete($existingPath);
+            }
+            $path = $request->file('twitter_image')->store('service-og-images', 'public');
+            $validated['twitter_image'] = rtrim(config('app.url'), '/') . '/storage/' . $path;
+        }
 
         $service->update($validated);
 
@@ -102,8 +137,10 @@ class ServiceController extends Controller
 
     public function destroy(Service $service)
     {
-        if ($service->featured_image) {
-            Storage::disk('public')->delete($service->featured_image);
+        foreach (['featured_image', 'og_image', 'twitter_image'] as $field) {
+            if ($service->$field) {
+                Storage::disk('public')->delete($service->$field);
+            }
         }
 
         $service->delete();

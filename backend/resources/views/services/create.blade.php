@@ -191,6 +191,93 @@
                     <input type="text" name="tags" value="{{ old('tags') }}" placeholder="comma-separated" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm">
                 </div>
             </div>
+
+            {{-- Advanced SEO --}}
+            <div x-data="{ seoOpen: false }" class="border-t border-mangrove-100 pt-5">
+                <button type="button" @click="seoOpen = !seoOpen" class="flex items-center gap-3 text-xs uppercase tracking-widest font-semibold text-mangrove-800/60 hover:text-mangrove-900 transition-colors w-full">
+                    <span x-text="seoOpen ? '▾' : '▸'" class="text-base leading-none w-4 text-left"></span>
+                    Advanced SEO — Open Graph, Twitter Card, Schema <span class="font-normal normal-case tracking-normal text-mangrove-800/30">(optional)</span>
+                </button>
+                <div x-show="seoOpen" x-cloak class="mt-5 space-y-5">
+                    <div class="p-5 rounded-xl bg-mangrove-50 border border-mangrove-100 space-y-4">
+                        <div class="text-[10px] uppercase tracking-widest text-mangrove-800/40 font-semibold">Open Graph (Facebook · LinkedIn · WhatsApp)</div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">OG Title</label>
+                                <input type="text" name="og_title" value="{{ old('og_title') }}" placeholder="Fallback: Meta Title" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">OG Description</label>
+                                <input type="text" name="og_description" value="{{ old('og_description') }}" placeholder="Fallback: Meta Description" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">OG Image <span class="font-normal normal-case tracking-normal text-mangrove-800/30">Recommended: 1200×630 px</span></label>
+                            <input type="file" name="og_image" accept="image/*" class="w-full text-sm text-mangrove-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-mangrove-accent/20 file:text-mangrove-900 file:text-xs file:tracking-widest file:uppercase">
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-xl bg-mangrove-50 border border-mangrove-100 space-y-4">
+                        <div class="text-[10px] uppercase tracking-widest text-mangrove-800/40 font-semibold">Twitter / X Card</div>
+                        <div class="grid sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Card Type</label>
+                                <select name="twitter_card" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                                    <option value="summary_large_image" selected>Large Image (recommended)</option>
+                                    <option value="summary">Summary (small thumbnail)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Twitter Title</label>
+                                <input type="text" name="twitter_title" value="{{ old('twitter_title') }}" placeholder="Fallback: OG Title" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Twitter Description</label>
+                                <input type="text" name="twitter_description" value="{{ old('twitter_description') }}" placeholder="Fallback: OG Description" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Twitter Image <span class="font-normal normal-case tracking-normal text-mangrove-800/30">Recommended: 1200×600 px</span></label>
+                            <input type="file" name="twitter_image" accept="image/*" class="w-full text-sm text-mangrove-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-mangrove-accent/20 file:text-mangrove-900 file:text-xs file:tracking-widest file:uppercase">
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-xl bg-mangrove-50 border border-mangrove-100 space-y-4">
+                        <div class="text-[10px] uppercase tracking-widest text-mangrove-800/40 font-semibold">Technical SEO</div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Canonical URL</label>
+                                <input type="text" name="canonical_url" value="{{ old('canonical_url') }}" placeholder="https://mangrovesglobal.com/logistics/..." class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm font-mono bg-white focus:outline-none focus:border-mangrove-accent">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Robots Directive</label>
+                                <select name="robots" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                                    <option value="index,follow" selected>index, follow (default)</option>
+                                    <option value="noindex,follow">noindex, follow</option>
+                                    <option value="index,nofollow">index, nofollow</option>
+                                    <option value="noindex,nofollow">noindex, nofollow</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-xl bg-mangrove-50 border border-mangrove-100 space-y-4">
+                        <div class="text-[10px] uppercase tracking-widest text-mangrove-800/40 font-semibold">Structured Data / Schema</div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Schema Type</label>
+                            <select name="schema_type" class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:border-mangrove-accent">
+                                <option value="">— None —</option>
+                                <option value="Service" @selected(old('schema_type') === 'Service')>Service (recommended for service pages)</option>
+                                <option value="ProfessionalService" @selected(old('schema_type') === 'ProfessionalService')>ProfessionalService</option>
+                                <option value="Custom" @selected(old('schema_type') === 'Custom')>Custom (use editor below)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-mangrove-800/60 mb-1.5">Custom JSON-LD</label>
+                            <textarea name="custom_schema_json" rows="6" spellcheck="false"
+                                placeholder='{&#10;  "@@context": "https://schema.org",&#10;  "@@type": "Service",&#10;  "name": "..."&#10;}'
+                                class="w-full border border-mangrove-100 rounded-xl px-4 py-3 text-sm font-mono bg-white focus:outline-none focus:border-mangrove-accent leading-relaxed">{{ old('custom_schema_json') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <button type="submit" class="px-8 py-4 bg-mangrove-accent text-mangrove-900 hover:bg-mangrove-900 hover:text-mangrove-accent transition-colors rounded-full font-semibold text-xs tracking-widest uppercase">
