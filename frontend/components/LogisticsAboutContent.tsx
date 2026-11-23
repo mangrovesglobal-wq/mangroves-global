@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Menu, X, ArrowUpRight, Network, FileSearch, Users, MapPin } from "lucide-react";
 import Reveal from "./Reveal";
 import GroupAboutSection from "./GroupAboutSection";
+import SiteFooter from "@/components/SiteFooter";
 
 const philosophy = [
   {
@@ -178,16 +179,7 @@ export default function LogisticsAboutContent() {
         </div>
       </main>
 
-      <footer className="bg-mangrove-accent text-mangrove-900/80 text-xs">
-        <div className="max-w-7xl mx-auto px-6 lg:px-16 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <Image src="/images/logo/mangroves-global-logo-wordmark.png" width={1200} height={289} className="h-6 sm:h-7 w-auto block" alt="Mangroves Global" />
-          <p>&copy; 2026 Mangroves Global. All rights reserved</p>
-          <div className="flex space-x-6">
-            <Link href="/" className="hover:text-mangrove-900 transition-colors">Privacy Policy</Link>
-            <Link href="/" className="hover:text-mangrove-900 transition-colors">Terms</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
