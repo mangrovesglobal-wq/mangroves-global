@@ -51,7 +51,11 @@ export default function BlogListingContent({
 
   useEffect(() => {
     if (serverPosts.length === 0) {
-      fetch(`${apiBase}/api/blog-posts?division=${division}`)
+      const base =
+        apiBase && !apiBase.includes("127.0.0.1") && !apiBase.includes("localhost")
+          ? apiBase
+          : "https://api.mangrovesglobal.com";
+      fetch(`${base}/api/blog-posts?division=${division}`)
         .then((r) => r.json())
         .then((d) => setClientPosts(d.data ?? []))
         .catch(() => setClientPosts([]));
