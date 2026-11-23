@@ -61,7 +61,7 @@ const schema = {
 async function getPosts(): Promise<BlogPostSummary[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/blog-posts?division=logistics`, {
-      next: { revalidate: 60 },
+      next: { revalidate: 300 },
     });
     if (!res.ok) return [];
     const json = await res.json();
